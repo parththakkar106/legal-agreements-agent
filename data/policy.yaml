@@ -1,0 +1,116 @@
+# Acme Cloud Inc. contract playbook.
+#
+# Acme sells a SaaS product on its own paper (NDA, MSA, DPA, SOW). Customers send
+# back edited versions. For every change, the Reviewer picks one decision and
+# cites the rule ids it relied on:
+#   accept     - fine as is, no attention needed
+#   push_back  - send back to the customer with our standard position
+#   escalate   - a human in legal (or the deal owner) must decide
+# A change that no rule covers is escalated: if we have no position on it, a person looks.
+#
+# red_line patterns are the code safety net: if words added by the customer match
+# one, the change is escalated whatever the AI decided. Keep them few and exact.
+
+rules:
+  - id: liability-cap
+    topic: Limitation of liability
+    applies_to: [msa, sow, dpa]
+    standard: Each party's total liability is capped at the fees paid or payable in the 12 months before the claim.
+    accept: A cap of 12 months of fees or more, or a separate higher cap for data breaches of up to 2x the general cap.
+    push_back: Any cap below 12 months of fees, or new carve-outs from the cap other than confidentiality and data breaches.
+    escalate: Uncapped liability for Acme, or deleting the cap.
+    red_line: ['\bunlimited liability\b', '\buncapped\b', '\bwithout (any )?limit(ation)?\b']
+
+  - id: indemnification
+    topic: Indemnification
+    applies_to: [msa]
+    standard: Acme defends the customer against third-party claims that the product infringes IP; the customer defends Acme against claims about customer content.
+    accept: Wording changes that keep the same scope.
+    push_back: Broadening Acme's indemnity beyond IP infringement (for example to any breach of contract or of law).
+    escalate: An indemnity from Acme that sits outside the liability cap.
+
+  - id: payment-terms
+    topic: Payment terms
+    applies_to: [msa, sow]
+    standard: Invoices are due within 30 days.
+    accept: Up to 45 days.
+    push_back: More than 45 days, or removing late-payment suspension rights.
+
+  - id: subscription-term
+    topic: Term, renewal and termination
+    applies_to: [msa]
+    standard: 1-year subscription that renews automatically unless either party gives 30 days notice; termination only for uncured material breach.
+    accept: Terms of 1 to 3 years; a notice period of up to 90 days.
+    push_back: Removing automatic renewal.
+    escalate: A customer right to terminate for convenience with a refund of prepaid fees.
+
+  - id: governing-law
+    topic: Governing law and courts
+    applies_to: [nda, msa, sow, dpa]
+    standard: Laws of the State of Delaware, courts in New Castle, Delaware.
+    accept: Any US state, England and Wales, or Ireland, with matching courts.
+    push_back: Any other country.
+    escalate: A sanctioned country.
+    red_line: ['\bRuss(ia|ian)\b', '\bBelarus\b', '\bIran\b', '\bNorth Korea\b', '\bSyria\b', '\bCuba\b', '\bCrimea\b']
+
+  - id: nda-term
+    topic: NDA term
+    applies_to: [nda]
+    standard: The NDA lasts 1 year.
+    accept: 1 to 3 years.
+    push_back: More than 3 years, or no end date.
+
+  - id: confidentiality-period
+    topic: How long information stays confidential
+    applies_to: [nda, msa]
+    standard: 2 years after disclosure; trade secrets for as long as they remain trade secrets.
+    accept: 1 to 5 years.
+    push_back: Perpetual confidentiality for all information (not just trade secrets).
+
+  - id: non-solicitation
+    topic: Non-solicitation of employees
+    applies_to: [nda, msa]
+    standard: Our templates have no non-solicitation clause.
+    accept: A mutual clause, limited to people met through the deal, lasting 12 months or less.
+    push_back: A one-way clause, or one that is broader or longer.
+
+  - id: ip-ownership
+    topic: Intellectual property
+    applies_to: [nda, msa, sow]
+    standard: Acme keeps all rights in its product, feedback and know-how; the customer keeps its content.
+    escalate: Any transfer of Acme IP to the customer, or customer ownership of deliverables built on the product.
+
+  - id: subprocessors
+    topic: Subprocessors
+    applies_to: [dpa]
+    standard: General authorisation for listed subprocessors; 30 days notice before adding one, with a right to object.
+    accept: A notice period of up to 30 days.
+    push_back: Prior specific written approval for every new subprocessor, or a notice period longer than 30 days.
+
+  - id: breach-notification
+    topic: Security incident notification
+    applies_to: [dpa]
+    standard: Notify the customer without undue delay and within 72 hours of becoming aware of an incident.
+    accept: 48 hours or more.
+    push_back: Less than 48 hours.
+
+  - id: data-location
+    topic: Where data is stored and transferred
+    applies_to: [dpa]
+    standard: Data may be processed outside the EEA under the EU Standard Contractual Clauses.
+    escalate: Any requirement to keep data in a specific country or region, or a ban on transfers outside the EEA.
+
+  - id: audit-rights
+    topic: Audits
+    applies_to: [dpa, msa]
+    standard: Audits are met through third-party reports and one security questionnaire per year.
+    accept: An on-site audit after a confirmed security incident.
+    push_back: On-site audits on demand or more than once a year.
+
+  - id: sow-commercials
+    topic: SOW scope, fees and acceptance
+    applies_to: [sow]
+    standard: Fixed fees and scope; a deliverable is accepted 10 business days after delivery unless a material defect is reported.
+    accept: An acceptance period of up to 15 business days.
+    push_back: Removing deemed acceptance.
+    escalate: Any change to fees or scope, which the deal owner must approve.
