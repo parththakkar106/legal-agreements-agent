@@ -16,8 +16,8 @@ rules:
     topic: Limitation of liability
     applies_to: [msa, sow, dpa]
     standard: Each party's total liability is capped at the fees paid or payable in the 12 months before the claim.
-    accept: A cap of 12 months of fees or more, or a separate higher cap for data breaches of up to 2x the general cap.
-    push_back: Any cap below 12 months of fees, or new carve-outs from the cap other than confidentiality and data breaches.
+    accept: A cap of 12 months of fees or less, or a separate higher cap for data breaches of up to 2x the general cap.
+    push_back: A general cap above 12 months of fees, or new carve-outs from the cap other than confidentiality and data breaches.
     escalate: Uncapped liability for Acme, or deleting the cap.
     red_line: ['\bunlimited liability\b', '\buncapped\b', '\bwithout (any )?limit(ation)?\b']
 

@@ -2,9 +2,13 @@
 
   python src/main.py diff OLD.docx NEW.docx        list the clause changes between two versions
   python src/main.py search "QUERY" [--chapter IV]  search the GDPR
+  python src/main.py review OLD.docx NEW.docx      full AI review (needs `claude -p` and CLAUDE_KEY)
 """
 
 import argparse
+import json
+import sys
+from dataclasses import asdict
 
 from legal_agent.clause_diff import diff_clauses
 from legal_agent.docx_parser import parse_docx
@@ -14,7 +18,7 @@ def cmd_diff(args):
     changes = diff_clauses(parse_docx(args.old), parse_docx(args.new))
     print(f"{len(changes)} change(s)\n")
     for change in changes:
-        title = "" if change.title == change.clause_id else f" {change.title}"
+        title = f" {change.title}" if change.title and change.title != change.clause_id else ""
         print(f"#{change.id} {change.kind.upper()}: {change.clause_id}{title}")
         if change.kind == "modified":
             for op, words in change.word_diff:
@@ -36,6 +40,40 @@ def cmd_search(args):
         print(f"   {chunk.text[:200]}...\n")
 
 
+def cmd_review(args):
+    from legal_agent.llm import LLMUnavailable
+    from legal_agent.orchestrator import review_contract
+
+    related = dict(item.split("=", 1) for item in args.related)
+    try:
+        review = review_contract(args.old, args.new, related)
+    except LLMUnavailable as error:
+        sys.exit(f"Error: {error}")
+
+    print(f"Contract type: {review.doc_type}    Verdict: {review.verdict.upper()}\n")
+    for r in review.changes:
+        title = f" {r.change.title}" if r.change.title and r.change.title != r.change.clause_id else ""
+        overridden = f" (AI said {r.ai_decision})" if r.ai_decision != r.decision else ""
+        print(f"#{r.change.id} {r.change.kind} {r.change.clause_id}{title}: {r.decision.upper()}{overridden}")
+        print(f"   Meaning: {r.meaning}")
+        print(f"   Impact:  {r.impact}")
+        sources = r.rule_ids + r.gdpr_citations + [f"clause {ref}" for ref in r.context_used]
+        print(f"   Sources: {', '.join(sources) or 'none'}")
+        if r.counter_proposal:
+            print(f"   Reply:   {r.counter_proposal}")
+        for note in r.guardrail_notes:
+            print(f"   Guardrail: {note}")
+        print()
+    for group in review.groups:
+        print(f"Group \"{group['theme']}\" (changes {', '.join(map(str, group['change_ids']))}): {group['summary']}")
+    u = review.usage
+    print(f"\n{u.calls} AI calls, {u.input_tokens:,} input + {u.output_tokens:,} output tokens, "
+          f"${u.cost_usd:.3f}, {u.llm_seconds:.0f}s of model time")
+    if args.json:
+        with open(args.json, "w", encoding="utf-8") as f:
+            json.dump(asdict(review), f, indent=2)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Legal agreements agent")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -50,6 +88,14 @@ def main():
     search.add_argument("--chapter", action="append", default=[], help="limit to a GDPR chapter, e.g. IV (repeatable)")
     search.add_argument("-k", type=int, default=5, help="number of results")
     search.set_defaults(func=cmd_search)
+
+    review = commands.add_parser("review", help="AI review of a redline (needs claude -p)")
+    review.add_argument("old")
+    review.add_argument("new")
+    review.add_argument("--related", action="append", default=[], metavar="NAME=PATH",
+                        help="another contract the reviewer may consult, e.g. msa=data/contracts/base/msa.docx")
+    review.add_argument("--json", help="also write the full result to this JSON file")
+    review.set_defaults(func=cmd_review)
 
     args = parser.parse_args()
     args.func(args)

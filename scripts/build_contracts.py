@@ -97,9 +97,23 @@ REDLINES = {
     ]),
     "msa_globex_v2": ("msa", [
         ("replace", "The Fees paid or payable by Customer in the 12 months immediately before the claim.",
-         "The Fees paid or payable by Customer in the 6 months immediately before the claim."),
+         "The Fees paid or payable by Customer in the 24 months immediately before the claim."),
         ("replace", "30 days from the invoice date.", "90 days from the invoice date."),
         ("delete", "5.5.b"),
+    ]),
+    "dpa_globex_v2": ("dpa", [
+        ("replace", "no later than 72 hours", "no later than 24 hours"),
+        ("replace", "30 days before a new Subprocessor is engaged.", "60 days before a new Subprocessor is engaged."),
+        ("insert_after", "3.1", ("3.1.a", "", "Provider will store and process Customer Personal Data only "
+                                 "within the European Union.")),
+    ]),
+    "sow_globex_v2": ("sow", [
+        ("replace", "USD 48,000, invoiced in two equal parts at kickoff and at completion.",
+         "USD 40,000, invoiced in full at completion."),
+        ("replace", " or 10 business days after delivery, whichever comes first, unless Customer reports a "
+         "material defect in that period", ""),
+        ("replace", "Each party's liability under this SOW is subject to Section 8",
+         "Provider's liability under this SOW is not subject to Section 8"),
     ]),
 }
 
