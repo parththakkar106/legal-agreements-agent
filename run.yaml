@@ -1,19 +1,19 @@
-# Fill this in before you submit -- our evaluator runs these commands
-# EXACTLY as written, in this order, from a fresh checkout of your fork.
-# Keep every command non-interactive (no prompts) and idempotent.
+# Our evaluator runs these commands EXACTLY as written, in this order,
+# from a fresh checkout. Every command is non-interactive and idempotent.
 
 setup_commands:
   - "pip install -r requirements.txt"
-  # - add every other setup step here, in order (env vars, downloads, etc.)
 
 run_commands:
   - "python src/main.py --help"
-  # - the real command(s) that actually run your solution
+  # Clause-by-clause diff of a customer's redline against Acme's original
+  - "python src/main.py diff data/contracts/base/nda.docx data/contracts/redlines/nda_globex_v2.docx"
+  - "python src/main.py diff data/contracts/base/msa.docx data/contracts/redlines/msa_globex_v2.docx"
+  # Hybrid (keyword + embedding) search over the GDPR
+  - "python src/main.py search \"sub-processor\""
+  - "python src/main.py search \"transfer personal data outside the EU\" --chapter V"
 
-test_commands: []
-  # optional -- commands that run your own tests/checks, if you have any
+test_commands:
+  - "python -m pytest -q"
 
-notes: ""
-  # anything we should know before running this (e.g. "needs a GPU",
-  # "takes about 10 minutes", "expects a sample dataset already present
-  # under data/, see docs/ for where to get it")
+notes: "Needs Python 3.10+. Everything runs on CPU; all data and the embedding model ship with the repo and pip packages, so nothing else is downloaded."
