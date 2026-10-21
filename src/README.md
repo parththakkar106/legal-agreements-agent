@@ -8,3 +8,4 @@
 | `legal_agent/gdpr.py` | Splits the GDPR into one chunk per article paragraph, each with a citation like "GDPR Art. 28(3)" |
 | `legal_agent/search.py` | Hybrid search over those chunks: BM25 keywords + WordLlama embeddings, merged with Reciprocal Rank Fusion |
 | `legal_agent/policy.py` | Loads Acme's playbook (`data/policy.yaml`) and runs its red-line checks |
+| `legal_agent/llm.py` | The one wrapper around `claude -p`: JSON-schema answers, token and cost counts, clear error if unavailable |
