@@ -2,19 +2,16 @@
 
 ## The problem
 
-Contracts rarely stall because they are hard. They stall in someone's inbox. A customer sends back
-an edited Word file, and someone has to compare it with what we sent, find what changed, check each
-edit against what the company accepts, and decide who needs to see it. Most edits are routine. A few
-really matter, like uncapped liability or data that must stay in one country. The job is to find
-those few quickly and never miss one.
+Contracts don’t usually stall because they are difficult to create, they stall in someone's inbox. A customer sends back an edited Word file, and then someone has to compare it with older versions, figure out what changed and then check everything against the company documentation. This is normal repetitive work which is something that can be taken over by AI, but with a caveat. Most edits are routine and can be caught by a simple prompt but some
+really matter, like rules about how that data must stay in one country. Missing even a single one might have major consequences, so the job is to find those few quickly and never miss one.
 
 ## What we built
 
-A contract manager and signing tool for **Acme Cloud**, a small SaaS company that sends customers its
+A contract manager and signing tool for **Acme Cloud** (a fictional company from the movie Coyote vs Acme(2026)) , a small SaaS company that sends customers its
 own contracts (NDA, service agreement, data processing agreement, statement of work), plus an AI agent
 that reviews every customer edit.
 
-- Every contract and every version (v1, v2, v3 ...) in one place, with an audit trail.
+- Every contract and every version (v1, v2, v3 ...) in one place with an audit trail.
 - When a customer's version arrives, the changes show up at once, clause by clause.
 - The AI marks each change **green** (fine), **yellow** (push back) or **red** (a person must decide),
   explains it in plain words, suggests a reply, and shows its sources.
@@ -38,9 +35,9 @@ read the findings on the **SOW with Globex**, sign the **NDA with Vandelay**, or
 
 ![How a redline moves through the app](architecture.svg)
 
-We split the work the way a careful paralegal would, so each step is easy to check:
+The work is designed to split into separate steps:
 
-1. **Find the changes (code):** both Word files are split into clauses and compared, so nothing is skimmed.
+1. **Find the changes (code):** both Word files are split into clauses and compared, and nothing is skimmed.
 2. **Classify (AI):** the contract type, and which GDPR topics each change touches.
 3. **Look up the law (search):** the four most relevant GDPR paragraphs per change.
 4. **Judge each change (AI):** against Acme's playbook and those paragraphs, citing the rule it used. If a
