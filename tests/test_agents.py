@@ -22,6 +22,7 @@ def test_reviewer_fetches_requested_clause_then_decides(monkeypatch):
     assert review.data["decision"] == "push_back"
     assert review.context_used == ["msa:8"]
     assert '<clause ref="msa:8">Liability is capped.</clause>' in prompts[1]
+    assert "Liability is capped." not in prompts[0]  # other clauses' text only when asked for
 
 
 def test_reviewer_stops_asking_for_context_after_the_limit(monkeypatch):

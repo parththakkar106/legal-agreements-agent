@@ -17,8 +17,10 @@ run_commands:
   - "python src/main.py review data/contracts/base/msa.docx data/contracts/redlines/msa_globex_v2.docx"
   - "python src/main.py review data/contracts/base/dpa.docx data/contracts/redlines/dpa_globex_v2.docx"
   - "python src/main.py review data/contracts/base/sow.docx data/contracts/redlines/sow_globex_v2.docx --related msa=data/contracts/base/msa.docx"
+  # Eval: 45 labelled changes in 8 contracts, our pipeline vs one raw claude -p call (about 3 minutes)
+  - "python src/main.py eval --baseline"
 
 test_commands:
   - "python -m pytest -q"
 
-notes: "Needs Python 3.10+ and the claude CLI (Claude Code) with CLAUDE_KEY set for the review commands; they stop with a clear error otherwise. Each review takes about 20-30 seconds. Everything else runs on CPU and nothing is downloaded beyond pip packages."
+notes: "Needs Python 3.10+ and the claude CLI (Claude Code) with CLAUDE_KEY set for the review commands; they stop with a clear error otherwise. Each review takes about 20-30 seconds; the eval about 3 minutes. Everything else runs on CPU and nothing is downloaded beyond pip packages."

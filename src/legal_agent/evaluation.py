@@ -65,6 +65,7 @@ class Answer:
     citations: list[str] = field(default_factory=list)
     chapters: list[str] = field(default_factory=list)
     query: str = ""  # pipeline only: the Classifier's GDPR search query
+    notes: list[str] = field(default_factory=list)  # pipeline only: what the guardrails said
 
 
 @dataclass
@@ -136,7 +137,7 @@ def run_pipeline(contract: EvalContract, old: Path, new: Path) -> Run:
     for case in contract.cases:
         r = by_clause.get(case.clause)
         answers[case.id] = Answer(True, r.decision, r.ai_decision, r.rule_ids, r.gdpr_citations, r.gdpr_chapters,
-                                  r.search_query) if r else Answer()
+                                  r.search_query, r.guardrail_notes) if r else Answer()
     u = review.usage
     return Run(review.doc_type, answers, len(set(by_clause) - {c.clause for c in contract.cases}),
                u.cost_usd, u.input_tokens + u.output_tokens, u.calls, seconds)
@@ -173,8 +174,7 @@ def score(contracts: list[EvalContract], runs: dict[str, Run], before_guardrails
     def decided(answer: Answer) -> str:
         return (answer.ai_decision if before_guardrails else answer.decision) or "missed"
 
-    def share(hits: int, total: int) -> str:
-        return f"{hits}/{total} ({hits / total:.0%})" if total else "n/a"
+    share = _share
 
     escalate = [(c, a) for _, c, a in pairs if c.decision == "escalate"]
     not_escalate = [(c, a) for _, c, a in pairs if c.decision != "escalate"]
@@ -215,21 +215,27 @@ def _article_paragraph(citation: str) -> tuple[int, int | None]:
     return int(found[1]), int(found[2]) if found[2] else None
 
 
-def compare_retrieval(contracts: list[EvalContract], runs: dict[str, Run]) -> dict[str, str]:
-    """Hit rate: does the top SEARCH_K contain a paragraph of an expected article?
-    Same query (the Classifier's) and same chapter filter (the labelled one) for each mode."""
+def compare_retrieval(contracts: list[EvalContract], runs: dict[str, Run]) -> dict[str, dict[str, str]]:
+    """Does the top 1 / top SEARCH_K contain a paragraph of an expected article?
+    Same query (the Classifier's) for each ranking, over the whole GDPR (no chapter filter,
+    which would make the task too easy to tell the rankings apart)."""
     search = get_search()
     cases = [(case, runs[contract.id].answers[case.id]) for contract in contracts for case in contract.cases
              if case.articles and runs[contract.id].answers[case.id].query]
     results = {}
     for mode, label in (("keyword", "Keyword only (BM25)"), ("meaning", "Meaning only (embeddings)"),
                         ("hybrid", "Hybrid (RRF), what the pipeline uses")):
-        hits = 0
+        top1 = topk = 0
         for case, answer in cases:
-            found = search.search(answer.query, k=SEARCH_K, chapters=set(case.chapters or []), mode=mode)
-            hits += any(_article_paragraph(chunk.citation)[0] in case.articles for chunk, _ in found)
-        results[label] = f"{hits}/{len(cases)} ({hits / len(cases):.0%})" if cases else "n/a"
+            found = [_article_paragraph(chunk.citation)[0] in case.articles
+                     for chunk, _ in search.search(answer.query, k=SEARCH_K, mode=mode)]
+            top1, topk = top1 + found[0], topk + any(found)
+        results[label] = {"Top 1": _share(top1, len(cases)), f"Top {SEARCH_K}": _share(topk, len(cases))}
     return results
+
+
+def _share(hits: int, total: int) -> str:
+    return f"{hits}/{total} ({hits / total:.0%})" if total else "n/a"
 
 
 def run(baseline: bool = False) -> str:
@@ -268,9 +274,19 @@ def report(contracts: list[EvalContract], pipeline: dict[str, Run], baseline: di
         "Wall time (s)": f"{sum(r.seconds for r in runs.values()) / len(runs):.1f}",
     } for name, runs in costs.items()})]
 
+    retrieval = compare_retrieval(contracts, pipeline)
     lines += ["\n## GDPR retrieval\n",
-              f"Hit rate in the top {SEARCH_K}: same Classifier query and chapter filter, three ways to rank.\n",
-              _table({"Hit rate": compare_retrieval(contracts, pipeline)})]
+              "Share of GDPR cases where an expected article is ranked first, or in the top "
+              f"{SEARCH_K} the Reviewer sees. Same Classifier query, whole GDPR, three ways to rank.\n",
+              _table({col: {mode: row[col] for mode, row in retrieval.items()} for col in next(iter(retrieval.values()))})]
+
+    misses = [(case, pipeline[contract.id].answers[case.id]) for contract in contracts for case in contract.cases
+              if pipeline[contract.id].answers[case.id].decision != case.decision]
+    if misses:
+        lines += ["\n## Where the pipeline differs from the label\n"]
+        lines += [f"- **{case.id}** expected {case.decision}, got {a.decision or 'missed'} "
+                  f"(AI said {a.ai_decision or '-'})" + (f"; guardrails: {' '.join(a.notes)}" if a.notes else "")
+                  for case, a in misses]
 
     lines += ["\n## Per case\n", "| Case | Expected | Pipeline | AI alone |" + (" Baseline |" if baseline else ""),
               "|---|---|---|---|" + ("---|" if baseline else "")]
