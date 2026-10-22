@@ -35,11 +35,14 @@ from legal_agent.web.sources import document, round_sources
 
 ROOT = Path(__file__).resolve().parents[3]
 CONTRACTS = ROOT / "data" / "contracts"
-VIEWS = {  # the home page tabs: which statuses each one shows
-    "action": ("Needs action", ("not reviewed", "needs review", "ready to sign", "failed")),
-    "counterparty": ("With counterparty", ("waiting for counterparty", "reviewing")),
-    "signed": ("Signed", ("signed",)),
-    "all": ("All", None),
+SECTIONS = {  # the home page, one section per status, in the order work flows
+    "not reviewed": ("Not reviewed", "Their redline is in; run the AI review when you are ready."),
+    "reviewing": ("AI reviewing", "The AI is reviewing their changes."),
+    "failed": ("AI review stopped", "Open the agreement to see why and try again."),
+    "needs review": ("Needs review", "The AI has reviewed their changes; a person answers each one."),
+    "ready to sign": ("Ready to sign", "Every change is agreed; only a person can sign."),
+    "waiting for counterparty": ("Waiting for counterparty", "Our latest version is with them."),
+    "signed": ("Signed", "Signed PDF with a certificate page."),
 }
 
 app = FastAPI(title="Acme Agreement Desk")
@@ -47,17 +50,14 @@ templates = Jinja2Templates(directory=Path(__file__).parent / "templates")
 
 
 @app.get("/")
-def index(request: Request, view: str = "all", error: str = ""):
+def index(request: Request, error: str = ""):
     with store.connect() as db:
         agreements = [store.get_agreement(db, r["id"]) for r in store.list_agreements(db)]
     rows = sorted((_summary(a) for a in agreements), key=lambda r: r["updated_at"] or "", reverse=True)
-    counts = {key: sum(1 for r in rows if statuses is None or r["status"] in statuses)
-              for key, (_, statuses) in VIEWS.items()}
-    view = view if view in VIEWS else "all"
-    statuses = VIEWS[view][1]
+    sections = [(status, title, note, [r for r in rows if r["status"] == status])
+                for status, (title, note) in SECTIONS.items()]
     return templates.TemplateResponse(request, "index.html", {
-        "rows": [r for r in rows if statuses is None or r["status"] in statuses],
-        "views": VIEWS, "view": view, "counts": counts, "error": error})
+        "sections": [s for s in sections if s[3]], "total": len(rows), "error": error})
 
 
 def _summary(a: dict) -> dict:

@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -165,4 +166,5 @@ def test_portfolio_builds_saves_and_loads(monkeypatch, tmp_path):
     assert http.get("/agreements/1/signed.pdf").content[:4] == b"%PDF"
     home = http.get("/").text
     assert "Hooli Inc." in home and "Run AI review" in home and "Sign v2" in home
-    assert "Soylent Corp." not in http.get("/?view=signed").text
+    sections = re.findall(r'class="group-head"[^>]*><h2>([^<]+)</h2>', home)
+    assert sections == ["Not reviewed", "Needs review", "Ready to sign", "Waiting for counterparty", "Signed"]

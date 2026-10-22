@@ -3,13 +3,13 @@
 {% block style %}
 .page-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
 .page-head p { margin: 0; max-width: 64ch; }
-.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
-@media (max-width: 720px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.tile { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); text-decoration: none; }
-.tile:hover { border-color: var(--rule-strong); }
-.tile.on { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-.tile b { font: 600 28px/1.1 var(--serif); font-variant-numeric: tabular-nums; }
-.tile span { font-size: 13px; color: var(--ink-2); }
+.jump { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+.jump a { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--rule-strong); background: var(--surface); color: var(--ink); text-decoration: none; font-size: 14px; }
+.jump a:hover { border-color: var(--ink-3); }
+.jump b { font-variant-numeric: tabular-nums; }
+.group-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 12px; scroll-margin-top: 16px; }
+.group-head .count { font: 600 15px var(--sans); color: var(--ink-3); }
+.group-head p { margin: 0; font-size: 14px; color: var(--ink-3); flex-basis: 100%; }
 .list { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
 .list th { text-align: left; font-weight: 500; font-size: 13px; color: var(--ink-3); padding: 0 16px 10px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
 .list td { padding: 14px 16px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
@@ -17,7 +17,9 @@
 .list .name a { font: 600 17px/1.3 var(--serif); color: var(--ink); text-decoration: none; }
 .list .name a:hover { text-decoration: underline; }
 .list .name div { font-size: 13px; color: var(--ink-3); margin-top: 2px; }
-.list-card { padding: 16px 0 4px; margin-bottom: 44px; }
+.list-card { padding: 16px 0 4px; margin-bottom: 36px; }
+.list col.c-name { width: 24%; } .list col.c-type { width: 7%; } .list col.c-vers { width: 11%; } .list col.c-ai { width: 18%; } .list col.c-step { width: 26%; }
+.list { table-layout: fixed; min-width: 760px; }
 .table-scroll { overflow-x: auto; }
 .empty { padding: 4px 20px 16px; color: var(--ink-2); margin: 0; }
 .vers { display: flex; align-items: center; gap: 3px; }
@@ -47,16 +49,18 @@
 </div>
 {% if error %}<p class="notice" role="alert">{{ error }}</p>{% endif %}
 
-<nav class="tiles" aria-label="Filter contracts">
-  {% for key, (label, _) in views.items() %}
-  <a class="tile {{ 'on' if key == view }}" href="/?view={{ key }}" {{ 'aria-current="page"' | safe if key == view }}><b>{{ counts[key] }}</b><span>{{ label }}</span></a>
-  {% endfor %}
+{% if sections %}
+<nav class="jump" aria-label="Jump to a section">
+  {% for status, title, note, rows in sections %}<a href="#{{ status | replace(' ', '-') }}"><span class="status st-{{ status | replace(' ', '-') }}">{{ title }}</span><b>{{ rows | length }}</b></a>{% endfor %}
 </nav>
+{% endif %}
 
+{% for status, title, note, rows in sections %}
+<div class="group-head" id="{{ status | replace(' ', '-') }}"><h2>{{ title }}</h2><span class="count">{{ rows | length }}</span><p>{{ note }}</p></div>
 <section class="card list-card">
-  {% if rows %}
   <div class="table-scroll"><table class="list">
-    <thead><tr><th>Agreement</th><th>Type</th><th>Versions</th><th>AI review of latest redline</th><th>Status</th><th>Next step</th><th>Last activity</th></tr></thead>
+    <colgroup><col class="c-name"><col class="c-type"><col class="c-vers"><col class="c-ai"><col class="c-step"><col></colgroup>
+    <thead><tr><th>Agreement</th><th>Type</th><th>Versions</th><th>AI review of latest redline</th><th>Next step</th><th>Last activity</th></tr></thead>
     <tbody>
     {% for r in rows %}
       <tr>
@@ -67,7 +71,6 @@
             {% elif r.review_round %}<span class="faint">Not reviewed yet</span>
             {% elif r.status == 'reviewing' %}<span class="faint">Reviewing…</span>
             {% else %}<span class="faint">–</span>{% endif %}</td>
-        <td><span class="status st-{{ r.status | replace(' ', '-') }}">{{ r.status | capitalize }}</span></td>
         <td class="step">{{ r.step }}
           {% if r.review_round %}<form method="post" action="/rounds/{{ r.review_round }}/review" data-busy="Starting…"><button class="btn small">Run AI review</button></form>{% endif %}</td>
         <td class="faint">{{ r.updated_at[:16] }}</td>
@@ -75,10 +78,10 @@
     {% endfor %}
     </tbody>
   </table></div>
-  {% else %}
-  <p class="empty">{{ 'No contracts yet. Add one below.' if view == 'all' else 'Nothing here right now.' }}</p>
-  {% endif %}
 </section>
+{% else %}
+<section class="card list-card"><p class="empty">No contracts yet. Add one below.</p></section>
+{% endfor %}
 
 <div class="start">
   <section class="card">
