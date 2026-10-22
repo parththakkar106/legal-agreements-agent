@@ -9,6 +9,24 @@ and finally signs the agreed version as a PDF with a certificate page.
 **The AI recommends; a person decides and signs.** Code guardrails can only make an AI decision
 stricter, never looser, and the AI never sends, accepts or signs anything.
 
+## Terms used
+
+| Term | What it means here |
+| --- | --- |
+| NDA | Non-disclosure agreement: both sides keep each other's information secret |
+| Cloud Service Agreement (MSA) | The main contract for using Acme's product: price, term, liability |
+| DPA | Data processing agreement: how Acme handles the customer's personal data, as the GDPR requires |
+| SOW | Statement of work: a specific project (here, onboarding) under the main contract |
+| GDPR | The EU's data protection law; the only law the AI reads |
+| Redline | A version of the contract with the other side's edits |
+| Counterparty | The other side of the contract, here the customer (Globex, Initech, ...) |
+| Clause | One numbered section or key term of a contract |
+| Playbook | Acme's list of what it accepts, pushes back on or sends to a lawyer, topic by topic ([`data/policy.yaml`](data/policy.yaml)) |
+| Red line | A change that must always go to a person, such as unlimited liability or a sanctioned country |
+| Liability cap | The most either side can be made to pay if things go wrong (Acme's standard: the fees paid in the 12 months before the claim) |
+| Governing law | Which country's or state's law applies, and whose courts decide disputes |
+| Accept / push back / escalate | The AI's three answers: fine as is / send back with our standard position / a person must decide |
+
 ## Run it
 
 Needs Python 3.10+ and, for anything that calls the model, the `claude` CLI (Claude Code) with
@@ -241,14 +259,14 @@ receiver in 30 lines of standard-library Python.
 
 ## Limitations
 
-- **Our paper only.** Contracts start from Acme's templates; reviewing a counterparty's own paper
-  (a whole-document review plus a check for missing protections) is designed but not built.
-- **Not modelled:** the counterparty's countersignature, roles and signing authority (for example
-  legal-only sign-off on MSAs), and multiple profiles. The web app relies on your SSO for login.
+- **Our contracts only.** Every negotiation starts from Acme's templates; reviewing a contract the
+  customer drafted (a whole-document review plus a check for missing protections) is designed but not built.
+- **Not modelled:** the customer's own signature, rules on who may sign what (for example only
+  legal signs service agreements), and multiple profiles. The web app relies on your SSO for login.
 - **Signature:** a typed electronic signature with consent and a SHA-256 certificate, behind a
-  small `Signer` interface so DocuSign or Dropbox Sign could replace it. It is not a qualified
-  electronic signature.
-- **GDPR only** as legal knowledge, and only the binding articles (no recitals).
+  small `Signer` interface so DocuSign or Dropbox Sign could replace it. It is not the stronger,
+  certificate-based e-signature some EU deals require.
+- **GDPR only** as legal knowledge, and only its articles, not its introductory notes.
 - **Cost and time:** about $0.10 and 20 to 40 seconds per contract review; the eval costs about
   $1.10 with the baseline.
 - **One instance:** SQLite and files on one volume, so it scales up, not out. Moving to Postgres and
