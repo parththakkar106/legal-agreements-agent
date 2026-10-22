@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block style %}
+.intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-block: 20px; }
+@media (max-width: 760px) { .intro { grid-template-columns: minmax(0, 1fr); } }
+.demos { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.demos button { width: 100%; text-align: left; line-height: 1.35; padding: 12px 14px; }
+.demos button small { display: block; font-weight: 400; opacity: .85; margin-top: 3px; }
+.fields { display: flex; flex-direction: column; gap: 12px; }
+{% endblock %}
+{% block content %}
+<h1>Customer redlines</h1>
+<p class="muted">Upload the version we sent and the version the customer sent back. The agent reads every changed
+clause against Acme's playbook and the GDPR, then a person decides.</p>
+{% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+
+<div class="intro">
+  <section class="panel">
+    <h2>Try a demo redline</h2>
+    <form method="post" action="/reviews" data-busy="Reviewing… about 30 seconds">
+      <div class="demos">
+        {% for key, demo in demos.items() %}
+        <button name="demo" value="{{ key }}">{{ demo[0] }}<small>{{ demo[2] }}</small></button>
+        {% endfor %}
+      </div>
+    </form>
+  </section>
+  <section class="panel">
+    <h2>Review your own</h2>
+    <form method="post" action="/reviews" enctype="multipart/form-data" class="fields" data-busy="Reviewing… about 30 seconds">
+      <div><label for="title">Name</label><input type="text" id="title" name="title" placeholder="Initech: Cloud Service Agreement"></div>
+      <div><label for="old">Our version (.docx)</label><input type="file" id="old" name="old" accept=".docx" required></div>
+      <div><label for="new">Their version (.docx)</label><input type="file" id="new" name="new" accept=".docx" required></div>
+      <div><button>Review changes</button></div>
+    </form>
+  </section>
+</div>
+
+<section class="panel">
+  <h2>Reviews</h2>
+  {% if reviews %}
+  <div class="table-scroll"><table>
+    <thead><tr><th>Agreement</th><th>Type</th><th>AI verdict</th><th>Status</th><th>Reviewed</th></tr></thead>
+    <tbody>
+    {% for r in reviews %}
+      <tr>
+        <td><a href="/reviews/{{ r.id }}">{{ r.title }}</a></td>
+        <td class="mono">{{ r.doc_type | upper }}</td>
+        <td><span class="pill {{ {'ready to sign': 'v-ready', 'send back': 'v-send'}.get(r.verdict, 'v-escalate') }}">{{ r.verdict }}</span></td>
+        <td>{{ r.status }}</td>
+        <td class="muted">{{ r.created_at }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <p class="muted">No reviews yet. Pick a demo above to see one.</p>
+  {% endif %}
+</section>
+{% endblock %}

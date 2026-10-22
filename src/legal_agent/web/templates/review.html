@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% set result = review.result %}
+{% set verdict_class = {'ready to sign': 'v-ready', 'send back': 'v-send'}.get(result.verdict, 'v-escalate') %}
+{% set decision_label = {'accept': 'Accept', 'push_back': 'Push back', 'escalate': 'Escalate'} %}
+{% block title %}{{ review.title }} · Acme Agreement Desk{% endblock %}
+{% block style %}
+.head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-bottom: 6px; }
+.counts { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 14px 22px; }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 20px; align-items: start; }
+@media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+.side { position: sticky; top: 16px; }
+@media (max-width: 900px) { .side { position: static; } }
+.group { border-left: 3px solid var(--accent); padding-left: 12px; }
+.group + .group { margin-top: 12px; }
+.change { padding: 0; overflow: hidden; }
+.change.k-escalate { border-left: 4px solid var(--risk); }
+.change.k-push_back { border-left: 4px solid var(--warn); }
+.change.k-accept { border-left: 4px solid var(--ok); }
+.change summary { list-style: none; cursor: pointer; padding: 14px 18px; display: flex; gap: 10px 14px; align-items: baseline; flex-wrap: wrap; }
+.change summary::-webkit-details-marker { display: none; }
+.change summary .where { font: 500 13px/1.4 var(--mono); color: var(--muted); }
+.change summary .what { flex: 1 1 260px; min-width: 0; font-weight: 500; }
+.detail-body { padding: 0 18px 18px; display: flex; flex-direction: column; gap: 14px; }
+.diff { font: 15px/1.7 var(--body); background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+.diff del { color: var(--del); background: var(--del-soft); text-decoration: line-through; padding: 0 2px; border-radius: 3px; }
+.diff ins { color: var(--ins); background: var(--ins-soft); text-decoration: none; padding: 0 2px; border-radius: 3px; }
+.label { font: 600 11px/1.3 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+.reply { background: var(--accent-soft); border-radius: 8px; padding: 12px 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 500 12px/1.6 var(--mono); padding: 1px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); }
+.guard { color: var(--risk); font-size: 14px; }
+.decide { display: flex; flex-direction: column; gap: 12px; }
+.decide .row { display: flex; gap: 8px; flex-wrap: wrap; }
+.check { display: flex; gap: 8px; align-items: flex-start; font-weight: 400; }
+.check input { margin-top: 4px; }
+.audit { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+.audit .when { font: 12px/1.4 var(--mono); color: var(--muted); }
+.usage { font: 13px/1.6 var(--mono); color: var(--muted); }
+{% endblock %}
+{% block content %}
+<p><a href="/">&larr; All reviews</a></p>
+<div class="head">
+  <h1>{{ review.title }}</h1>
+  <span class="pill {{ verdict_class }}">AI verdict: {{ result.verdict }}</span>
+  <span class="pill s-neutral">{{ review.status }}</span>
+</div>
+<p class="muted">{{ result.doc_type | upper }} · reviewed {{ review.created_at }} · {{ result.changes | length }} changed clause{{ '' if result.changes | length == 1 else 's' }}</p>
+
+<div class="counts">
+  {% for key in ['escalate', 'push_back', 'accept'] %}
+  {% set n = result.changes | selectattr('decision', 'equalto', key) | list | length %}
+  {% if n %}<span class="pill d-{{ key }}">{{ n }} × {{ decision_label[key] }}</span>{% endif %}
+  {% endfor %}
+</div>
+
+<div class="layout">
+  <div class="stack">
+    {% if result.groups %}
+    <section class="panel">
+      <h2>What changed, in short</h2>
+      {% for g in result.groups %}
+      <div class="group">
+        <strong>{{ g.theme }}</strong> <span class="muted">· changes {{ g.change_ids | join(', ') }}</span>
+        <div>{{ g.summary }}</div>
+      </div>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    {% for key in ['escalate', 'push_back', 'accept'] %}{% for r in result.changes | selectattr('decision', 'equalto', key) %}
+    {% set c = r.change %}
+    <details class="panel change k-{{ r.decision }}" {% if r.decision != 'accept' %}open{% endif %}>
+      <summary>
+        <span class="pill d-{{ r.decision }}">{{ decision_label[r.decision] }}</span>
+        <span class="where">#{{ c.id }} · {{ c.kind }} · §{{ c.clause_id }}</span>
+        <span class="what">{{ c.title or c.clause_id }}</span>
+      </summary>
+      <div class="detail-body">
+        <div class="diff">
+          {%- if c.kind == 'modified' -%}
+            {%- for op, words in c.word_diff -%}
+              {%- if op == 'delete' %}<del>{{ words }}</del> {% elif op == 'insert' %}<ins>{{ words }}</ins> {% else %}{{ words }} {% endif -%}
+            {%- endfor -%}
+          {%- elif c.kind == 'added' -%}<ins>{{ c.new_text }}</ins>
+          {%- else -%}<del>{{ c.old_text }}</del>{%- endif -%}
+        </div>
+        <div><div class="label">What it means</div>{{ r.meaning }}</div>
+        <div><div class="label">Impact on Acme</div>{{ r.impact }}</div>
+        {% if r.counter_proposal %}
+        <div class="reply"><div class="label">Suggested reply to the customer</div>{{ r.counter_proposal }}</div>
+        {% endif %}
+        {% for note in r.guardrail_notes %}
+        <div class="guard"><strong>Safety check:</strong> {{ note }}{% if r.ai_decision != r.decision %} (the AI said {{ decision_label[r.ai_decision] | lower }}){% endif %}</div>
+        {% endfor %}
+        <div>
+          <div class="label">Sources</div>
+          <div class="chips">
+            {% for id in r.rule_ids %}<span class="chip" title="Acme playbook rule">playbook: {{ id }}</span>{% endfor %}
+            {% for cite in r.gdpr_citations %}<span class="chip">{{ cite }}</span>{% endfor %}
+            {% for ref in r.context_used %}<span class="chip" title="Another clause the AI asked to read">read §{{ ref }}</span>{% endfor %}
+            <span class="chip" title="How sure the AI was">confidence {{ '%.0f' | format(r.confidence * 100) }}%</span>
+          </div>
+        </div>
+      </div>
+    </details>
+    {% endfor %}{% endfor %}
+  </div>
+
+  <aside class="side stack">
+    <section class="panel">
+      <h2>Your decision</h2>
+      {% if review.status == 'awaiting decision' %}
+      <form method="post" action="/reviews/{{ review.id }}/decision" class="decide">
+        <p class="muted" style="margin:0">The AI recommends <strong>{{ result.verdict }}</strong>. You make the call.</p>
+        <div><label for="note">Note (optional)</label><textarea id="note" name="note" placeholder="What you are sending back or escalating, and why"></textarea></div>
+        <div class="row">
+          <button name="action" value="send_back" class="quiet" formnovalidate>Send back</button>
+          <button name="action" value="escalate" class="quiet" formnovalidate>Escalate to legal</button>
+        </div>
+        <hr style="border:0;border-top:1px solid var(--line);width:100%;margin:4px 0">
+        <div><label for="name">Full name to sign</label><input type="text" id="name" name="name" autocomplete="name" required></div>
+        <label class="check"><input type="checkbox" name="consent" value="yes" required> I have read this agreement and sign it electronically on behalf of Acme Cloud Inc.</label>
+        <div><button name="action" value="sign">Sign agreement</button></div>
+        <p class="usage" style="margin:0" title="SHA-256 of the exact file reviewed">Document fingerprint {{ review.new_sha256[:16] }}…</p>
+      </form>
+      {% else %}
+      <p style="margin:0">This agreement was <strong>{{ review.status }}</strong>. See the audit trail below.</p>
+      {% endif %}
+    </section>
+
+    <section class="panel">
+      <h2>Audit trail</h2>
+      <ol class="audit">
+        {% for e in review.events %}
+        <li><div class="when">{{ e.at }}</div><strong>{{ e.action | replace('_', ' ') }}</strong> by {{ e.actor }}{% if e.detail %}<div class="muted">{{ e.detail }}</div>{% endif %}</li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <section class="panel">
+      <h2>Cost of this review</h2>
+      {% set u = result.usage %}
+      <div class="usage">{{ u.calls }} AI calls<br>{{ '{:,}'.format(u.input_tokens) }} in / {{ '{:,}'.format(u.output_tokens) }} out tokens<br>${{ '%.3f' | format(u.cost_usd) }} · {{ '%.0f' | format(u.llm_seconds) }}s model time</div>
+    </section>
+  </aside>
+</div>
+{% endblock %}

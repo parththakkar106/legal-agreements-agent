@@ -3,6 +3,7 @@
   python src/main.py diff OLD.docx NEW.docx        list the clause changes between two versions
   python src/main.py search "QUERY" [--chapter IV]  search the GDPR
   python src/main.py review OLD.docx NEW.docx      full AI review (needs `claude -p` and CLAUDE_KEY)
+  python src/main.py serve                         the web app at http://127.0.0.1:8000
 """
 
 import argparse
@@ -74,6 +75,12 @@ def cmd_review(args):
             json.dump(asdict(review), f, indent=2)
 
 
+def cmd_serve(args):
+    import uvicorn
+
+    uvicorn.run("legal_agent.web.app:app", host=args.host, port=args.port)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Legal agreements agent")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -96,6 +103,11 @@ def main():
                         help="another contract the reviewer may consult, e.g. msa=data/contracts/base/msa.docx")
     review.add_argument("--json", help="also write the full result to this JSON file")
     review.set_defaults(func=cmd_review)
+
+    serve = commands.add_parser("serve", help="run the web app")
+    serve.add_argument("--host", default="127.0.0.1")
+    serve.add_argument("--port", type=int, default=8000)
+    serve.set_defaults(func=cmd_serve)
 
     args = parser.parse_args()
     args.func(args)

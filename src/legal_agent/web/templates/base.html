@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{% block title %}Acme Agreement Desk{% endblock %}</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap">
+<style>
+/* Layout: a working desk. Summary first, the change list on the left, the human decision pinned on the right. */
+:root {
+  --paper: #f5f6f8; --surface: #ffffff; --ink: #18202b; --muted: #5a6474; --line: #dde1e8;
+  --accent: #2a4c86; --accent-soft: #e6ecf6;
+  --ok: #1d7047; --ok-soft: #e3f2ea; --warn: #9a5b00; --warn-soft: #fbf0dc; --risk: #ad2a22; --risk-soft: #fbe6e4;
+  --del: #ad2a22; --del-soft: #fbe6e4; --ins: #1d7047; --ins-soft: #e3f2ea;
+  --display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #12161c; --surface: #1a2028; --ink: #e6e9ee; --muted: #9aa4b2; --line: #2c3440;
+  --accent: #8fb0e8; --accent-soft: #1f2b3d;
+  --ok: #6fcf9a; --ok-soft: #173326; --warn: #f0b960; --warn-soft: #3a2c12; --risk: #f08a80; --risk-soft: #3d1c1a;
+  --del: #f08a80; --del-soft: #3d1c1a; --ins: #6fcf9a; --ins-soft: #173326; color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --paper: #12161c; --surface: #1a2028; --ink: #e6e9ee; --muted: #9aa4b2; --line: #2c3440;
+  --accent: #8fb0e8; --accent-soft: #1f2b3d;
+  --ok: #6fcf9a; --ok-soft: #173326; --warn: #f0b960; --warn-soft: #3a2c12; --risk: #f08a80; --risk-soft: #3d1c1a;
+  --del: #f08a80; --del-soft: #3d1c1a; --ins: #6fcf9a; --ins-soft: #173326; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 var(--body); }
+a { color: var(--accent); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 24px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.topbar { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding-bottom: 14px; border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+.brand { font: 600 18px/1.2 var(--display); color: var(--ink); text-decoration: none; }
+.brand small { font: 500 11px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-left: 8px; }
+h1 { font: 600 clamp(24px, 3.2vw, 32px)/1.2 var(--display); margin: 0; text-wrap: balance; }
+h2 { font: 600 13px/1.3 var(--body); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); font-size: .9em; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px;
+  font: 600 12px/1.6 var(--body); letter-spacing: .03em; white-space: nowrap; }
+.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.d-accept, .v-ready { color: var(--ok); background: var(--ok-soft); }
+.d-push_back, .v-send { color: var(--warn); background: var(--warn-soft); }
+.d-escalate, .v-escalate { color: var(--risk); background: var(--risk-soft); }
+.s-neutral { color: var(--accent); background: var(--accent-soft); }
+button, .button { font: 600 14px/1 var(--body); padding: 11px 16px; border-radius: 8px; border: 1px solid var(--accent);
+  background: var(--accent); color: var(--surface); cursor: pointer; }
+button.quiet { background: transparent; color: var(--accent); }
+button:disabled { opacity: .55; cursor: progress; }
+button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input[type=text], textarea { width: 100%; font: 15px/1.4 var(--body); padding: 9px 11px; border: 1px solid var(--line);
+  border-radius: 8px; background: var(--paper); color: var(--ink); }
+textarea { min-height: 110px; resize: vertical; }
+label { display: block; font-weight: 500; margin-bottom: 6px; }
+.error { border: 1px solid var(--risk); background: var(--risk-soft); color: var(--ink); padding: 12px 14px; border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th { text-align: left; font: 600 12px/1.3 var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+th, td { padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.table-scroll { overflow-x: auto; }
+@media (prefers-reduced-motion: no-preference) { details[open] > .detail-body { animation: reveal .18s ease-out; } }
+@keyframes reveal { from { opacity: .4; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+{% block style %}{% endblock %}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/">Acme Agreement Desk<small>Contract review</small></a>
+    <span class="muted">Every agreement is signed by a person. The AI only triages.</span>
+  </header>
+  {% block content %}{% endblock %}
+</div>
+<script>
+// While a slow action runs (an AI review takes about 30 seconds), disable its button and say so.
+document.querySelectorAll("form[data-busy]").forEach(form => form.addEventListener("submit", event => {
+  const button = event.submitter || form.querySelector("button");
+  form.querySelectorAll("button").forEach(b => b.disabled = true);
+  if (button) button.textContent = form.dataset.busy;
+}));
+</script>
+</body>
+</html>

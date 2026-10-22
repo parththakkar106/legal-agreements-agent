@@ -2,7 +2,7 @@
 
 | File | What it does |
 | --- | --- |
-| `main.py` | Command line entry point (`diff`, `search`) |
+| `main.py` | Command line entry point (`diff`, `search`, `review`, `serve`) |
 | `legal_agent/docx_parser.py` | Reads a .docx and splits it into clauses (by typed clause numbers and Word headings) |
 | `legal_agent/clause_diff.py` | Matches clauses between two versions and lists what was added, removed or modified, with a word-level diff |
 | `legal_agent/gdpr.py` | Splits the GDPR into one chunk per article paragraph, each with a citation like "GDPR Art. 28(3)" |
@@ -14,4 +14,6 @@
 | `legal_agent/agents/grouper.py` | AI: groups related changes under one theme |
 | `legal_agent/guardrails.py` | Code checks that can only make a decision stricter: red lines, injection, missing rule, unknown citation, low confidence |
 | `legal_agent/orchestrator.py` | Runs the steps in order, reviews changes in parallel, totals tokens, cost and time |
-
+| `legal_agent/store.py` | SQLite: saved reviews, their status, the SHA-256 of the reviewed file, and an audit trail of every action |
+| `legal_agent/web/app.py` | FastAPI web app: run a review (demo or upload), read it, and let a person sign, send back or escalate |
+| `legal_agent/web/templates/` | The HTML pages (Jinja, no frontend framework) |
