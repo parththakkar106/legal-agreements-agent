@@ -8,7 +8,7 @@
    "status": "signed",
    "related_file": null,
    "signed_pdf": "files/1/signed.pdf",
-   "created_at": "2026-10-22 10:49:15 UTC"
+   "created_at": "2026-10-22 11:22:13 UTC"
   },
   {
    "id": 2,
@@ -18,7 +18,7 @@
    "status": "signed",
    "related_file": null,
    "signed_pdf": "files/2/signed.pdf",
-   "created_at": "2026-10-22 10:49:51 UTC"
+   "created_at": "2026-10-22 11:22:47 UTC"
   },
   {
    "id": 3,
@@ -28,7 +28,7 @@
    "status": "signed",
    "related_file": null,
    "signed_pdf": "files/3/signed.pdf",
-   "created_at": "2026-10-22 10:50:28 UTC"
+   "created_at": "2026-10-22 11:23:08 UTC"
   },
   {
    "id": 4,
@@ -38,7 +38,7 @@
    "status": "waiting for counterparty",
    "related_file": null,
    "signed_pdf": null,
-   "created_at": "2026-10-22 10:50:51 UTC"
+   "created_at": "2026-10-22 11:23:27 UTC"
   },
   {
    "id": 5,
@@ -48,7 +48,7 @@
    "status": "needs review",
    "related_file": null,
    "signed_pdf": null,
-   "created_at": "2026-10-22 10:51:12 UTC"
+   "created_at": "2026-10-22 11:23:46 UTC"
   },
   {
    "id": 6,
@@ -58,7 +58,7 @@
    "status": "ready to sign",
    "related_file": null,
    "signed_pdf": null,
-   "created_at": "2026-10-22 10:51:47 UTC"
+   "created_at": "2026-10-22 11:24:11 UTC"
   },
   {
    "id": 7,
@@ -68,7 +68,7 @@
    "status": "needs review",
    "related_file": "files/7/related.docx",
    "signed_pdf": null,
-   "created_at": "2026-10-22 10:52:08 UTC"
+   "created_at": "2026-10-22 11:24:26 UTC"
   },
   {
    "id": 8,
@@ -78,7 +78,7 @@
    "status": "waiting for counterparty",
    "related_file": null,
    "signed_pdf": null,
-   "created_at": "2026-10-22 10:52:24 UTC"
+   "created_at": "2026-10-22 11:24:40 UTC"
   },
   {
    "id": 9,
@@ -88,7 +88,7 @@
    "status": "not reviewed",
    "related_file": null,
    "signed_pdf": null,
-   "created_at": "2026-10-22 10:52:24 UTC"
+   "created_at": "2026-10-22 11:24:40 UTC"
   }
  ],
  "versions": [
@@ -101,7 +101,7 @@
    "name": "Acme_Cloud-Service-Agreement_v1.docx",
    "sha256": "19b21690f6accfcbbcf7f1edc61773414891af5d1c88c900a90eefd9c4c15d53",
    "note": "",
-   "created_at": "2026-10-22 10:49:15 UTC"
+   "created_at": "2026-10-22 11:22:13 UTC"
   },
   {
    "id": 2,
@@ -112,7 +112,7 @@
    "name": "Globex_Cloud-Service-Agreement_v2_redline.docx",
    "sha256": "86ae5ca9c766482b81a660019dda813da4a140b5be9149d79557fb473c04bf07",
    "note": "",
-   "created_at": "2026-10-22 10:49:15 UTC"
+   "created_at": "2026-10-22 11:22:13 UTC"
   },
   {
    "id": 3,
@@ -121,9 +121,9 @@
    "author": "Acme Cloud Inc.",
    "file": "files/1/v3.docx",
    "name": "Acme_Cloud-Service-Agreement_v3.docx",
-   "sha256": "0347eb8bc7043302bcc3b2067a0016f15fe18c6c0562d41f7940868435fb00cc",
+   "sha256": "4556c41df0bb6d71646b87cf397fb2c1c0233a2458609e01aa9869a5b349490a",
    "note": "Our answer to your changes in v2. Version v3 is attached, unsigned.\n- Payment Period: we propose new wording, see the attached version. We can move from 30 to 45 days, which is the longest we offer.\n- General Cap Amount: not accepted; our original wording is restored. We keep the cap at 12 months of fees, our standard for all customers.\n- § 5.5.b: not accepted; our original wording is restored. We need to keep the deletion clause; it is required for GDPR compliance.",
-   "created_at": "2026-10-22 10:49:36 UTC"
+   "created_at": "2026-10-22 11:22:34 UTC"
   },
   {
    "id": 4,
@@ -132,9 +132,9 @@
    "author": "Globex Inc.",
    "file": "files/1/v4.docx",
    "name": "Globex_Cloud-Service-Agreement_v4.docx",
-   "sha256": "7c5aa0a073b1256a9248734a2ec58e427e2a2cf91517d8554e6d94a528b87cd4",
+   "sha256": "109d5ad79efd404782ea5ad5d207492dd2d162643f66077725e6568612d8ff58",
    "note": "",
-   "created_at": "2026-10-22 10:49:36 UTC"
+   "created_at": "2026-10-22 11:22:34 UTC"
   },
   {
    "id": 5,
@@ -145,7 +145,7 @@
    "name": "Acme_Mutual-NDA_v1.docx",
    "sha256": "2c069c3c709e083be1df5b5bf22bd10b7fec159c521dd4b665bf31e16b3129f5",
    "note": "",
-   "created_at": "2026-10-22 10:49:51 UTC"
+   "created_at": "2026-10-22 11:22:47 UTC"
   },
   {
    "id": 6,
@@ -156,7 +156,7 @@
    "name": "Initech_Mutual-NDA_v2_redline.docx",
    "sha256": "1b9149dfd70d035096471149f45c82cc0bf896cfde5620dbffb9333317a1073f",
    "note": "",
-   "created_at": "2026-10-22 10:49:51 UTC"
+   "created_at": "2026-10-22 11:22:47 UTC"
   },
   {
    "id": 7,
@@ -167,7 +167,7 @@
    "name": "Acme_Data-Processing-Agreement_v1.docx",
    "sha256": "b96ce38dc4fd7b31651a67ceec7c3192eeee6b666eb73acf2af50c4d66f2c065",
    "note": "",
-   "created_at": "2026-10-22 10:50:28 UTC"
+   "created_at": "2026-10-22 11:23:08 UTC"
   },
   {
    "id": 8,
@@ -178,7 +178,7 @@
    "name": "Umbrella_Data-Processing-Agreement_v2_redline.docx",
    "sha256": "2f5797575fbca10a5a9e9327ae01cdf876ed718540aa7943b0dd765750855582",
    "note": "",
-   "created_at": "2026-10-22 10:50:28 UTC"
+   "created_at": "2026-10-22 11:23:08 UTC"
   },
   {
    "id": 9,
@@ -187,9 +187,9 @@
    "author": "Acme Cloud Inc.",
    "file": "files/3/v3.docx",
    "name": "Acme_Data-Processing-Agreement_v3.docx",
-   "sha256": "03556b11074f09e78de973014ed8635a9f24e6dbdc28ae9b7835c03ab4c6dae8",
+   "sha256": "d4fb1e370e6156adad67b0c251cec72530fa5a27e7833b4105fd1d0a882b74d0",
    "note": "Our answer to your changes in v2. Version v3 is attached, unsigned.\n- Subprocessor Notice Period: not accepted; our original wording is restored. We keep 30 days' notice with your right to object.\n- § 3.1.a: not accepted; the new clause is taken out. We cannot commit to EU-only processing; transfers are covered by the SCCs.\n- § 4.1: we propose new wording, see the attached version. We can commit to 48 hours, with details provided in phases.",
-   "created_at": "2026-10-22 10:50:51 UTC"
+   "created_at": "2026-10-22 11:23:27 UTC"
   },
   {
    "id": 10,
@@ -198,9 +198,9 @@
    "author": "Umbrella Corp.",
    "file": "files/3/v4.docx",
    "name": "Umbrella_Data-Processing-Agreement_v4.docx",
-   "sha256": "03556b11074f09e78de973014ed8635a9f24e6dbdc28ae9b7835c03ab4c6dae8",
+   "sha256": "d4fb1e370e6156adad67b0c251cec72530fa5a27e7833b4105fd1d0a882b74d0",
    "note": "",
-   "created_at": "2026-10-22 10:50:51 UTC"
+   "created_at": "2026-10-22 11:23:27 UTC"
   },
   {
    "id": 11,
@@ -211,7 +211,7 @@
    "name": "Acme_Data-Processing-Agreement_v1.docx",
    "sha256": "b96ce38dc4fd7b31651a67ceec7c3192eeee6b666eb73acf2af50c4d66f2c065",
    "note": "",
-   "created_at": "2026-10-22 10:50:51 UTC"
+   "created_at": "2026-10-22 11:23:27 UTC"
   },
   {
    "id": 12,
@@ -222,7 +222,7 @@
    "name": "Initech_Data-Processing-Agreement_v2_redline.docx",
    "sha256": "2f5797575fbca10a5a9e9327ae01cdf876ed718540aa7943b0dd765750855582",
    "note": "",
-   "created_at": "2026-10-22 10:50:51 UTC"
+   "created_at": "2026-10-22 11:23:27 UTC"
   },
   {
    "id": 13,
@@ -231,9 +231,9 @@
    "author": "Acme Cloud Inc.",
    "file": "files/4/v3.docx",
    "name": "Acme_Data-Processing-Agreement_v3.docx",
-   "sha256": "56632bec94ff8cf429e07426b4f0226fb7476ec4864cf148a8ea2cde8ff8a785",
+   "sha256": "80a998175243ad2ce013a015e351f8c8a4925f61a057e999608f757f71775d2f",
    "note": "Our answer to your changes in v2. Version v3 is attached, unsigned.\n- Subprocessor Notice Period: not accepted; our original wording is restored. We keep 30 days' notice with your right to object.\n- § 3.1.a: not accepted; the new clause is taken out. We cannot commit to EU-only processing; transfers are covered by the SCCs.\n- § 4.1: we propose new wording, see the attached version. We can commit to 48 hours, with details provided in phases.",
-   "created_at": "2026-10-22 10:51:12 UTC"
+   "created_at": "2026-10-22 11:23:46 UTC"
   },
   {
    "id": 14,
@@ -244,7 +244,7 @@
    "name": "Acme_Cloud-Service-Agreement_v1.docx",
    "sha256": "19b21690f6accfcbbcf7f1edc61773414891af5d1c88c900a90eefd9c4c15d53",
    "note": "",
-   "created_at": "2026-10-22 10:51:12 UTC"
+   "created_at": "2026-10-22 11:23:46 UTC"
   },
   {
    "id": 15,
@@ -255,7 +255,7 @@
    "name": "Hooli_Cloud-Service-Agreement_v2_redline.docx",
    "sha256": "86ae5ca9c766482b81a660019dda813da4a140b5be9149d79557fb473c04bf07",
    "note": "",
-   "created_at": "2026-10-22 10:51:12 UTC"
+   "created_at": "2026-10-22 11:23:46 UTC"
   },
   {
    "id": 16,
@@ -264,9 +264,9 @@
    "author": "Acme Cloud Inc.",
    "file": "files/5/v3.docx",
    "name": "Acme_Cloud-Service-Agreement_v3.docx",
-   "sha256": "f52149e140616308954be3241c266b679f075455f03cd01180baf413fcdf021e",
+   "sha256": "82beea44f52c31927d7080ae8b950e83b7c5083bb59482bccb9c533e82720443",
    "note": "Our answer to your changes in v2. Version v3 is attached, unsigned.\n- Payment Period: we propose new wording, see the attached version. We can move from 30 to 45 days, which is the longest we offer.\n- General Cap Amount: not accepted; our original wording is restored. We keep the cap at 12 months of fees, our standard for all customers.\n- § 5.5.b: not accepted; our original wording is restored. We need to keep the deletion clause; it is required for GDPR compliance.",
-   "created_at": "2026-10-22 10:51:35 UTC"
+   "created_at": "2026-10-22 11:24:02 UTC"
   },
   {
    "id": 17,
@@ -275,9 +275,9 @@
    "author": "Hooli Inc.",
    "file": "files/5/v4.docx",
    "name": "Hooli_Cloud-Service-Agreement_v4.docx",
-   "sha256": "197aa19f5ac29a6fb1e2ee8d9ffc815ab71d98d6addafabfb2e6288c2e50104a",
+   "sha256": "c32334fc3da19e519c7fef3ed28170bc21616cb15b41c5cf1635f7643ea347d4",
    "note": "",
-   "created_at": "2026-10-22 10:51:35 UTC"
+   "created_at": "2026-10-22 11:24:03 UTC"
   },
   {
    "id": 18,
@@ -288,7 +288,7 @@
    "name": "Acme_Mutual-NDA_v1.docx",
    "sha256": "2c069c3c709e083be1df5b5bf22bd10b7fec159c521dd4b665bf31e16b3129f5",
    "note": "",
-   "created_at": "2026-10-22 10:51:47 UTC"
+   "created_at": "2026-10-22 11:24:11 UTC"
   },
   {
    "id": 19,
@@ -299,7 +299,7 @@
    "name": "Vandelay_Mutual-NDA_v2_redline.docx",
    "sha256": "1b9149dfd70d035096471149f45c82cc0bf896cfde5620dbffb9333317a1073f",
    "note": "",
-   "created_at": "2026-10-22 10:51:47 UTC"
+   "created_at": "2026-10-22 11:24:11 UTC"
   },
   {
    "id": 20,
@@ -310,7 +310,7 @@
    "name": "Acme_Onboarding-SOW_v1.docx",
    "sha256": "56422fee0dec814c7ed1114871062f31edcbbf2ada3eb30dd4c4d79e561b671a",
    "note": "",
-   "created_at": "2026-10-22 10:52:08 UTC"
+   "created_at": "2026-10-22 11:24:26 UTC"
   },
   {
    "id": 21,
@@ -321,7 +321,7 @@
    "name": "Globex_Onboarding-SOW_v2_redline.docx",
    "sha256": "0967c8ccde6ba9ae8d8abcb59298727a6d22fc61625e31e35bb339cce9024585",
    "note": "",
-   "created_at": "2026-10-22 10:52:08 UTC"
+   "created_at": "2026-10-22 11:24:26 UTC"
   },
   {
    "id": 22,
@@ -332,7 +332,7 @@
    "name": "Acme_Mutual-NDA_v1.docx",
    "sha256": "2c069c3c709e083be1df5b5bf22bd10b7fec159c521dd4b665bf31e16b3129f5",
    "note": "",
-   "created_at": "2026-10-22 10:52:24 UTC"
+   "created_at": "2026-10-22 11:24:40 UTC"
   },
   {
    "id": 23,
@@ -343,7 +343,7 @@
    "name": "Acme_Data-Processing-Agreement_v1.docx",
    "sha256": "b96ce38dc4fd7b31651a67ceec7c3192eeee6b666eb73acf2af50c4d66f2c065",
    "note": "",
-   "created_at": "2026-10-22 10:52:24 UTC"
+   "created_at": "2026-10-22 11:24:40 UTC"
   },
   {
    "id": 24,
@@ -354,7 +354,7 @@
    "name": "Globex_Data-Processing-Agreement_v2_redline.docx",
    "sha256": "2f5797575fbca10a5a9e9327ae01cdf876ed718540aa7943b0dd765750855582",
    "note": "",
-   "created_at": "2026-10-22 10:52:24 UTC"
+   "created_at": "2026-10-22 11:24:40 UTC"
   }
  ],
  "rounds": [
@@ -366,7 +366,7 @@
    "status": "closed",
    "stage": null,
    "changes_json": "[{\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Payment Period\", \"title\": \"Payment Period\", \"old_text\": \"30 days from the invoice date.\", \"new_text\": \"90 days from the invoice date.\", \"word_diff\": [[\"delete\", \"30\"], [\"insert\", \"90\"], [\"equal\", \"days from the invoice date.\"]]}, {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"General Cap Amount\", \"title\": \"General Cap Amount\", \"old_text\": \"The Fees paid or payable by Customer in the 12 months immediately before the claim.\", \"new_text\": \"The Fees paid or payable by Customer in the 24 months immediately before the claim.\", \"word_diff\": [[\"equal\", \"The Fees paid or payable by Customer in the\"], [\"delete\", \"12\"], [\"insert\", \"24\"], [\"equal\", \"months immediately before the claim.\"]]}, {\"id\": 3, \"kind\": \"removed\", \"clause_id\": \"5.5.b\", \"title\": \"\", \"old_text\": \"Upon Customer\\u2019s request, Provider will delete Customer Content within 60 days.\", \"new_text\": \"\", \"word_diff\": []}]",
-   "result_json": "{\"doc_type\": \"msa\", \"verdict\": \"escalate\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Payment Period\", \"title\": \"Payment Period\", \"old_text\": \"30 days from the invoice date.\", \"new_text\": \"90 days from the invoice date.\", \"word_diff\": [[\"delete\", \"30\"], [\"insert\", \"90\"], [\"equal\", \"days from the invoice date.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the invoice payment deadline from 30 days to 90 days after the invoice date.\", \"impact\": \"Acme would wait up to three months to be paid, which hurts cash flow and is beyond the 45 days the playbook allows.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"payment-terms\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can offer payment within 30 days of the invoice date, and we could agree to up to 45 days if needed.\", \"confidence\": 0.96, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"General Cap Amount\", \"title\": \"General Cap Amount\", \"old_text\": \"The Fees paid or payable by Customer in the 12 months immediately before the claim.\", \"new_text\": \"The Fees paid or payable by Customer in the 24 months immediately before the claim.\", \"word_diff\": [[\"equal\", \"The Fees paid or payable by Customer in the\"], [\"delete\", \"12\"], [\"insert\", \"24\"], [\"equal\", \"months immediately before the claim.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the general liability cap from fees paid or payable in the 12 months before a claim to fees in the 24 months before a claim. This doubles the cap.\", \"impact\": \"Acme's maximum exposure for general claims would double, going beyond the 12-month limit our playbook allows.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"liability-cap\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can offer a general cap of the fees paid or payable in the 12 months before the claim, and a separate higher cap for data breaches of up to 2x that general cap.\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 3, \"kind\": \"removed\", \"clause_id\": \"5.5.b\", \"title\": \"\", \"old_text\": \"Upon Customer\\u2019s request, Provider will delete Customer Content within 60 days.\", \"new_text\": \"\", \"word_diff\": []}, \"gdpr_chapters\": [\"II\", \"III\", \"IV\"], \"search_query\": \"controller erasure of personal data upon request storage limitation processor deletion after end of processing\", \"excerpts\": [\"GDPR Art. 17(2)\", \"GDPR Art. 28(3)\", \"GDPR Art. 18(1)\", \"GDPR Art. 19\"], \"meaning\": \"The customer deleted the clause that let it ask Acme to delete its Customer Content within 60 days. The agreement no longer gives the customer an express right to request deletion.\", \"impact\": \"No playbook rule covers data deletion. Removing the clause could leave Acme without clear deletion terms. If Acme acts as a processor of personal data, GDPR Art. 28(3)(g) expects deletion or return at the controller's choice after the services end. That is a data protection and legal question for a human to decide.\", \"ai_decision\": \"escalate\", \"decision\": \"escalate\", \"rule_ids\": [], \"gdpr_citations\": [\"GDPR Art. 28(3)\"], \"counter_proposal\": \"\", \"confidence\": 0.8, \"guardrail_notes\": [\"No playbook rule covers this change.\"], \"context_used\": []}], \"groups\": [], \"usage\": {\"calls\": 5, \"input_tokens\": 27776, \"output_tokens\": 1767, \"cost_usd\": 0.1160556, \"llm_seconds\": 30.371574885000086}}"
+   "result_json": "{\"doc_type\": \"msa\", \"verdict\": \"escalate\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Payment Period\", \"title\": \"Payment Period\", \"old_text\": \"30 days from the invoice date.\", \"new_text\": \"90 days from the invoice date.\", \"word_diff\": [[\"delete\", \"30\"], [\"insert\", \"90\"], [\"equal\", \"days from the invoice date.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the payment deadline from 30 days to 90 days after the invoice date.\", \"impact\": \"Acme would wait up to three months to be paid, which hurts cash flow and delays the point at which it can suspend for non-payment. This is well past the 45-day limit we accept.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"payment-terms\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can offer payment within 30 days of the invoice date, or up to 45 days at most, but not 90 days.\", \"confidence\": 0.96, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"General Cap Amount\", \"title\": \"General Cap Amount\", \"old_text\": \"The Fees paid or payable by Customer in the 12 months immediately before the claim.\", \"new_text\": \"The Fees paid or payable by Customer in the 24 months immediately before the claim.\", \"word_diff\": [[\"equal\", \"The Fees paid or payable by Customer in the\"], [\"delete\", \"12\"], [\"insert\", \"24\"], [\"equal\", \"months immediately before the claim.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer doubled the general liability cap, from fees paid or payable in the 12 months before a claim to fees in the 24 months before a claim.\", \"impact\": \"Acme's maximum exposure to the customer under the general cap roughly doubles, which goes beyond what the playbook allows.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"liability-cap\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can keep the general cap at the fees paid or payable in the 12 months before the claim, and we can discuss a separate higher cap for data breaches of up to 2x the general cap.\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 3, \"kind\": \"removed\", \"clause_id\": \"5.5.b\", \"title\": \"\", \"old_text\": \"Upon Customer\\u2019s request, Provider will delete Customer Content within 60 days.\", \"new_text\": \"\", \"word_diff\": []}, \"gdpr_chapters\": [\"II\", \"III\", \"IV\"], \"search_query\": \"controller erasure of personal data upon request storage limitation processor deletion after end of processing\", \"excerpts\": [\"GDPR Art. 17(2)\", \"GDPR Art. 28(3)\", \"GDPR Art. 18(1)\", \"GDPR Art. 19\"], \"meaning\": \"The customer deleted the clause that let it ask Acme to delete its Customer Content within 60 days. The contract no longer has an explicit deletion-on-request commitment after termination.\", \"impact\": \"Removing it lowers Acme's own obligation, so the commercial risk is small. But the contract may no longer give the customer the deletion or return right that GDPR requires in processor contracts. Acme would then have no clear rule on what happens to customer data after termination.\", \"ai_decision\": \"escalate\", \"decision\": \"escalate\", \"rule_ids\": [], \"gdpr_citations\": [\"GDPR Art. 28(3)\"], \"counter_proposal\": \"\", \"confidence\": 0.8, \"guardrail_notes\": [\"No playbook rule covers this change.\"], \"context_used\": []}], \"groups\": [], \"usage\": {\"calls\": 5, \"input_tokens\": 27774, \"output_tokens\": 1869, \"cost_usd\": 0.0281671, \"llm_seconds\": 33.109955420999995}}"
   },
   {
    "id": 2,
@@ -376,7 +376,7 @@
    "status": "closed",
    "stage": null,
    "changes_json": "[{\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"General Cap Amount\", \"title\": \"General Cap Amount\", \"old_text\": \"The Fees paid or payable by Customer in the 12 months immediately before the claim.\", \"new_text\": \"The Fees paid or payable by Customer in the 18 months immediately before the claim.\", \"word_diff\": [[\"equal\", \"The Fees paid or payable by Customer in the\"], [\"delete\", \"12\"], [\"insert\", \"18\"], [\"equal\", \"months immediately before the claim.\"]]}]",
-   "result_json": "{\"doc_type\": \"msa\", \"verdict\": \"send back\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"General Cap Amount\", \"title\": \"General Cap Amount\", \"old_text\": \"The Fees paid or payable by Customer in the 12 months immediately before the claim.\", \"new_text\": \"The Fees paid or payable by Customer in the 18 months immediately before the claim.\", \"word_diff\": [[\"equal\", \"The Fees paid or payable by Customer in the\"], [\"delete\", \"12\"], [\"insert\", \"18\"], [\"equal\", \"months immediately before the claim.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer raised the general liability cap from 12 months of fees to 18 months of fees paid or payable before a claim.\", \"impact\": \"Acme's maximum exposure for claims increases by about 50%, going beyond the 12-month limit the playbook allows for a general cap.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"liability-cap\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can offer a general cap of the fees paid or payable in the 12 months before the claim, and, if needed, a separate higher cap for data breaches of up to 2x the general cap.\", \"confidence\": 0.96, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [], \"usage\": {\"calls\": 2, \"input_tokens\": 10305, \"output_tokens\": 500, \"cost_usd\": 0.037698300000000004, \"llm_seconds\": 12.498879854999927}}"
+   "result_json": "{\"doc_type\": \"msa\", \"verdict\": \"send back\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"General Cap Amount\", \"title\": \"General Cap Amount\", \"old_text\": \"The Fees paid or payable by Customer in the 12 months immediately before the claim.\", \"new_text\": \"The Fees paid or payable by Customer in the 18 months immediately before the claim.\", \"word_diff\": [[\"equal\", \"The Fees paid or payable by Customer in the\"], [\"delete\", \"12\"], [\"insert\", \"18\"], [\"equal\", \"months immediately before the claim.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer raised the cap on each party's total liability from 12 months of fees to 18 months of fees paid or payable before the claim.\", \"impact\": \"Acme's maximum exposure to the customer rises by about 50%, which is above our accepted limit of 12 months of fees for a general cap.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"liability-cap\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can keep the general liability cap at the fees paid or payable in the 12 months before the claim, and we can discuss a separate higher cap for data breaches of up to 2x that general cap.\", \"confidence\": 0.96, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [], \"usage\": {\"calls\": 2, \"input_tokens\": 10305, \"output_tokens\": 507, \"cost_usd\": 0.0061081, \"llm_seconds\": 10.043276668999965}}"
   },
   {
    "id": 3,
@@ -386,7 +386,7 @@
    "status": "closed",
    "stage": null,
    "changes_json": "[{\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"MNDA Term\", \"title\": \"MNDA Term\", \"old_text\": \"Expires 1 year from the Effective Date.\", \"new_text\": \"Expires 3 years from the Effective Date.\", \"word_diff\": [[\"equal\", \"Expires\"], [\"delete\", \"1 year\"], [\"insert\", \"3 years\"], [\"equal\", \"from the Effective Date.\"]]}, {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"Governing Law\", \"title\": \"Governing Law\", \"old_text\": \"State of Delaware.\", \"new_text\": \"England and Wales.\", \"word_diff\": [[\"delete\", \"State of Delaware.\"], [\"insert\", \"England and Wales.\"]]}, {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"Jurisdiction\", \"title\": \"Jurisdiction\", \"old_text\": \"Courts located in New Castle, Delaware.\", \"new_text\": \"Courts located in London, England.\", \"word_diff\": [[\"equal\", \"Courts located in\"], [\"delete\", \"New Castle, Delaware.\"], [\"insert\", \"London, England.\"]]}, {\"id\": 4, \"kind\": \"added\", \"clause_id\": \"12\", \"title\": \"Non-Solicitation\", \"old_text\": \"\", \"new_text\": \"Non-Solicitation. During the MNDA Term, neither party will solicit for employment any employee of the other party it met through the Purpose.\", \"word_diff\": []}]",
-   "result_json": "{\"doc_type\": \"nda\", \"verdict\": \"send back\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"MNDA Term\", \"title\": \"MNDA Term\", \"old_text\": \"Expires 1 year from the Effective Date.\", \"new_text\": \"Expires 3 years from the Effective Date.\", \"word_diff\": [[\"equal\", \"Expires\"], [\"delete\", \"1 year\"], [\"insert\", \"3 years\"], [\"equal\", \"from the Effective Date.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer lengthened the NDA's term from 1 year to 3 years from the Effective Date.\", \"impact\": \"The NDA stays in force for three years instead of one. Acme's confidentiality obligations and the non-solicitation period (which runs for the MNDA Term) last longer. This is within our acceptable range.\", \"ai_decision\": \"accept\", \"decision\": \"accept\", \"rule_ids\": [\"nda-term\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.85, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"Governing Law\", \"title\": \"Governing Law\", \"old_text\": \"State of Delaware.\", \"new_text\": \"England and Wales.\", \"word_diff\": [[\"delete\", \"State of Delaware.\"], [\"insert\", \"England and Wales.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the governing law of the NDA from the State of Delaware to England and Wales. The jurisdiction clause already points to the courts in London, England.\", \"impact\": \"Disputes would be decided under English law in London courts instead of Delaware. The playbook allows this, and the law and courts match, so Acme takes on no extra risk.\", \"ai_decision\": \"accept\", \"decision\": \"accept\", \"rule_ids\": [\"governing-law\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.93, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"Jurisdiction\", \"title\": \"Jurisdiction\", \"old_text\": \"Courts located in New Castle, Delaware.\", \"new_text\": \"Courts located in London, England.\", \"word_diff\": [[\"equal\", \"Courts located in\"], [\"delete\", \"New Castle, Delaware.\"], [\"insert\", \"London, England.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer moved disputes from the courts in New Castle, Delaware to the courts in London, England. The governing law in the contract is England and Wales, so the courts now match it.\", \"impact\": \"Acme would have to bring or defend any NDA dispute in London instead of Delaware. That costs more and is less familiar, but the playbook allows it.\", \"ai_decision\": \"accept\", \"decision\": \"accept\", \"rule_ids\": [\"governing-law\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.9, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 4, \"kind\": \"added\", \"clause_id\": \"12\", \"title\": \"Non-Solicitation\", \"old_text\": \"\", \"new_text\": \"Non-Solicitation. During the MNDA Term, neither party will solicit for employment any employee of the other party it met through the Purpose.\", \"word_diff\": []}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer added a clause saying neither side may try to hire the other's employees that it met through the evaluation. The ban lasts for the whole MNDA Term, which is 3 years.\", \"impact\": \"The clause is mutual and limited to people met through the deal, but it restricts Acme's hiring for 3 years. The playbook allows 12 months at most.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"non-solicitation\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can accept a mutual non-solicitation clause limited to people met through the Purpose, but the restriction must last no more than 12 months, not the full 3-year MNDA Term.\", \"confidence\": 0.9, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [{\"theme\": \"Move of disputes to England and London\", \"change_ids\": [2, 3], \"summary\": \"The customer switched both the governing law and the courts from Delaware to England and Wales and London, so any NDA dispute would be decided and fought in London under English law.\"}, {\"theme\": \"Longer term extends non-solicit restriction\", \"change_ids\": [1, 4], \"summary\": \"Lengthening the MNDA Term to 3 years also stretches the new mutual non-solicit to 3 years, which is well beyond the playbook's 12-month limit on Acme's hiring.\"}], \"usage\": {\"calls\": 6, \"input_tokens\": 19906, \"output_tokens\": 2382, \"cost_usd\": 0.07781259999999998, \"llm_seconds\": 53.23597156599999}}"
+   "result_json": "{\"doc_type\": \"nda\", \"verdict\": \"send back\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"MNDA Term\", \"title\": \"MNDA Term\", \"old_text\": \"Expires 1 year from the Effective Date.\", \"new_text\": \"Expires 3 years from the Effective Date.\", \"word_diff\": [[\"equal\", \"Expires\"], [\"delete\", \"1 year\"], [\"insert\", \"3 years\"], [\"equal\", \"from the Effective Date.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the NDA term from 1 year to 3 years, so the agreement now lasts three years from the Effective Date.\", \"impact\": \"A 3-year term is the longest the playbook allows. Acme's confidentiality obligations and the non-solicitation clause (tied to the MNDA Term) run a bit longer, but this is within acceptable limits.\", \"ai_decision\": \"accept\", \"decision\": \"accept\", \"rule_ids\": [\"nda-term\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.9, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"Governing Law\", \"title\": \"Governing Law\", \"old_text\": \"State of Delaware.\", \"new_text\": \"England and Wales.\", \"word_diff\": [[\"delete\", \"State of Delaware.\"], [\"insert\", \"England and Wales.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the governing law of the NDA from the State of Delaware to England and Wales. The courts named in the contract are in London, England.\", \"impact\": \"Disputes would be handled under English law in London instead of Delaware. The playbook allows this, and the law and courts match, so it creates no extra risk for Acme.\", \"ai_decision\": \"accept\", \"decision\": \"accept\", \"rule_ids\": [\"governing-law\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.93, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"Jurisdiction\", \"title\": \"Jurisdiction\", \"old_text\": \"Courts located in New Castle, Delaware.\", \"new_text\": \"Courts located in London, England.\", \"word_diff\": [[\"equal\", \"Courts located in\"], [\"delete\", \"New Castle, Delaware.\"], [\"insert\", \"London, England.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer moved the courts that handle disputes from New Castle, Delaware to London, England.\", \"impact\": \"Disputes would be heard in London, not Delaware. This matches the England and Wales governing law already in the NDA, so Acme takes on no extra risk under the playbook.\", \"ai_decision\": \"accept\", \"decision\": \"accept\", \"rule_ids\": [\"governing-law\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.93, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 4, \"kind\": \"added\", \"clause_id\": \"12\", \"title\": \"Non-Solicitation\", \"old_text\": \"\", \"new_text\": \"Non-Solicitation. During the MNDA Term, neither party will solicit for employment any employee of the other party it met through the Purpose.\", \"word_diff\": []}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The change adds a mutual clause. For as long as the NDA runs, neither side may try to hire an employee of the other that it met through the deal. The NDA runs for 3 years, so the restriction lasts 3 years.\", \"impact\": \"Acme would be barred from recruiting relevant counterparty staff for 3 years. Our playbook allows only 12 months. The clause is mutual and limited to people met through the deal, but the duration is too long.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"non-solicitation\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can accept a mutual non-solicitation clause limited to employees met through the Purpose, but only for 12 months from the Effective Date rather than the full 3-year MNDA Term. Our standard position is no such clause.\", \"confidence\": 0.88, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [{\"theme\": \"English law and London courts\", \"change_ids\": [2, 3], \"summary\": \"The governing law and the dispute courts both moved from Delaware to England and Wales and London, so they match and are acceptable under the playbook.\"}, {\"theme\": \"Longer NDA term extends non-solicitation\", \"change_ids\": [1, 4], \"summary\": \"Extending the MNDA term to 3 years also stretches the non-solicitation restriction to 3 years, which is over the playbook's 12-month limit.\"}], \"usage\": {\"calls\": 6, \"input_tokens\": 19924, \"output_tokens\": 2325, \"cost_usd\": 0.032464599999999996, \"llm_seconds\": 35.42222636500003}}"
   },
   {
    "id": 4,
@@ -396,7 +396,7 @@
    "status": "closed",
    "stage": null,
    "changes_json": "[{\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Subprocessor Notice Period\", \"title\": \"Subprocessor Notice Period\", \"old_text\": \"30 days before a new Subprocessor is engaged.\", \"new_text\": \"60 days before a new Subprocessor is engaged.\", \"word_diff\": [[\"delete\", \"30\"], [\"insert\", \"60\"], [\"equal\", \"days before a new Subprocessor is engaged.\"]]}, {\"id\": 2, \"kind\": \"added\", \"clause_id\": \"3.1.a\", \"title\": \"\", \"old_text\": \"\", \"new_text\": \"Provider will store and process Customer Personal Data only within the European Union.\", \"word_diff\": []}, {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"4.1\", \"title\": \"\", \"old_text\": \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 72 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\", \"new_text\": \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 24 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\", \"word_diff\": [[\"equal\", \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than\"], [\"delete\", \"72\"], [\"insert\", \"24\"], [\"equal\", \"hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\"]]}]",
-   "result_json": "{\"doc_type\": \"dpa\", \"verdict\": \"escalate\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Subprocessor Notice Period\", \"title\": \"Subprocessor Notice Period\", \"old_text\": \"30 days before a new Subprocessor is engaged.\", \"new_text\": \"60 days before a new Subprocessor is engaged.\", \"word_diff\": [[\"delete\", \"30\"], [\"insert\", \"60\"], [\"equal\", \"days before a new Subprocessor is engaged.\"]]}, \"gdpr_chapters\": [\"IV\"], \"search_query\": \"processor engaging another processor prior notice to controller opportunity to object\", \"excerpts\": [\"GDPR Art. 28(2)\", \"GDPR Art. 28(4)\", \"GDPR Art. 28(10)\", \"GDPR Art. 28(3)\"], \"meaning\": \"The change increases the notice Acme must give before engaging a new subprocessor from 30 days to 60 days.\", \"impact\": \"Acme would have to wait twice as long before onboarding a new subprocessor, which slows changes to its supply chain. This is longer than the playbook allows.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"subprocessors\"], \"gdpr_citations\": [\"GDPR Art. 28(2)\"], \"counter_proposal\": \"We can offer our standard position: 30 days' notice before a new Subprocessor is engaged, with the Customer's right to object.\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"added\", \"clause_id\": \"3.1.a\", \"title\": \"\", \"old_text\": \"\", \"new_text\": \"Provider will store and process Customer Personal Data only within the European Union.\", \"word_diff\": []}, \"gdpr_chapters\": [\"V\"], \"search_query\": \"restriction of transfers of personal data to third countries outside the Union\", \"excerpts\": [\"GDPR Art. 45(8)\", \"GDPR Art. 49(5)\", \"GDPR Art. 45(1)\", \"GDPR Art. 44\"], \"meaning\": \"The customer added a sentence requiring Acme to store and process the customer's personal data only inside the European Union. This replaces the current flexibility to process data elsewhere under the EU Standard Contractual Clauses.\", \"impact\": \"Acme could not use its US-based hosting and subprocessors (for example AWS in the United States) for this customer's data. That would likely force operational changes and risk breach of contract.\", \"ai_decision\": \"escalate\", \"decision\": \"escalate\", \"rule_ids\": [\"data-location\"], \"gdpr_citations\": [\"GDPR Art. 44\"], \"counter_proposal\": \"\", \"confidence\": 0.93, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"4.1\", \"title\": \"\", \"old_text\": \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 72 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\", \"new_text\": \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 24 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\", \"word_diff\": [[\"equal\", \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than\"], [\"delete\", \"72\"], [\"insert\", \"24\"], [\"equal\", \"hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\"]]}, \"gdpr_chapters\": [\"IV\"], \"search_query\": \"processor notify controller personal data breach without undue delay 72 hours\", \"excerpts\": [\"GDPR Art. 33(1)\", \"GDPR Art. 33(2)\", \"GDPR Art. 33(4)\", \"GDPR Art. 34(1)\"], \"meaning\": \"The customer shortened the deadline for Acme to notify them of a security incident from 72 hours to 24 hours after Acme becomes aware of it.\", \"impact\": \"Acme would have to notify within 24 hours, which is a tighter deadline than our playbook allows (48 hours or more) and raises the risk of breaching the contract while an incident is still being investigated.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"breach-notification\"], \"gdpr_citations\": [\"GDPR Art. 33(2)\"], \"counter_proposal\": \"We can commit to notifying you without undue delay and no later than 72 hours after becoming aware of a Security Incident (or a shorter period of not less than 48 hours if needed).\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [{\"theme\": \"Restrictions on subprocessors and data hosting\", \"change_ids\": [1, 2], \"summary\": \"The customer is limiting Acme's freedom to choose and change its hosting and subprocessors, through a longer 60-day notice for new subprocessors and a requirement to keep data inside the EU.\"}], \"usage\": {\"calls\": 5, \"input_tokens\": 25050, \"output_tokens\": 1794, \"cost_usd\": 0.09719259999999999, \"llm_seconds\": 32.075507680999976}}"
+   "result_json": "{\"doc_type\": \"dpa\", \"verdict\": \"escalate\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Subprocessor Notice Period\", \"title\": \"Subprocessor Notice Period\", \"old_text\": \"30 days before a new Subprocessor is engaged.\", \"new_text\": \"60 days before a new Subprocessor is engaged.\", \"word_diff\": [[\"delete\", \"30\"], [\"insert\", \"60\"], [\"equal\", \"days before a new Subprocessor is engaged.\"]]}, \"gdpr_chapters\": [\"IV\"], \"search_query\": \"processor engaging another processor prior notice to controller opportunity to object\", \"excerpts\": [\"GDPR Art. 28(2)\", \"GDPR Art. 28(4)\", \"GDPR Art. 28(10)\", \"GDPR Art. 28(3)\"], \"meaning\": \"The customer doubled the advance notice Acme must give before adding a new subprocessor, from 30 days to 60 days.\", \"impact\": \"Acme would have to wait twice as long before bringing in a new subprocessor, which slows vendor changes and infrastructure rollouts. It is also more than our standard position allows.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"subprocessors\"], \"gdpr_citations\": [\"GDPR Art. 28(2)\"], \"counter_proposal\": \"We can offer general authorisation for listed subprocessors with 30 days' notice before a new one is engaged, plus the customer's right to object.\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"added\", \"clause_id\": \"3.1.a\", \"title\": \"\", \"old_text\": \"\", \"new_text\": \"Provider will store and process Customer Personal Data only within the European Union.\", \"word_diff\": []}, \"gdpr_chapters\": [\"V\"], \"search_query\": \"transfer of personal data to third countries restricted to Union territory\", \"excerpts\": [\"GDPR Art. 45(1)\", \"GDPR Art. 49(5)\", \"GDPR Art. 48\", \"GDPR Art. 49(1)\"], \"meaning\": \"The customer added a clause requiring Acme to store and process all Customer Personal Data only within the European Union. This restricts the existing right in 3.1 to transfer data outside the EEA.\", \"impact\": \"Acme could not use its US-hosted infrastructure (e.g., AWS in the United States) or any non-EU processing, and it conflicts with clause 3.1 and our standard SCC-based transfer model. This needs a business and legal decision.\", \"ai_decision\": \"escalate\", \"decision\": \"escalate\", \"rule_ids\": [\"data-location\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": [\"3.1\"]}, {\"change\": {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"4.1\", \"title\": \"\", \"old_text\": \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 72 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\", \"new_text\": \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 24 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\", \"word_diff\": [[\"equal\", \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than\"], [\"delete\", \"72\"], [\"insert\", \"24\"], [\"equal\", \"hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\"]]}, \"gdpr_chapters\": [\"IV\", \"VII\"], \"search_query\": \"processor notify controller personal data breach without undue delay supervisory authority 72 hours\", \"excerpts\": [\"GDPR Art. 33(1)\", \"GDPR Art. 33(2)\", \"GDPR Art. 33(4)\", \"GDPR Art. 33(5)\"], \"meaning\": \"The customer shortened the deadline for Acme to notify them of a security incident from 72 hours to 24 hours after Acme becomes aware of it.\", \"impact\": \"Acme would have a much tighter deadline to notify, risking breach of contract if investigation takes longer. This is stricter than the playbook minimum of 48 hours and stricter than GDPR requires of a processor.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"breach-notification\"], \"gdpr_citations\": [\"GDPR Art. 33(2)\"], \"counter_proposal\": \"We can commit to notifying Customer without undue delay and no later than 72 hours (or, at most, 48 hours) after becoming aware of a Security Incident, as GDPR Art. 33(2) requires only notice without undue delay.\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [{\"theme\": \"Restrictions on Acme's infrastructure and vendor flexibility\", \"change_ids\": [1, 2], \"summary\": \"The customer is limiting where Acme can process data (EU only) and how quickly Acme can add new subprocessors (60 days' notice), which together constrain Acme's hosting and vendor choices.\"}], \"usage\": {\"calls\": 6, \"input_tokens\": 32531, \"output_tokens\": 2314, \"cost_usd\": 0.054983399999999995, \"llm_seconds\": 31.815777568000044}}"
   },
   {
    "id": 5,
@@ -416,7 +416,7 @@
    "status": "closed",
    "stage": null,
    "changes_json": "[{\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Subprocessor Notice Period\", \"title\": \"Subprocessor Notice Period\", \"old_text\": \"30 days before a new Subprocessor is engaged.\", \"new_text\": \"60 days before a new Subprocessor is engaged.\", \"word_diff\": [[\"delete\", \"30\"], [\"insert\", \"60\"], [\"equal\", \"days before a new Subprocessor is engaged.\"]]}, {\"id\": 2, \"kind\": \"added\", \"clause_id\": \"3.1.a\", \"title\": \"\", \"old_text\": \"\", \"new_text\": \"Provider will store and process Customer Personal Data only within the European Union.\", \"word_diff\": []}, {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"4.1\", \"title\": \"\", \"old_text\": \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 72 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\", \"new_text\": \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 24 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\", \"word_diff\": [[\"equal\", \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than\"], [\"delete\", \"72\"], [\"insert\", \"24\"], [\"equal\", \"hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\"]]}]",
-   "result_json": "{\"doc_type\": \"dpa\", \"verdict\": \"escalate\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Subprocessor Notice Period\", \"title\": \"Subprocessor Notice Period\", \"old_text\": \"30 days before a new Subprocessor is engaged.\", \"new_text\": \"60 days before a new Subprocessor is engaged.\", \"word_diff\": [[\"delete\", \"30\"], [\"insert\", \"60\"], [\"equal\", \"days before a new Subprocessor is engaged.\"]]}, \"gdpr_chapters\": [\"IV\"], \"search_query\": \"processor engaging another processor prior notice to controller opportunity to object\", \"excerpts\": [\"GDPR Art. 28(2)\", \"GDPR Art. 28(4)\", \"GDPR Art. 28(10)\", \"GDPR Art. 28(3)\"], \"meaning\": \"The customer doubled the advance notice Acme must give before engaging a new subprocessor, from 30 days to 60 days.\", \"impact\": \"Acme would have to wait twice as long before onboarding a new subprocessor, which slows infrastructure or vendor changes. The playbook caps the notice period at 30 days.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"subprocessors\"], \"gdpr_citations\": [\"GDPR Art. 28(2)\"], \"counter_proposal\": \"We can offer our standard position: 30 days' notice before a new Subprocessor is engaged, with the Customer's right to object.\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"added\", \"clause_id\": \"3.1.a\", \"title\": \"\", \"old_text\": \"\", \"new_text\": \"Provider will store and process Customer Personal Data only within the European Union.\", \"word_diff\": []}, \"gdpr_chapters\": [\"V\"], \"search_query\": \"transfer of personal data to third country restricted to Union territory\", \"excerpts\": [\"GDPR Art. 45(1)\", \"GDPR Art. 48\", \"GDPR Art. 49(5)\", \"GDPR Art. 44\"], \"meaning\": \"The customer added a rule that Acme may store and process their personal data only within the European Union. This removes Acme's ability to process data elsewhere, such as in the United States.\", \"impact\": \"Acme's hosting and subprocessors include US locations, so it might not be able to comply without changing its infrastructure. This is a data-residency commitment that needs a business and legal decision.\", \"ai_decision\": \"escalate\", \"decision\": \"escalate\", \"rule_ids\": [\"data-location\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.93, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"4.1\", \"title\": \"\", \"old_text\": \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 72 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\", \"new_text\": \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 24 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\", \"word_diff\": [[\"equal\", \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than\"], [\"delete\", \"72\"], [\"insert\", \"24\"], [\"equal\", \"hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\"]]}, \"gdpr_chapters\": [\"IV\"], \"search_query\": \"processor notify controller personal data breach without undue delay 72 hours supervisory authority\", \"excerpts\": [\"GDPR Art. 33(1)\", \"GDPR Art. 33(2)\", \"GDPR Art. 33(4)\", \"GDPR Art. 33(5)\"], \"meaning\": \"The customer shortened the deadline for Acme to notify them of a security incident from 72 hours to 24 hours after Acme becomes aware of it.\", \"impact\": \"Acme would have to notify within 24 hours, which is tighter than our standard and than the 48-hour minimum we accept. Missing it would put Acme in breach of the DPA.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"breach-notification\"], \"gdpr_citations\": [\"GDPR Art. 33(2)\"], \"counter_proposal\": \"We can commit to notifying Customer without undue delay and no later than 72 hours after becoming aware of a Security Incident (or 48 hours at the shortest).\", \"confidence\": 0.96, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [{\"theme\": \"Operational constraints in data processing terms\", \"change_ids\": [1, 2, 3], \"summary\": \"The customer's edits to subprocessor notice, EU-only data location and a 24-hour incident notice together make Acme's data processing duties harder to meet and raise its risk of breaching the DPA.\"}], \"usage\": {\"calls\": 5, \"input_tokens\": 25112, \"output_tokens\": 1704, \"cost_usd\": 0.0642213, \"llm_seconds\": 29.23098479199996}}"
+   "result_json": "{\"doc_type\": \"dpa\", \"verdict\": \"escalate\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Subprocessor Notice Period\", \"title\": \"Subprocessor Notice Period\", \"old_text\": \"30 days before a new Subprocessor is engaged.\", \"new_text\": \"60 days before a new Subprocessor is engaged.\", \"word_diff\": [[\"delete\", \"30\"], [\"insert\", \"60\"], [\"equal\", \"days before a new Subprocessor is engaged.\"]]}, \"gdpr_chapters\": [\"IV\"], \"search_query\": \"processor engaging another processor prior notice to controller opportunity to object\", \"excerpts\": [\"GDPR Art. 28(2)\", \"GDPR Art. 28(4)\", \"GDPR Art. 28(10)\", \"GDPR Art. 28(3)\"], \"meaning\": \"The customer doubled the advance notice Acme must give before engaging a new subprocessor, from 30 days to 60 days.\", \"impact\": \"Acme would have to wait twice as long before onboarding a new subprocessor. That slows vendor changes and goes beyond our standard 30-day position.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"subprocessors\"], \"gdpr_citations\": [\"GDPR Art. 28(2)\"], \"counter_proposal\": \"We can offer general authorisation for listed subprocessors with 30 days' notice before a new one is engaged, and the customer keeps the right to object.\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"added\", \"clause_id\": \"3.1.a\", \"title\": \"\", \"old_text\": \"\", \"new_text\": \"Provider will store and process Customer Personal Data only within the European Union.\", \"word_diff\": []}, \"gdpr_chapters\": [\"V\"], \"search_query\": \"transfer of personal data to third countries restricted to European Union territory\", \"excerpts\": [\"GDPR Art. 45(1)\", \"GDPR Art. 49(5)\", \"GDPR Art. 48\", \"GDPR Art. 49(1)\"], \"meaning\": \"The customer added a requirement that Acme store and process all Customer Personal Data only inside the European Union.\", \"impact\": \"Acme could not use its US-based hosting (e.g. AWS in the United States) or other non-EU processing for this customer. It would need to change infrastructure and could breach the contract. It also conflicts with the SCC-based transfer approach in Section 3.\", \"ai_decision\": \"escalate\", \"decision\": \"escalate\", \"rule_ids\": [\"data-location\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"4.1\", \"title\": \"\", \"old_text\": \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 72 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\", \"new_text\": \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 24 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\", \"word_diff\": [[\"equal\", \"Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than\"], [\"delete\", \"72\"], [\"insert\", \"24\"], [\"equal\", \"hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider\\u2019s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.\"]]}, \"gdpr_chapters\": [\"IV\"], \"search_query\": \"processor notify controller personal data breach without undue delay timeframe hours\", \"excerpts\": [\"GDPR Art. 33(1)\", \"GDPR Art. 33(2)\", \"GDPR Art. 33(4)\", \"GDPR Art. 34(1)\"], \"meaning\": \"The customer shortened the deadline for Acme to notify them of a security incident from 72 hours to 24 hours after Acme becomes aware of it.\", \"impact\": \"Acme would have to notify within 24 hours, which is tighter than our playbook allows (48 hours minimum) and raises the risk of breaching the contract while an incident is still being investigated.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"breach-notification\"], \"gdpr_citations\": [\"GDPR Art. 33(2)\"], \"counter_proposal\": \"We can commit to notifying you without undue delay and within 72 hours of becoming aware of a Security Incident (we could agree to 48 hours at the shortest).\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [{\"theme\": \"Stricter data protection obligations on Acme\", \"change_ids\": [1, 2, 3], \"summary\": \"The customer's edits to subprocessor notice (60 days), EU-only data storage and processing, and 24-hour incident notification together make Acme's data protection duties much tighter and raise the risk that Acme breaches the contract.\"}], \"usage\": {\"calls\": 5, \"input_tokens\": 25704, \"output_tokens\": 1858, \"cost_usd\": 0.027853999999999997, \"llm_seconds\": 27.466820493999876}}"
   },
   {
    "id": 7,
@@ -426,7 +426,7 @@
    "status": "closed",
    "stage": null,
    "changes_json": "[{\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Payment Period\", \"title\": \"Payment Period\", \"old_text\": \"30 days from the invoice date.\", \"new_text\": \"90 days from the invoice date.\", \"word_diff\": [[\"delete\", \"30\"], [\"insert\", \"90\"], [\"equal\", \"days from the invoice date.\"]]}, {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"General Cap Amount\", \"title\": \"General Cap Amount\", \"old_text\": \"The Fees paid or payable by Customer in the 12 months immediately before the claim.\", \"new_text\": \"The Fees paid or payable by Customer in the 24 months immediately before the claim.\", \"word_diff\": [[\"equal\", \"The Fees paid or payable by Customer in the\"], [\"delete\", \"12\"], [\"insert\", \"24\"], [\"equal\", \"months immediately before the claim.\"]]}, {\"id\": 3, \"kind\": \"removed\", \"clause_id\": \"5.5.b\", \"title\": \"\", \"old_text\": \"Upon Customer\\u2019s request, Provider will delete Customer Content within 60 days.\", \"new_text\": \"\", \"word_diff\": []}]",
-   "result_json": "{\"doc_type\": \"msa\", \"verdict\": \"escalate\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Payment Period\", \"title\": \"Payment Period\", \"old_text\": \"30 days from the invoice date.\", \"new_text\": \"90 days from the invoice date.\", \"word_diff\": [[\"delete\", \"30\"], [\"insert\", \"90\"], [\"equal\", \"days from the invoice date.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the invoice payment deadline from 30 days to 90 days after the invoice date.\", \"impact\": \"Acme would wait three times as long to be paid, which hurts cash flow and delays its right to suspend for non-payment. It is beyond the 45-day limit the playbook allows.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"payment-terms\"], \"gdpr_citations\": [], \"counter_proposal\": \"Our standard position is that invoices are due within 30 days of the invoice date, and we can agree to up to 45 days if needed.\", \"confidence\": 0.97, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"General Cap Amount\", \"title\": \"General Cap Amount\", \"old_text\": \"The Fees paid or payable by Customer in the 12 months immediately before the claim.\", \"new_text\": \"The Fees paid or payable by Customer in the 24 months immediately before the claim.\", \"word_diff\": [[\"equal\", \"The Fees paid or payable by Customer in the\"], [\"delete\", \"12\"], [\"insert\", \"24\"], [\"equal\", \"months immediately before the claim.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the general liability cap from fees paid or payable in the 12 months before a claim to fees in the 24 months before a claim. This doubles the maximum amount either party can be held liable for.\", \"impact\": \"Acme's maximum exposure for general claims roughly doubles, going beyond our standard 12-month limit.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"liability-cap\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can agree to a general cap of the fees paid or payable in the 12 months before the claim, and we can discuss a separate higher cap of up to 2x that amount for data breaches.\", \"confidence\": 0.96, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 3, \"kind\": \"removed\", \"clause_id\": \"5.5.b\", \"title\": \"\", \"old_text\": \"Upon Customer\\u2019s request, Provider will delete Customer Content within 60 days.\", \"new_text\": \"\", \"word_diff\": []}, \"gdpr_chapters\": [\"II\", \"III\", \"IV\"], \"search_query\": \"controller erasure of personal data upon request storage limitation processor deletion after termination\", \"excerpts\": [\"GDPR Art. 17(2)\", \"GDPR Art. 19\", \"GDPR Art. 28(3)\", \"GDPR Art. 18(1)\"], \"meaning\": \"The customer deleted the clause saying Acme will delete Customer Content within 60 days of the customer's request. The contract no longer has an express deletion commitment in the termination section.\", \"impact\": \"Acme loses a defined deletion duty, which reduces its operational burden. But where Acme acts as a processor of personal data, GDPR requires the contract to provide for deletion or return of data at the controller's choice, so the gap could create a compliance problem. It may also leave deletion and retention terms unclear.\", \"ai_decision\": \"escalate\", \"decision\": \"escalate\", \"rule_ids\": [], \"gdpr_citations\": [\"GDPR Art. 28(3)\"], \"counter_proposal\": \"\", \"confidence\": 0.8, \"guardrail_notes\": [\"No playbook rule covers this change.\"], \"context_used\": []}], \"groups\": [], \"usage\": {\"calls\": 5, \"input_tokens\": 27804, \"output_tokens\": 1871, \"cost_usd\": 0.0548934, \"llm_seconds\": 37.05862770999988}}"
+   "result_json": "{\"doc_type\": \"msa\", \"verdict\": \"escalate\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Payment Period\", \"title\": \"Payment Period\", \"old_text\": \"30 days from the invoice date.\", \"new_text\": \"90 days from the invoice date.\", \"word_diff\": [[\"delete\", \"30\"], [\"insert\", \"90\"], [\"equal\", \"days from the invoice date.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the payment deadline from 30 days to 90 days after the invoice date, so they have three times as long to pay.\", \"impact\": \"Acme would wait up to 90 days for payment, which slows cash flow and delays the point at which it can suspend for non-payment. This is well beyond the 45-day limit in the playbook.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"payment-terms\"], \"gdpr_citations\": [], \"counter_proposal\": \"Our standard position is that invoices are due within 30 days of the invoice date, and we can agree to up to 45 days if needed.\", \"confidence\": 0.96, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"General Cap Amount\", \"title\": \"General Cap Amount\", \"old_text\": \"The Fees paid or payable by Customer in the 12 months immediately before the claim.\", \"new_text\": \"The Fees paid or payable by Customer in the 24 months immediately before the claim.\", \"word_diff\": [[\"equal\", \"The Fees paid or payable by Customer in the\"], [\"delete\", \"12\"], [\"insert\", \"24\"], [\"equal\", \"months immediately before the claim.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the general liability cap from fees paid or payable in the 12 months before a claim to fees in the 24 months before a claim. This doubles the maximum amount either party can be liable for.\", \"impact\": \"Acme's maximum exposure for general claims roughly doubles, which is above our accepted limit of 12 months of fees.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"liability-cap\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can keep the general cap at the fees paid or payable in the 12 months before the claim, and we can discuss a separate higher cap for data breaches of up to 2x that general cap.\", \"confidence\": 0.96, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 3, \"kind\": \"removed\", \"clause_id\": \"5.5.b\", \"title\": \"\", \"old_text\": \"Upon Customer\\u2019s request, Provider will delete Customer Content within 60 days.\", \"new_text\": \"\", \"word_diff\": []}, \"gdpr_chapters\": [\"II\", \"III\", \"IV\"], \"search_query\": \"controller erasure of personal data upon request storage limitation processor deletion after end of processing\", \"excerpts\": [\"GDPR Art. 17(2)\", \"GDPR Art. 28(3)\", \"GDPR Art. 18(1)\", \"GDPR Art. 19\"], \"meaning\": \"The customer deleted the clause that said Acme will delete Customer Content within 60 days if the customer asks. Acme no longer has that specific deletion promise.\", \"impact\": \"The removal cuts one of Acme's obligations, so it looks low-risk. But it leaves a gap on what happens to customer data, including personal data, after a request or at the end of the contract. That gap could matter for GDPR data-processing terms. The customer may also have a reason for the edit that we can't see from the text.\", \"ai_decision\": \"escalate\", \"decision\": \"escalate\", \"rule_ids\": [], \"gdpr_citations\": [\"GDPR Art. 28(3)\"], \"counter_proposal\": \"\", \"confidence\": 0.8, \"guardrail_notes\": [\"No playbook rule covers this change.\"], \"context_used\": []}], \"groups\": [], \"usage\": {\"calls\": 5, \"input_tokens\": 27814, \"output_tokens\": 1925, \"cost_usd\": 0.0288871, \"llm_seconds\": 24.90109108899992}}"
   },
   {
    "id": 8,
@@ -436,7 +436,7 @@
    "status": "open",
    "stage": null,
    "changes_json": "[{\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"General Cap Amount\", \"title\": \"General Cap Amount\", \"old_text\": \"The Fees paid or payable by Customer in the 12 months immediately before the claim.\", \"new_text\": \"The Fees paid or payable by Customer in the 18 months immediately before the claim.\", \"word_diff\": [[\"equal\", \"The Fees paid or payable by Customer in the\"], [\"delete\", \"12\"], [\"insert\", \"18\"], [\"equal\", \"months immediately before the claim.\"]]}]",
-   "result_json": "{\"doc_type\": \"msa\", \"verdict\": \"send back\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"General Cap Amount\", \"title\": \"General Cap Amount\", \"old_text\": \"The Fees paid or payable by Customer in the 12 months immediately before the claim.\", \"new_text\": \"The Fees paid or payable by Customer in the 18 months immediately before the claim.\", \"word_diff\": [[\"equal\", \"The Fees paid or payable by Customer in the\"], [\"delete\", \"12\"], [\"insert\", \"18\"], [\"equal\", \"months immediately before the claim.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer raised the general liability cap from the fees for the 12 months before a claim to the fees for the 18 months before a claim. This increases the maximum each party can owe the other.\", \"impact\": \"Acme's maximum exposure for general claims rises by about 50%, above the 12-month limit the playbook allows.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"liability-cap\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can keep the general cap at the fees paid or payable in the 12 months before the claim, and we can discuss a separate higher cap for data breaches of up to 2x the general cap.\", \"confidence\": 0.96, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [], \"usage\": {\"calls\": 2, \"input_tokens\": 10305, \"output_tokens\": 511, \"cost_usd\": 0.0061481, \"llm_seconds\": 11.239392439000085}}"
+   "result_json": "{\"doc_type\": \"msa\", \"verdict\": \"send back\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"General Cap Amount\", \"title\": \"General Cap Amount\", \"old_text\": \"The Fees paid or payable by Customer in the 12 months immediately before the claim.\", \"new_text\": \"The Fees paid or payable by Customer in the 18 months immediately before the claim.\", \"word_diff\": [[\"equal\", \"The Fees paid or payable by Customer in the\"], [\"delete\", \"12\"], [\"insert\", \"18\"], [\"equal\", \"months immediately before the claim.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer raised the general liability cap from fees paid or payable in the 12 months before a claim to fees in the 18 months before a claim.\", \"impact\": \"Acme's maximum exposure under the general cap rises by about 50%, beyond what the playbook allows.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"liability-cap\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can keep the general cap at the fees paid or payable in the 12 months before the claim, and we can discuss a separate higher cap for data breaches of up to 2x the general cap.\", \"confidence\": 0.96, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [], \"usage\": {\"calls\": 2, \"input_tokens\": 10305, \"output_tokens\": 496, \"cost_usd\": 0.005998100000000001, \"llm_seconds\": 6.955670234000081}}"
   },
   {
    "id": 9,
@@ -446,7 +446,7 @@
    "status": "closed",
    "stage": null,
    "changes_json": "[{\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"MNDA Term\", \"title\": \"MNDA Term\", \"old_text\": \"Expires 1 year from the Effective Date.\", \"new_text\": \"Expires 3 years from the Effective Date.\", \"word_diff\": [[\"equal\", \"Expires\"], [\"delete\", \"1 year\"], [\"insert\", \"3 years\"], [\"equal\", \"from the Effective Date.\"]]}, {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"Governing Law\", \"title\": \"Governing Law\", \"old_text\": \"State of Delaware.\", \"new_text\": \"England and Wales.\", \"word_diff\": [[\"delete\", \"State of Delaware.\"], [\"insert\", \"England and Wales.\"]]}, {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"Jurisdiction\", \"title\": \"Jurisdiction\", \"old_text\": \"Courts located in New Castle, Delaware.\", \"new_text\": \"Courts located in London, England.\", \"word_diff\": [[\"equal\", \"Courts located in\"], [\"delete\", \"New Castle, Delaware.\"], [\"insert\", \"London, England.\"]]}, {\"id\": 4, \"kind\": \"added\", \"clause_id\": \"12\", \"title\": \"Non-Solicitation\", \"old_text\": \"\", \"new_text\": \"Non-Solicitation. During the MNDA Term, neither party will solicit for employment any employee of the other party it met through the Purpose.\", \"word_diff\": []}]",
-   "result_json": "{\"doc_type\": \"nda\", \"verdict\": \"send back\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"MNDA Term\", \"title\": \"MNDA Term\", \"old_text\": \"Expires 1 year from the Effective Date.\", \"new_text\": \"Expires 3 years from the Effective Date.\", \"word_diff\": [[\"equal\", \"Expires\"], [\"delete\", \"1 year\"], [\"insert\", \"3 years\"], [\"equal\", \"from the Effective Date.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the NDA term from 1 year to 3 years, so the agreement now lasts 3 years from the Effective Date.\", \"impact\": \"A 3-year term is longer than our 1-year standard but is within the range we accept (1 to 3 years), so it creates no policy problem for Acme.\", \"ai_decision\": \"accept\", \"decision\": \"accept\", \"rule_ids\": [\"nda-term\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"Governing Law\", \"title\": \"Governing Law\", \"old_text\": \"State of Delaware.\", \"new_text\": \"England and Wales.\", \"word_diff\": [[\"delete\", \"State of Delaware.\"], [\"insert\", \"England and Wales.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the governing law of the NDA from the State of Delaware to England and Wales. The Jurisdiction field already names the courts in London, England.\", \"impact\": \"Disputes would be handled under English law in London courts instead of Delaware. The playbook allows this, and the courts match the law, so Acme takes on no unusual risk.\", \"ai_decision\": \"accept\", \"decision\": \"accept\", \"rule_ids\": [\"governing-law\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.93, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"Jurisdiction\", \"title\": \"Jurisdiction\", \"old_text\": \"Courts located in New Castle, Delaware.\", \"new_text\": \"Courts located in London, England.\", \"word_diff\": [[\"equal\", \"Courts located in\"], [\"delete\", \"New Castle, Delaware.\"], [\"insert\", \"London, England.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer moved disputes from the courts in New Castle, Delaware to the courts in London, England. The contract's governing law is already England and Wales.\", \"impact\": \"Acme would have to bring or defend any dispute in London instead of Delaware. The playbook allows England and Wales law with matching courts, so this is within the acceptable range.\", \"ai_decision\": \"accept\", \"decision\": \"accept\", \"rule_ids\": [\"governing-law\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.93, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 4, \"kind\": \"added\", \"clause_id\": \"12\", \"title\": \"Non-Solicitation\", \"old_text\": \"\", \"new_text\": \"Non-Solicitation. During the MNDA Term, neither party will solicit for employment any employee of the other party it met through the Purpose.\", \"word_diff\": []}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer added a clause saying neither side may try to hire the other's employees they met through the deal. It applies for the whole MNDA Term, which is 3 years.\", \"impact\": \"The clause is mutual and limited to people met through the deal, so it is acceptable in scope. But it lasts 3 years, which is much longer than the 12 months we allow. That would restrict Acme's hiring for longer than our policy permits.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"non-solicitation\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can accept a mutual non-solicitation clause limited to employees met through the Purpose, but it must last no more than 12 months from the Effective Date rather than the full 3-year MNDA Term.\", \"confidence\": 0.88, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [{\"theme\": \"Governing law and dispute forum moved to England\", \"change_ids\": [2, 3], \"summary\": \"The customer switched both the governing law and the courts from Delaware to England and Wales and London, so any dispute would be handled in London under English law, which the playbook allows.\"}], \"usage\": {\"calls\": 6, \"input_tokens\": 19920, \"output_tokens\": 2215, \"cost_usd\": 0.0313486, \"llm_seconds\": 36.21121817599999}}"
+   "result_json": "{\"doc_type\": \"nda\", \"verdict\": \"send back\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"MNDA Term\", \"title\": \"MNDA Term\", \"old_text\": \"Expires 1 year from the Effective Date.\", \"new_text\": \"Expires 3 years from the Effective Date.\", \"word_diff\": [[\"equal\", \"Expires\"], [\"delete\", \"1 year\"], [\"insert\", \"3 years\"], [\"equal\", \"from the Effective Date.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the NDA term from 1 year to 3 years, so the agreement now expires 3 years after the Effective Date.\", \"impact\": \"The NDA stays in force longer than our 1-year standard, but 3 years is the top of the range the playbook allows, so the risk to Acme is acceptable.\", \"ai_decision\": \"accept\", \"decision\": \"accept\", \"rule_ids\": [\"nda-term\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.93, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"Governing Law\", \"title\": \"Governing Law\", \"old_text\": \"State of Delaware.\", \"new_text\": \"England and Wales.\", \"word_diff\": [[\"delete\", \"State of Delaware.\"], [\"insert\", \"England and Wales.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the governing law of the NDA from the State of Delaware to England and Wales. The jurisdiction field already names courts in London, England.\", \"impact\": \"Disputes would be handled under English law in London courts instead of Delaware. The playbook allows this, so it needs no further attention.\", \"ai_decision\": \"accept\", \"decision\": \"accept\", \"rule_ids\": [\"governing-law\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.93, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"Jurisdiction\", \"title\": \"Jurisdiction\", \"old_text\": \"Courts located in New Castle, Delaware.\", \"new_text\": \"Courts located in London, England.\", \"word_diff\": [[\"equal\", \"Courts located in\"], [\"delete\", \"New Castle, Delaware.\"], [\"insert\", \"London, England.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer moved the court venue for disputes from New Castle, Delaware to London, England. The governing law is already England and Wales, so the courts now match it.\", \"impact\": \"This is within the playbook's acceptable range, so Acme would have to bring or defend any dispute in London instead of Delaware. No escalation is needed, because the courts match the England and Wales governing law.\", \"ai_decision\": \"accept\", \"decision\": \"accept\", \"rule_ids\": [\"governing-law\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.93, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 4, \"kind\": \"added\", \"clause_id\": \"12\", \"title\": \"Non-Solicitation\", \"old_text\": \"\", \"new_text\": \"Non-Solicitation. During the MNDA Term, neither party will solicit for employment any employee of the other party it met through the Purpose.\", \"word_diff\": []}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The added clause says neither side may try to hire the other side's employees it met through the deal. The ban lasts for the whole MNDA Term, which is 3 years from the Effective Date.\", \"impact\": \"The clause is mutual and limited to people met through the deal, but a 3-year ban is much longer than the 12 months we allow. It would restrict Acme's hiring for longer than our playbook permits.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"non-solicitation\"], \"gdpr_citations\": [], \"counter_proposal\": \"Our standard template has no non-solicitation clause, but we can accept a mutual clause limited to people met through the Purpose and lasting no more than 12 months from the Effective Date instead of the full MNDA Term.\", \"confidence\": 0.9, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [{\"theme\": \"Dispute resolution moved to England\", \"change_ids\": [2, 3], \"summary\": \"The governing law and court venue both move from Delaware to England and Wales and London, so any dispute would be handled under English law in London courts.\"}], \"usage\": {\"calls\": 6, \"input_tokens\": 19912, \"output_tokens\": 2260, \"cost_usd\": 0.0317666, \"llm_seconds\": 29.485082446999968}}"
   },
   {
    "id": 10,
@@ -456,7 +456,7 @@
    "status": "open",
    "stage": null,
    "changes_json": "[{\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Fees\", \"title\": \"Fees\", \"old_text\": \"USD 48,000, invoiced in two equal parts at kickoff and at completion.\", \"new_text\": \"USD 40,000, invoiced in full at completion.\", \"word_diff\": [[\"equal\", \"USD\"], [\"delete\", \"48,000,\"], [\"insert\", \"40,000,\"], [\"equal\", \"invoiced in\"], [\"delete\", \"two equal parts at kickoff and\"], [\"insert\", \"full\"], [\"equal\", \"at completion.\"]]}, {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"4\", \"title\": \"Acceptance\", \"old_text\": \"Acceptance. Each deliverable is accepted when Customer confirms in writing or 10 business days after delivery, whichever comes first, unless Customer reports a material defect in that period.\", \"new_text\": \"Acceptance. Each deliverable is accepted when Customer confirms in writing.\", \"word_diff\": [[\"equal\", \"Acceptance. Each deliverable is accepted when Customer confirms in\"], [\"delete\", \"writing or 10 business days after delivery, whichever comes first, unless Customer reports a material defect in that period.\"], [\"insert\", \"writing.\"]]}, {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"6\", \"title\": \"Liability\", \"old_text\": \"Liability. Each party's liability under this SOW is subject to Section 8 (Limitation of Liability) of the Agreement.\", \"new_text\": \"Liability. Provider's liability under this SOW is not subject to Section 8 (Limitation of Liability) of the Agreement.\", \"word_diff\": [[\"equal\", \"Liability.\"], [\"delete\", \"Each party's\"], [\"insert\", \"Provider's\"], [\"equal\", \"liability under this SOW is\"], [\"insert\", \"not\"], [\"equal\", \"subject to Section 8 (Limitation of Liability) of the Agreement.\"]]}]",
-   "result_json": "{\"doc_type\": \"sow\", \"verdict\": \"escalate\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Fees\", \"title\": \"Fees\", \"old_text\": \"USD 48,000, invoiced in two equal parts at kickoff and at completion.\", \"new_text\": \"USD 40,000, invoiced in full at completion.\", \"word_diff\": [[\"equal\", \"USD\"], [\"delete\", \"48,000,\"], [\"insert\", \"40,000,\"], [\"equal\", \"invoiced in\"], [\"delete\", \"two equal parts at kickoff and\"], [\"insert\", \"full\"], [\"equal\", \"at completion.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer cut the SOW fee from USD 48,000 to USD 40,000. They also changed billing from two equal installments (kickoff and completion) to a single invoice at completion.\", \"impact\": \"Acme would earn USD 8,000 less and would not be paid until the work is finished. That adds cash-flow and collection risk.\", \"ai_decision\": \"escalate\", \"decision\": \"escalate\", \"rule_ids\": [\"sow-commercials\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"4\", \"title\": \"Acceptance\", \"old_text\": \"Acceptance. Each deliverable is accepted when Customer confirms in writing or 10 business days after delivery, whichever comes first, unless Customer reports a material defect in that period.\", \"new_text\": \"Acceptance. Each deliverable is accepted when Customer confirms in writing.\", \"word_diff\": [[\"equal\", \"Acceptance. Each deliverable is accepted when Customer confirms in\"], [\"delete\", \"writing or 10 business days after delivery, whichever comes first, unless Customer reports a material defect in that period.\"], [\"insert\", \"writing.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer deleted the automatic acceptance after 10 business days. A deliverable now counts as accepted only if the customer confirms in writing.\", \"impact\": \"The customer could delay or never confirm, so acceptance stays open. Because the USD 40,000 fee is invoiced at completion, this could hold up Acme's invoicing and payment indefinitely.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"sow-commercials\"], \"gdpr_citations\": [], \"counter_proposal\": \"We can't remove deemed acceptance; our standard is that a deliverable is accepted on written confirmation or 10 business days after delivery, whichever comes first, unless a material defect is reported (we could extend that period to up to 15 business days).\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"6\", \"title\": \"Liability\", \"old_text\": \"Liability. Each party's liability under this SOW is subject to Section 8 (Limitation of Liability) of the Agreement.\", \"new_text\": \"Liability. Provider's liability under this SOW is not subject to Section 8 (Limitation of Liability) of the Agreement.\", \"word_diff\": [[\"equal\", \"Liability.\"], [\"delete\", \"Each party's\"], [\"insert\", \"Provider's\"], [\"equal\", \"liability under this SOW is\"], [\"insert\", \"not\"], [\"equal\", \"subject to Section 8 (Limitation of Liability) of the Agreement.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer changed the clause so that Acme's (the Provider's) liability under this SOW is no longer subject to the liability cap in the main agreement. The customer's liability stays capped.\", \"impact\": \"Acme would have uncapped liability for work under this SOW, while the customer keeps its cap. That is a large, one-sided financial risk for Acme.\", \"ai_decision\": \"escalate\", \"decision\": \"escalate\", \"rule_ids\": [\"liability-cap\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.96, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [{\"theme\": \"Payment and acceptance risk\", \"change_ids\": [1, 2], \"summary\": \"The customer cut the fee and moved to a single invoice at completion, and it removed automatic acceptance, so Acme could be paid less and later, or not at all, if the customer never confirms acceptance in writing.\"}], \"usage\": {\"calls\": 5, \"input_tokens\": 26011, \"output_tokens\": 1474, \"cost_usd\": 0.0978366, \"llm_seconds\": 24.154337992000023}}"
+   "result_json": "{\"doc_type\": \"sow\", \"verdict\": \"escalate\", \"changes\": [{\"change\": {\"id\": 1, \"kind\": \"modified\", \"clause_id\": \"Fees\", \"title\": \"Fees\", \"old_text\": \"USD 48,000, invoiced in two equal parts at kickoff and at completion.\", \"new_text\": \"USD 40,000, invoiced in full at completion.\", \"word_diff\": [[\"equal\", \"USD\"], [\"delete\", \"48,000,\"], [\"insert\", \"40,000,\"], [\"equal\", \"invoiced in\"], [\"delete\", \"two equal parts at kickoff and\"], [\"insert\", \"full\"], [\"equal\", \"at completion.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer cut the SOW fee from USD 48,000 to USD 40,000. They also changed billing from two equal installments (at kickoff and completion) to one invoice at completion.\", \"impact\": \"Acme would get USD 8,000 less in revenue and would be paid only after the work is finished, which delays cash and adds collection risk. The playbook says the deal owner must approve any fee change.\", \"ai_decision\": \"escalate\", \"decision\": \"escalate\", \"rule_ids\": [\"sow-commercials\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 2, \"kind\": \"modified\", \"clause_id\": \"4\", \"title\": \"Acceptance\", \"old_text\": \"Acceptance. Each deliverable is accepted when Customer confirms in writing or 10 business days after delivery, whichever comes first, unless Customer reports a material defect in that period.\", \"new_text\": \"Acceptance. Each deliverable is accepted when Customer confirms in writing.\", \"word_diff\": [[\"equal\", \"Acceptance. Each deliverable is accepted when Customer confirms in\"], [\"delete\", \"writing or 10 business days after delivery, whichever comes first, unless Customer reports a material defect in that period.\"], [\"insert\", \"writing.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The customer deleted the 10-business-day automatic acceptance. A deliverable now counts as accepted only if the customer confirms in writing.\", \"impact\": \"The customer could delay acceptance indefinitely by never confirming. Acme's fees are invoiced at completion, so payment could be held up with no deadline for acceptance.\", \"ai_decision\": \"push_back\", \"decision\": \"push_back\", \"rule_ids\": [\"sow-commercials\"], \"gdpr_citations\": [], \"counter_proposal\": \"Each deliverable is accepted when the Customer confirms in writing, or 10 business days after delivery if no material defect has been reported, whichever comes first.\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}, {\"change\": {\"id\": 3, \"kind\": \"modified\", \"clause_id\": \"6\", \"title\": \"Liability\", \"old_text\": \"Liability. Each party's liability under this SOW is subject to Section 8 (Limitation of Liability) of the Agreement.\", \"new_text\": \"Liability. Provider's liability under this SOW is not subject to Section 8 (Limitation of Liability) of the Agreement.\", \"word_diff\": [[\"equal\", \"Liability.\"], [\"delete\", \"Each party's\"], [\"insert\", \"Provider's\"], [\"equal\", \"liability under this SOW is\"], [\"insert\", \"not\"], [\"equal\", \"subject to Section 8 (Limitation of Liability) of the Agreement.\"]]}, \"gdpr_chapters\": [], \"search_query\": \"\", \"excerpts\": [], \"meaning\": \"The change removes the link between Acme's (the Provider's) liability under this SOW and the liability limits in the main agreement. Acme's liability under the SOW would no longer be capped. The customer's liability stays unchanged.\", \"impact\": \"Acme would face unlimited liability for any claim arising from this SOW, which is much more than the 12-month fee cap. That is a major financial risk.\", \"ai_decision\": \"escalate\", \"decision\": \"escalate\", \"rule_ids\": [\"liability-cap\"], \"gdpr_citations\": [], \"counter_proposal\": \"\", \"confidence\": 0.95, \"guardrail_notes\": [], \"context_used\": []}], \"groups\": [{\"theme\": \"Payment and cash-flow risk\", \"change_ids\": [1, 2], \"summary\": \"The customer lowered the fee and moved all billing to completion, and also removed automatic acceptance, so Acme could be paid less and later, with no deadline to trigger the invoice.\"}], \"usage\": {\"calls\": 5, \"input_tokens\": 26032, \"output_tokens\": 1460, \"cost_usd\": 0.0239614, \"llm_seconds\": 21.40226865799991}}"
   },
   {
    "id": 11,
@@ -478,7 +478,7 @@
    "internal_comment": "Finance agreed 45 days as our limit.",
    "external_comment": "We can move from 30 to 45 days, which is the longest we offer.",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:49:35 UTC"
+   "at": "2026-10-22 11:22:33 UTC"
   },
   {
    "round_id": 1,
@@ -488,7 +488,7 @@
    "internal_comment": "A 24-month cap doubles our exposure.",
    "external_comment": "We keep the cap at 12 months of fees, our standard for all customers.",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:49:35 UTC"
+   "at": "2026-10-22 11:22:33 UTC"
   },
   {
    "round_id": 1,
@@ -498,7 +498,7 @@
    "internal_comment": "The deletion duty protects us under GDPR Art. 28(3)(g).",
    "external_comment": "We need to keep the deletion clause; it is required for GDPR compliance.",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:49:35 UTC"
+   "at": "2026-10-22 11:22:33 UTC"
   },
   {
    "round_id": 2,
@@ -508,7 +508,7 @@
    "internal_comment": "Deal owner approved 18 months for this deal size; legal agreed.",
    "external_comment": "We accept 18 months.",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:49:50 UTC"
+   "at": "2026-10-22 11:22:46 UTC"
   },
   {
    "round_id": 3,
@@ -518,7 +518,7 @@
    "internal_comment": "Within our playbook: mutual, limited to the deal.",
    "external_comment": "",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:50:27 UTC"
+   "at": "2026-10-22 11:23:07 UTC"
   },
   {
    "round_id": 3,
@@ -528,7 +528,7 @@
    "internal_comment": "Within our playbook: mutual, limited to the deal.",
    "external_comment": "",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:50:27 UTC"
+   "at": "2026-10-22 11:23:07 UTC"
   },
   {
    "round_id": 3,
@@ -538,7 +538,7 @@
    "internal_comment": "Within our playbook: mutual, limited to the deal.",
    "external_comment": "",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:50:27 UTC"
+   "at": "2026-10-22 11:23:07 UTC"
   },
   {
    "round_id": 3,
@@ -548,7 +548,7 @@
    "internal_comment": "Within our playbook: mutual, limited to the deal.",
    "external_comment": "",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:50:27 UTC"
+   "at": "2026-10-22 11:23:08 UTC"
   },
   {
    "round_id": 4,
@@ -558,7 +558,7 @@
    "internal_comment": "60 days would block vendor changes.",
    "external_comment": "We keep 30 days' notice with your right to object.",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:50:50 UTC"
+   "at": "2026-10-22 11:23:26 UTC"
   },
   {
    "round_id": 4,
@@ -568,7 +568,7 @@
    "internal_comment": "Our hosting is in the US and the EU; EU-only needs a product change.",
    "external_comment": "We cannot commit to EU-only processing; transfers are covered by the SCCs.",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:50:50 UTC"
+   "at": "2026-10-22 11:23:26 UTC"
   },
   {
    "round_id": 4,
@@ -578,7 +578,7 @@
    "internal_comment": "48 hours is the shortest we can operate.",
    "external_comment": "We can commit to 48 hours, with details provided in phases.",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:50:50 UTC"
+   "at": "2026-10-22 11:23:26 UTC"
   },
   {
    "round_id": 6,
@@ -588,7 +588,7 @@
    "internal_comment": "60 days would block vendor changes.",
    "external_comment": "We keep 30 days' notice with your right to object.",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:51:11 UTC"
+   "at": "2026-10-22 11:23:45 UTC"
   },
   {
    "round_id": 6,
@@ -598,7 +598,7 @@
    "internal_comment": "Our hosting is in the US and the EU; EU-only needs a product change.",
    "external_comment": "We cannot commit to EU-only processing; transfers are covered by the SCCs.",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:51:11 UTC"
+   "at": "2026-10-22 11:23:45 UTC"
   },
   {
    "round_id": 6,
@@ -608,7 +608,7 @@
    "internal_comment": "48 hours is the shortest we can operate.",
    "external_comment": "We can commit to 48 hours, with details provided in phases.",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:51:12 UTC"
+   "at": "2026-10-22 11:23:46 UTC"
   },
   {
    "round_id": 7,
@@ -618,7 +618,7 @@
    "internal_comment": "Finance agreed 45 days as our limit.",
    "external_comment": "We can move from 30 to 45 days, which is the longest we offer.",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:51:34 UTC"
+   "at": "2026-10-22 11:24:02 UTC"
   },
   {
    "round_id": 7,
@@ -628,7 +628,7 @@
    "internal_comment": "A 24-month cap doubles our exposure.",
    "external_comment": "We keep the cap at 12 months of fees, our standard for all customers.",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:51:34 UTC"
+   "at": "2026-10-22 11:24:02 UTC"
   },
   {
    "round_id": 7,
@@ -638,7 +638,7 @@
    "internal_comment": "The deletion duty protects us under GDPR Art. 28(3)(g).",
    "external_comment": "We need to keep the deletion clause; it is required for GDPR compliance.",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:51:34 UTC"
+   "at": "2026-10-22 11:24:02 UTC"
   },
   {
    "round_id": 9,
@@ -648,7 +648,7 @@
    "internal_comment": "Within our playbook: mutual, limited to the deal.",
    "external_comment": "",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:52:07 UTC"
+   "at": "2026-10-22 11:24:25 UTC"
   },
   {
    "round_id": 9,
@@ -658,7 +658,7 @@
    "internal_comment": "Within our playbook: mutual, limited to the deal.",
    "external_comment": "",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:52:07 UTC"
+   "at": "2026-10-22 11:24:25 UTC"
   },
   {
    "round_id": 9,
@@ -668,7 +668,7 @@
    "internal_comment": "Within our playbook: mutual, limited to the deal.",
    "external_comment": "",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:52:07 UTC"
+   "at": "2026-10-22 11:24:25 UTC"
   },
   {
    "round_id": 9,
@@ -678,14 +678,14 @@
    "internal_comment": "Within our playbook: mutual, limited to the deal.",
    "external_comment": "",
    "actor": "Ana Ruiz",
-   "at": "2026-10-22 10:52:08 UTC"
+   "at": "2026-10-22 11:24:26 UTC"
   }
  ],
  "events": [
   {
    "id": 1,
    "agreement_id": 1,
-   "at": "2026-10-22 10:49:15 UTC",
+   "at": "2026-10-22 11:22:13 UTC",
    "action": "sent",
    "actor": "Acme Cloud Inc.",
    "detail": "Acme_Cloud-Service-Agreement_v1.docx",
@@ -695,7 +695,7 @@
   {
    "id": 2,
    "agreement_id": 1,
-   "at": "2026-10-22 10:49:15 UTC",
+   "at": "2026-10-22 11:22:13 UTC",
    "action": "received",
    "actor": "Globex Inc.",
    "detail": "Globex_Cloud-Service-Agreement_v2_redline.docx",
@@ -705,7 +705,7 @@
   {
    "id": 3,
    "agreement_id": 1,
-   "at": "2026-10-22 10:49:34 UTC",
+   "at": "2026-10-22 11:22:32 UTC",
    "action": "reviewed",
    "actor": "AI agent",
    "detail": "escalate",
@@ -715,7 +715,7 @@
   {
    "id": 4,
    "agreement_id": 1,
-   "at": "2026-10-22 10:49:35 UTC",
+   "at": "2026-10-22 11:22:33 UTC",
    "action": "round closed",
    "actor": "Ana Ruiz",
    "detail": "2 rejected, 1 countered",
@@ -725,7 +725,7 @@
   {
    "id": 5,
    "agreement_id": 1,
-   "at": "2026-10-22 10:49:36 UTC",
+   "at": "2026-10-22 11:22:34 UTC",
    "action": "sent",
    "actor": "Acme Cloud Inc.",
    "detail": "Acme_Cloud-Service-Agreement_v3.docx",
@@ -735,7 +735,7 @@
   {
    "id": 6,
    "agreement_id": 1,
-   "at": "2026-10-22 10:49:36 UTC",
+   "at": "2026-10-22 11:22:34 UTC",
    "action": "received",
    "actor": "Globex Inc.",
    "detail": "Globex_Cloud-Service-Agreement_v4.docx",
@@ -745,7 +745,7 @@
   {
    "id": 7,
    "agreement_id": 1,
-   "at": "2026-10-22 10:49:49 UTC",
+   "at": "2026-10-22 11:22:44 UTC",
    "action": "reviewed",
    "actor": "AI agent",
    "detail": "send back",
@@ -755,7 +755,7 @@
   {
    "id": 8,
    "agreement_id": 1,
-   "at": "2026-10-22 10:49:50 UTC",
+   "at": "2026-10-22 11:22:46 UTC",
    "action": "round closed",
    "actor": "Ana Ruiz",
    "detail": "1 accepted",
@@ -765,17 +765,17 @@
   {
    "id": 9,
    "agreement_id": 1,
-   "at": "2026-10-22 10:49:51 UTC",
+   "at": "2026-10-22 11:22:47 UTC",
    "action": "sign",
    "actor": "Ben Okafor",
-   "detail": "Signed v4 (Globex_Cloud-Service-Agreement_v4.docx), SHA-256 7c5aa0a073b1256a9248734a2ec58e427e2a2cf91517d8554e6d94a528b87cd4. Final check: no red lines in the final text.",
+   "detail": "Signed v4 (Globex_Cloud-Service-Agreement_v4.docx), SHA-256 109d5ad79efd404782ea5ad5d207492dd2d162643f66077725e6568612d8ff58. Final check: no red lines in the final text.",
    "version": 4,
    "round_id": null
   },
   {
    "id": 10,
    "agreement_id": 2,
-   "at": "2026-10-22 10:49:51 UTC",
+   "at": "2026-10-22 11:22:47 UTC",
    "action": "sent",
    "actor": "Acme Cloud Inc.",
    "detail": "Acme_Mutual-NDA_v1.docx",
@@ -785,7 +785,7 @@
   {
    "id": 11,
    "agreement_id": 2,
-   "at": "2026-10-22 10:49:51 UTC",
+   "at": "2026-10-22 11:22:47 UTC",
    "action": "received",
    "actor": "Initech Ltd.",
    "detail": "Initech_Mutual-NDA_v2_redline.docx",
@@ -795,7 +795,7 @@
   {
    "id": 12,
    "agreement_id": 2,
-   "at": "2026-10-22 10:50:26 UTC",
+   "at": "2026-10-22 11:23:06 UTC",
    "action": "reviewed",
    "actor": "AI agent",
    "detail": "send back",
@@ -805,7 +805,7 @@
   {
    "id": 13,
    "agreement_id": 2,
-   "at": "2026-10-22 10:50:28 UTC",
+   "at": "2026-10-22 11:23:08 UTC",
    "action": "round closed",
    "actor": "Ana Ruiz",
    "detail": "4 accepted",
@@ -815,7 +815,7 @@
   {
    "id": 14,
    "agreement_id": 2,
-   "at": "2026-10-22 10:50:28 UTC",
+   "at": "2026-10-22 11:23:08 UTC",
    "action": "sign",
    "actor": "Ben Okafor",
    "detail": "Signed v2 (Initech_Mutual-NDA_v2_redline.docx), SHA-256 1b9149dfd70d035096471149f45c82cc0bf896cfde5620dbffb9333317a1073f. Final check: no red lines in the final text.",
@@ -825,7 +825,7 @@
   {
    "id": 15,
    "agreement_id": 3,
-   "at": "2026-10-22 10:50:28 UTC",
+   "at": "2026-10-22 11:23:08 UTC",
    "action": "sent",
    "actor": "Acme Cloud Inc.",
    "detail": "Acme_Data-Processing-Agreement_v1.docx",
@@ -835,7 +835,7 @@
   {
    "id": 16,
    "agreement_id": 3,
-   "at": "2026-10-22 10:50:28 UTC",
+   "at": "2026-10-22 11:23:08 UTC",
    "action": "received",
    "actor": "Umbrella Corp.",
    "detail": "Umbrella_Data-Processing-Agreement_v2_redline.docx",
@@ -845,7 +845,7 @@
   {
    "id": 17,
    "agreement_id": 3,
-   "at": "2026-10-22 10:50:48 UTC",
+   "at": "2026-10-22 11:23:26 UTC",
    "action": "reviewed",
    "actor": "AI agent",
    "detail": "escalate",
@@ -855,7 +855,7 @@
   {
    "id": 18,
    "agreement_id": 3,
-   "at": "2026-10-22 10:50:50 UTC",
+   "at": "2026-10-22 11:23:27 UTC",
    "action": "round closed",
    "actor": "Ana Ruiz",
    "detail": "2 rejected, 1 countered",
@@ -865,7 +865,7 @@
   {
    "id": 19,
    "agreement_id": 3,
-   "at": "2026-10-22 10:50:51 UTC",
+   "at": "2026-10-22 11:23:27 UTC",
    "action": "sent",
    "actor": "Acme Cloud Inc.",
    "detail": "Acme_Data-Processing-Agreement_v3.docx",
@@ -875,7 +875,7 @@
   {
    "id": 20,
    "agreement_id": 3,
-   "at": "2026-10-22 10:50:51 UTC",
+   "at": "2026-10-22 11:23:27 UTC",
    "action": "received",
    "actor": "Umbrella Corp.",
    "detail": "Umbrella_Data-Processing-Agreement_v4.docx",
@@ -885,7 +885,7 @@
   {
    "id": 21,
    "agreement_id": 3,
-   "at": "2026-10-22 10:50:51 UTC",
+   "at": "2026-10-22 11:23:27 UTC",
    "action": "round closed",
    "actor": "the desk",
    "detail": "No changes: Umbrella Corp. accepted v3.",
@@ -895,17 +895,17 @@
   {
    "id": 22,
    "agreement_id": 3,
-   "at": "2026-10-22 10:50:51 UTC",
+   "at": "2026-10-22 11:23:27 UTC",
    "action": "sign",
    "actor": "Ben Okafor",
-   "detail": "Signed v4 (Umbrella_Data-Processing-Agreement_v4.docx), SHA-256 03556b11074f09e78de973014ed8635a9f24e6dbdc28ae9b7835c03ab4c6dae8. Final check: no red lines in the final text.",
+   "detail": "Signed v4 (Umbrella_Data-Processing-Agreement_v4.docx), SHA-256 d4fb1e370e6156adad67b0c251cec72530fa5a27e7833b4105fd1d0a882b74d0. Final check: no red lines in the final text.",
    "version": 4,
    "round_id": null
   },
   {
    "id": 23,
    "agreement_id": 4,
-   "at": "2026-10-22 10:50:51 UTC",
+   "at": "2026-10-22 11:23:27 UTC",
    "action": "sent",
    "actor": "Acme Cloud Inc.",
    "detail": "Acme_Data-Processing-Agreement_v1.docx",
@@ -915,7 +915,7 @@
   {
    "id": 24,
    "agreement_id": 4,
-   "at": "2026-10-22 10:50:51 UTC",
+   "at": "2026-10-22 11:23:27 UTC",
    "action": "received",
    "actor": "Initech Ltd.",
    "detail": "Initech_Data-Processing-Agreement_v2_redline.docx",
@@ -925,7 +925,7 @@
   {
    "id": 25,
    "agreement_id": 4,
-   "at": "2026-10-22 10:51:11 UTC",
+   "at": "2026-10-22 11:23:45 UTC",
    "action": "reviewed",
    "actor": "AI agent",
    "detail": "escalate",
@@ -935,7 +935,7 @@
   {
    "id": 26,
    "agreement_id": 4,
-   "at": "2026-10-22 10:51:12 UTC",
+   "at": "2026-10-22 11:23:46 UTC",
    "action": "round closed",
    "actor": "Ana Ruiz",
    "detail": "2 rejected, 1 countered",
@@ -945,7 +945,7 @@
   {
    "id": 27,
    "agreement_id": 4,
-   "at": "2026-10-22 10:51:12 UTC",
+   "at": "2026-10-22 11:23:46 UTC",
    "action": "sent",
    "actor": "Acme Cloud Inc.",
    "detail": "Acme_Data-Processing-Agreement_v3.docx",
@@ -955,7 +955,7 @@
   {
    "id": 28,
    "agreement_id": 5,
-   "at": "2026-10-22 10:51:12 UTC",
+   "at": "2026-10-22 11:23:46 UTC",
    "action": "sent",
    "actor": "Acme Cloud Inc.",
    "detail": "Acme_Cloud-Service-Agreement_v1.docx",
@@ -965,7 +965,7 @@
   {
    "id": 29,
    "agreement_id": 5,
-   "at": "2026-10-22 10:51:12 UTC",
+   "at": "2026-10-22 11:23:46 UTC",
    "action": "received",
    "actor": "Hooli Inc.",
    "detail": "Hooli_Cloud-Service-Agreement_v2_redline.docx",
@@ -975,7 +975,7 @@
   {
    "id": 30,
    "agreement_id": 5,
-   "at": "2026-10-22 10:51:34 UTC",
+   "at": "2026-10-22 11:24:01 UTC",
    "action": "reviewed",
    "actor": "AI agent",
    "detail": "escalate",
@@ -985,7 +985,7 @@
   {
    "id": 31,
    "agreement_id": 5,
-   "at": "2026-10-22 10:51:34 UTC",
+   "at": "2026-10-22 11:24:02 UTC",
    "action": "round closed",
    "actor": "Ana Ruiz",
    "detail": "2 rejected, 1 countered",
@@ -995,7 +995,7 @@
   {
    "id": 32,
    "agreement_id": 5,
-   "at": "2026-10-22 10:51:35 UTC",
+   "at": "2026-10-22 11:24:02 UTC",
    "action": "sent",
    "actor": "Acme Cloud Inc.",
    "detail": "Acme_Cloud-Service-Agreement_v3.docx",
@@ -1005,7 +1005,7 @@
   {
    "id": 33,
    "agreement_id": 5,
-   "at": "2026-10-22 10:51:35 UTC",
+   "at": "2026-10-22 11:24:03 UTC",
    "action": "received",
    "actor": "Hooli Inc.",
    "detail": "Hooli_Cloud-Service-Agreement_v4.docx",
@@ -1015,7 +1015,7 @@
   {
    "id": 34,
    "agreement_id": 5,
-   "at": "2026-10-22 10:51:46 UTC",
+   "at": "2026-10-22 11:24:10 UTC",
    "action": "reviewed",
    "actor": "AI agent",
    "detail": "send back",
@@ -1025,7 +1025,7 @@
   {
    "id": 35,
    "agreement_id": 6,
-   "at": "2026-10-22 10:51:47 UTC",
+   "at": "2026-10-22 11:24:11 UTC",
    "action": "sent",
    "actor": "Acme Cloud Inc.",
    "detail": "Acme_Mutual-NDA_v1.docx",
@@ -1035,7 +1035,7 @@
   {
    "id": 36,
    "agreement_id": 6,
-   "at": "2026-10-22 10:51:47 UTC",
+   "at": "2026-10-22 11:24:11 UTC",
    "action": "received",
    "actor": "Vandelay Industries",
    "detail": "Vandelay_Mutual-NDA_v2_redline.docx",
@@ -1045,7 +1045,7 @@
   {
    "id": 37,
    "agreement_id": 6,
-   "at": "2026-10-22 10:52:07 UTC",
+   "at": "2026-10-22 11:24:24 UTC",
    "action": "reviewed",
    "actor": "AI agent",
    "detail": "send back",
@@ -1055,7 +1055,7 @@
   {
    "id": 38,
    "agreement_id": 6,
-   "at": "2026-10-22 10:52:08 UTC",
+   "at": "2026-10-22 11:24:26 UTC",
    "action": "round closed",
    "actor": "Ana Ruiz",
    "detail": "4 accepted",
@@ -1065,7 +1065,7 @@
   {
    "id": 39,
    "agreement_id": 7,
-   "at": "2026-10-22 10:52:08 UTC",
+   "at": "2026-10-22 11:24:26 UTC",
    "action": "sent",
    "actor": "Acme Cloud Inc.",
    "detail": "Acme_Onboarding-SOW_v1.docx",
@@ -1075,7 +1075,7 @@
   {
    "id": 40,
    "agreement_id": 7,
-   "at": "2026-10-22 10:52:08 UTC",
+   "at": "2026-10-22 11:24:26 UTC",
    "action": "received",
    "actor": "Globex Inc.",
    "detail": "Globex_Onboarding-SOW_v2_redline.docx",
@@ -1085,7 +1085,7 @@
   {
    "id": 41,
    "agreement_id": 7,
-   "at": "2026-10-22 10:52:22 UTC",
+   "at": "2026-10-22 11:24:39 UTC",
    "action": "reviewed",
    "actor": "AI agent",
    "detail": "escalate",
@@ -1095,7 +1095,7 @@
   {
    "id": 42,
    "agreement_id": 8,
-   "at": "2026-10-22 10:52:24 UTC",
+   "at": "2026-10-22 11:24:40 UTC",
    "action": "sent",
    "actor": "Acme Cloud Inc.",
    "detail": "Acme_Mutual-NDA_v1.docx",
@@ -1105,7 +1105,7 @@
   {
    "id": 43,
    "agreement_id": 9,
-   "at": "2026-10-22 10:52:24 UTC",
+   "at": "2026-10-22 11:24:40 UTC",
    "action": "sent",
    "actor": "Acme Cloud Inc.",
    "detail": "Acme_Data-Processing-Agreement_v1.docx",
@@ -1115,7 +1115,7 @@
   {
    "id": 44,
    "agreement_id": 9,
-   "at": "2026-10-22 10:52:24 UTC",
+   "at": "2026-10-22 11:24:40 UTC",
    "action": "received",
    "actor": "Globex Inc.",
    "detail": "Globex_Data-Processing-Agreement_v2_redline.docx",

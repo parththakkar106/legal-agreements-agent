@@ -5,3 +5,26 @@
   <span class="file-actions"><a href="{{ open_url }}">Open</a><a href="{{ download_url }}" download>Download</a></span>
 </div>
 {%- endmacro %}
+
+{# Name, designation and signature style, prefilled from the profile: used by the profile page and every sign form. #}
+{% macro signature_fields(me, styles, fallback_name='') -%}
+<div class="sig-fields">
+  <div class="two">
+    <div><label for="sig-name">Full name</label><input type="text" id="sig-name" name="name" value="{{ me.name if me else fallback_name }}" autocomplete="name" required></div>
+    <div><label for="sig-title">Designation (optional)</label><input type="text" id="sig-title" name="job_title" value="{{ me.job_title if me }}" placeholder="Head of Legal"></div>
+  </div>
+  <fieldset class="styles"><legend>Signature style</legend>
+    {% for style in styles %}
+    <label><input type="radio" name="style" value="{{ style }}" {{ 'checked' if (me and me.style == style) or (not me and loop.first) }}>
+      <span class="signature" style="font-family: '{{ style }}', cursive" data-preview>{{ (me.name if me else fallback_name) or 'Your Name' }}</span></label>
+    {% endfor %}
+  </fieldset>
+</div>
+<script>
+// The style previews show the name as it is typed.
+(() => {
+  const input = document.getElementById("sig-name");
+  input.addEventListener("input", () => document.querySelectorAll("[data-preview]").forEach(p => p.textContent = input.value || "Your Name"));
+})();
+</script>
+{%- endmacro %}

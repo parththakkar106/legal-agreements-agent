@@ -22,6 +22,7 @@ from urllib.parse import quote
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from legal_agent import negotiation, store
@@ -30,7 +31,7 @@ from legal_agent.docx_parser import parse_docx
 from legal_agent.docx_writer import write_docx
 from legal_agent.orchestrator import Usage, review_contract
 from legal_agent.policy import load_policy, red_line_hits, rules_for
-from legal_agent.signing import SIGNER
+from legal_agent.signing import SIGNATURE_FONTS, SIGNATURE_FONTS_DIR, SIGNER
 from legal_agent.web.sources import document, round_sources
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -48,7 +49,8 @@ SECTIONS = {  # the home page, one section per status, in the order work flows
 app = FastAPI(title="Acme Agreement Desk")
 templates = Jinja2Templates(directory=Path(__file__).parent / "templates")
 templates.env.globals["profile"] = lambda: _profile()  # the top bar shows who is signed in
-SIGNATURE_STYLES = ("Dancing Script", "Caveat", "Homemade Apple")  # Google Fonts that look handwritten
+SIGNATURE_STYLES = tuple(SIGNATURE_FONTS)
+app.mount("/fonts", StaticFiles(directory=SIGNATURE_FONTS_DIR), name="fonts")
 
 
 @app.get("/")
@@ -197,7 +199,8 @@ def show_agreement(request: Request, agreement_id: int):
                for rid, r in agreement["rounds"].items() if r["result"]}
     return templates.TemplateResponse(request, "agreement.html", {
         "agreement": agreement, "sources": sources, "missing": missing,
-        "history": negotiation.clause_history(agreement), "reviewer": _reviewer(request)})
+        "history": negotiation.clause_history(agreement), "reviewer": _reviewer(request),
+        "styles": SIGNATURE_STYLES})
 
 
 @app.post("/rounds/{round_id}/items/{change_id}")
@@ -251,21 +254,21 @@ def close_round(round_id: int, actor: str = Form(...)):
 
 
 @app.post("/agreements/{agreement_id}/sign")
-def sign(agreement_id: int, name: str = Form(""), consent: str = Form(""), remember: str = Form("")):
+def sign(agreement_id: int, name: str = Form(""), job_title: str = Form(""), style: str = Form(SIGNATURE_STYLES[0]),
+         consent: str = Form(""), remember: str = Form("")):
     """Only a person signs, and only the version both sides agreed. The AI never calls this.
 
-    The name comes from the adopted signature in the profile, or is typed here; `remember`
-    adopts a typed one. Either way each document needs its own consent tick.
+    The form starts from the profile's signature; `remember` saves what was used back to it.
+    Each document needs its own consent tick.
     """
     agreement = _load(agreement_id)
     _require(agreement["status"] == "ready to sign", "This agreement is not ready to sign.")
-    name = name.strip()
+    name, job_title = name.strip(), job_title.strip()
     _require(bool(consent and name), "To sign, tick the consent box and type your full name.")
-    with store.connect() as db:
-        if remember:
-            store.save_profile(db, name, "", SIGNATURE_STYLES[0])
-        me = store.get_profile(db)
-    adopted = me if me and me["name"] == name else None
+    _require(style in SIGNATURE_STYLES, "Unknown signature style.")
+    if remember:
+        with store.connect() as db:
+            store.save_profile(db, name, job_title, style)
     final = _latest(agreement)
     if store.sha256_of(final["file"]) != final["sha256"]:
         raise HTTPException(409, "The document changed after it was agreed. It cannot be signed.")
@@ -275,12 +278,11 @@ def sign(agreement_id: int, name: str = Form(""), consent: str = Form(""), remem
     signed_at = store.now()
     certificate = {
         "document": f"{agreement['title']} between {store.ACME} and {agreement['counterparty']}",
-        "signature": name,
+        "signature": {"name": name, "job_title": job_title, "style": style},
         "fields": {"Agreement": agreement["title"], "Counterparty": agreement["counterparty"],
                    "Signed version": f"v{final['number']} ({final['name']})", "SHA-256 of signed file": final["sha256"],
-                   "Signed by": f"{name}{', ' + adopted['job_title'] if adopted and adopted['job_title'] else ''}"
-                                f" for {store.ACME}, typed electronic signature"
-                                f"{' adopted on ' + adopted['adopted_at'][:10] if adopted else ''}, with consent",
+                   "Signed by": f"{name}{', ' + job_title if job_title else ''} for {store.ACME},"
+                                f" typed electronic signature ({style} style) with consent",
                    "Signed at": signed_at, "Final playbook check": final_check},
         "versions": [f"v{v['number']}  {v['created_at']}  from {v['author']}  {v['name']}  SHA-256 {v['sha256']}"
                      for v in agreement["versions"].values()]}

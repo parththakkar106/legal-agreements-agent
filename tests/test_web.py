@@ -181,19 +181,25 @@ def test_signature_adopted_once_is_reused(monkeypatch, tmp_path):
             store.set_status(db, agreement_id, "ready to sign")
         return agreement_id
 
-    # First signature: typed, and saved for next time.
+    # First signature: name, designation and style, saved for next time.
     first = ready_nda()
-    assert "Save this as my signature" in http.get(f"/agreements/{first}").text
-    http.post(f"/agreements/{first}/sign", data={"name": "Ana Ruiz", "consent": "yes", "remember": "yes"})
-    http.post("/profile", data={"name": "Ana Ruiz", "job_title": "Head of Legal", "style": "Caveat"})
+    page = http.get(f"/agreements/{first}").text
+    assert 'name="job_title"' in page and 'value="Caveat"' in page and 'name="remember"' in page
+    http.post(f"/agreements/{first}/sign", data={"name": "Ana Ruiz", "job_title": "Head of Legal", "style": "Caveat",
+                                                  "consent": "yes", "remember": "yes"})
 
-    # Next one: the page signs as the profile; only the consent tick is needed.
+    # Next one: the form starts from the saved signature; each document still needs its own consent.
     second = ready_nda()
     page = http.get(f"/agreements/{second}").text
-    assert "Signing as Ana Ruiz, Head of Legal" in page and 'name="remember"' not in page
-    assert http.post(f"/agreements/{second}/sign", data={"name": "Ana Ruiz"}).status_code == 400  # still needs consent
-    http.post(f"/agreements/{second}/sign", data={"name": "Ana Ruiz", "consent": "yes"})
+    assert 'value="Ana Ruiz"' in page and 'value="Head of Legal"' in page and 'value="Caveat" checked' in page
+    assert http.post(f"/agreements/{second}/sign", data={"name": "Ana Ruiz"}).status_code == 400  # no consent
+    assert http.post(f"/agreements/{second}/sign", data={"name": "Ana Ruiz", "style": "Comic Sans",
+                                                         "consent": "yes"}).status_code == 400
+    http.post(f"/agreements/{second}/sign", data={"name": "Ana Ruiz", "job_title": "Head of Legal", "style": "Caveat",
+                                                   "consent": "yes"})
     data = http.get(f"/api/agreements/{second}").json()
     assert data["status"] == "signed" and data["events"][-1]["actor"] == "Ana Ruiz"
+    assert Path(data["signed_pdf"]).read_bytes()[:4] == b"%PDF"
+    assert http.get("/fonts/Caveat.ttf").status_code == 200
     assert "Ana Ruiz" in http.get("/").text
     assert http.post("/profile", data={"name": "Ana", "style": "Comic Sans"}).status_code == 400

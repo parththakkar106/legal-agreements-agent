@@ -191,7 +191,8 @@ def _close(http, agreement: int):
 
 
 def _sign(http, agreement: int):
-    http.post(f"/agreements/{agreement}/sign", data={"name": PEOPLE["sales"], "consent": "yes"})
+    http.post(f"/agreements/{agreement}/sign", data={"name": PEOPLE["sales"], "job_title": "VP of Sales",
+                                                     "style": "Dancing Script", "consent": "yes"})
 
 
 def _wait(http, agreement: int):
