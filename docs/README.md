@@ -2,12 +2,12 @@
 
 ## The problem
 
-Contracts don’t usually stall because they are difficult to create, they stall in someone's inbox. A customer sends back an edited Word file, and then someone has to compare it with older versions, figure out what changed and then check everything against the company documentation. This is normal repetitive work which is something that can be taken over by AI, but with a caveat. Most edits are routine and can be caught by a simple prompt but some
-really matter, like rules about how that data must stay in one country. Missing even a single one might have major consequences, so the job is to find those few quickly and never miss one.
+Contracts don’t usually stall because they are difficult to create; they stall in someone's inbox. A customer sends back an edited Word file, and then someone has to compare it with older versions, figure out what changed and then check everything against the company documentation. This is normal repetitive work which is something that can be taken over by AI, but with a caveat. Most edits are routine and can be caught by a simple prompt, but some
+really matter, like a rule that customer data must stay in one country. Missing even a single one might have major consequences, so the job is to find those few quickly and never miss one.
 
 ## What we built
 
-A contract manager and signing tool for **Acme Cloud** (a fictional company from the movie Coyote vs Acme(2026)) , a small SaaS company that sends customers its
+A contract manager and signing tool for **Acme Cloud** (named after the Acme company from Looney Tunes and *Coyote vs. Acme*), a small SaaS company that sends customers its
 own contracts (NDA, service agreement, data processing agreement, statement of work), plus an AI agent
 that reviews every customer edit.
 
