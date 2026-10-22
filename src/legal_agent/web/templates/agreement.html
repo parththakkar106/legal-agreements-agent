@@ -30,7 +30,6 @@
 {%- endmacro %}
 
 {% block title %}{{ a.title }}, {{ cp }} · Acme Agreement Desk{% endblock %}
-{% block head %}{% if a.status == 'reviewing' %}<meta http-equiv="refresh" content="3">{% endif %}{% endblock %}
 {% block style %}
 .head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 24px; align-items: start; margin-bottom: 36px; }
 .head .eyebrow { grid-column: 1 / -1; }
@@ -66,8 +65,15 @@
 .round-line strong { font: 600 19px/1.3 var(--serif); }
 .round-line a { margin-left: auto; font-size: 14px; }
 .tally { display: flex; gap: 16px; flex-wrap: wrap; }
-.groups { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: var(--ink-2); }
-.groups b { color: var(--ink); font-weight: 600; }
+.groups { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.groups-label { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
+.group { border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 8px; padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; }
+.group-title { font-weight: 600; font-size: 14px; }
+.group p { margin: 0; font-size: 14px; color: var(--ink-2); }
+.group-members { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.group-members a { font-size: 12px; text-decoration: none; border: 1px solid var(--rule-strong); border-radius: 999px; padding: 2px 9px; color: var(--ink-2); }
+.group-members a:hover { border-color: var(--accent); color: var(--accent); }
+.in-group { font-size: 12px; color: var(--accent); }
 .working { display: flex; gap: 12px; align-items: center; color: var(--ink-2); font-size: 14px; }
 .spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--rule-strong); border-top-color: var(--accent); flex: none; }
 @media (prefers-reduced-motion: no-preference) { .spinner { animation: spin .9s linear infinite; } }
@@ -191,16 +197,28 @@
           <div class="round-line">
             {% if not r.changes %}<strong>No changes</strong><span class="faint">{{ cp }} accepted v{{ r.old_version }} as it was</span>
             {% else %}<strong>{{ r.changes | length }} change{{ '' if r.changes | length == 1 else 's' }} from v{{ r.old_version }}</strong>
-              {% if r.result %}<span class="faint">AI recommends: {{ verdicts[r.result.verdict] | lower }}</span>{% endif %}
+              {% if r.result %}<span class="faint">AI recommends: {{ verdicts[r.result.verdict] }}</span>{% endif %}
               <a href="/agreements/{{ a.id }}/rounds/{{ r.id }}/diff">Full diff</a>{% endif %}
           </div>
-          {% if r.status == 'reviewing' %}<div class="working"><span class="spinner" aria-hidden="true"></span><span>AI review: {{ r.stage }}… You can read the changes meanwhile.</span></div>{% endif %}
+          {% if r.status == 'reviewing' %}<div class="working" data-poll="/api/agreements/{{ a.id }}/progress" data-token="{{ r.stage }}"><span class="spinner" aria-hidden="true"></span><span>AI review: {{ r.stage }}… You can read the changes meanwhile; this page updates by itself.</span></div>{% endif %}
           {% if r.result and r.changes %}
           <div class="tally">
             {% for key in ['escalate', 'push_back', 'accept'] %}{% set n = r.result.changes | selectattr('decision', 'equalto', key) | list | length %}
             {% if n %}<span class="dec dec-{{ key }}">{{ n }} {{ labels[key] }}</span>{% endif %}{% endfor %}
           </div>
-          {% if r.result.groups %}<ul class="groups">{% for g in r.result.groups %}<li><b>{{ g.theme }}.</b> {{ g.summary }}</li>{% endfor %}</ul>{% endif %}
+          {% if r.result.groups %}
+          {% set titles = {} %}{% for rc in r.result.changes %}{% set _ = titles.update({rc.change.id: rc.change.title if rc.change.title and rc.change.title != rc.change.clause_id else clause_ref(rc.change.clause_id)}) %}{% endfor %}
+          <div class="groups">
+            <div class="groups-label">Related changes, read together</div>
+            {% for g in r.result.groups %}
+            <div class="group">
+              <div class="group-title">{{ g.theme }}</div>
+              <p>{{ g.summary }}</p>
+              <div class="group-members">{% for cid in g.change_ids %}<a href="#change-{{ r.id }}-{{ cid }}">{{ titles.get(cid, '#' ~ cid) }}</a>{% endfor %}</div>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
           {% endif %}
         </div>
 
@@ -211,8 +229,9 @@
         {% else %}
           {% for key in ['escalate', 'push_back', 'accept'] %}{% for rc in r.result.changes | selectattr('decision', 'equalto', key) %}
           {% set c = rc.change %}{% set item = r.answers.get(c.id) or {} %}{% set todo = missing[r.id][c.id] %}
+          {% set found = namespace(group=none) %}{% for g in r.result.groups if c.id in g.change_ids and not found.group %}{% set found.group = g %}{% endfor %}{% set group = found.group %}
           <article class="chg" id="change-{{ r.id }}-{{ c.id }}">
-            {% call change_head(c, rc) %}{{ source(known, ('old:' if c.kind == 'removed' else 'new:') ~ c.clause_id, 'Show in v' ~ (r.old_version if c.kind == 'removed' else r.new_version)) }}{% endcall %}
+            {% call change_head(c, rc) %}{% if group %}<span class="in-group">Group: {{ group.theme }}</span>{% endif %}{{ source(known, ('old:' if c.kind == 'removed' else 'new:') ~ c.clause_id, 'Show in v' ~ (r.old_version if c.kind == 'removed' else r.new_version)) }}{% endcall %}
             {{ redline(c) }}
             <div class="explain">
               <div><h3>What it means</h3><p>{{ rc.meaning }}</p></div>
@@ -276,7 +295,7 @@
   </li>
   {% elif e.action == 'reviewed' %}
   <li class="ev ev-small ev-reviewed"><span class="ev-dot"></span>
-    <div class="ev-head"><span class="ev-title">AI review finished: {{ verdicts.get(e.detail, e.detail) | lower }}</span><span class="ev-meta">{{ e.at }}</span></div>
+    <div class="ev-head"><span class="ev-title">AI review finished: {{ verdicts.get(e.detail, e.detail) }}</span><span class="ev-meta">{{ e.at }}</span></div>
   </li>
   {% elif e.action == 'review failed' %}
   <li class="ev ev-failed"><span class="ev-dot"></span>

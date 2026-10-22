@@ -116,3 +116,17 @@ def test_missing_claude_is_shown_in_the_trail(monkeypatch, tmp_path):
     assert "AI review stopped" in page.text and "was not found" in page.text
     assert "Non-Solicitation" in page.text  # the plain diff is still shown
     assert http.get(page.url.path.replace("/agreements", "/api/agreements")).json()["status"] == "failed"
+
+
+def test_examples_play_through_to_signed(monkeypatch, tmp_path):
+    from legal_agent.web import examples
+    fake_ai(monkeypatch)
+    http = client(monkeypatch, tmp_path)
+
+    examples.load_examples()
+
+    agreements = [http.get(f"/api/agreements/{i}").json() for i in (1, 2, 3)]
+    assert [a["status"] for a in agreements] == ["signed", "signed", "signed"]
+    assert len(agreements[0]["versions"]) == 4 and len(agreements[0]["rounds"]) == 2
+    assert agreements[1]["counterparty"] == "Initech Ltd."
+    assert http.get("/api/agreements/1/progress").json() == {"busy": False, "token": ""}

@@ -97,6 +97,11 @@ document.querySelectorAll("form[data-busy]").forEach(form => form.addEventListen
   setTimeout(() => form.querySelectorAll("button").forEach(b => b.disabled = true));
   if (button) button.textContent = form.dataset.busy;
 }));
+// While the AI works, ask the server every 2 seconds and reload when something changed.
+const poll = document.querySelector("[data-poll]");
+if (poll) setInterval(() => fetch(poll.dataset.poll).then(r => r.json()).then(state => {
+  if (!state.busy || state.token !== poll.dataset.token) location.reload();
+}).catch(() => {}), 2000);
 </script>
 {% block script %}{% endblock %}
 </body>

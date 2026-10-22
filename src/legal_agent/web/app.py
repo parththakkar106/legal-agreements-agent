@@ -30,6 +30,7 @@ from legal_agent.docx_writer import write_docx
 from legal_agent.orchestrator import Usage, review_contract
 from legal_agent.policy import load_policy, red_line_hits, rules_for
 from legal_agent.signing import SIGNER
+from legal_agent.web import examples
 from legal_agent.web.sources import document, round_sources
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -61,8 +62,8 @@ templates = Jinja2Templates(directory=Path(__file__).parent / "templates")
 def index(request: Request, error: str = ""):
     with store.connect() as db:
         agreements = store.list_agreements(db)
-    return templates.TemplateResponse(request, "index.html",
-                                      {"agreements": agreements, "demos": DEMOS, "error": error})
+    return templates.TemplateResponse(request, "index.html", {
+        "agreements": agreements, "demos": DEMOS, "error": error, "examples_running": examples.running})
 
 
 @app.post("/agreements")
@@ -282,6 +283,29 @@ def show_demo_document(request: Request, demo: str, version: str):
 def download_demo_document(demo: str, version: str):
     path, name = _demo_version(demo, version)
     return FileResponse(path, filename=name)
+
+
+@app.post("/examples")
+def start_examples():
+    """Play the example negotiations through the app in the background (needs `claude -p`)."""
+    if not examples.running:
+        Thread(target=examples.load_examples, daemon=True).start()
+    return RedirectResponse("/", status_code=303)
+
+
+@app.get("/api/examples")
+def examples_progress() -> dict:
+    with store.connect() as db:
+        count = len(store.list_agreements(db))
+    return {"busy": examples.running, "token": str(count)}
+
+
+@app.get("/api/agreements/{agreement_id}/progress")
+def review_progress(agreement_id: int) -> dict:
+    """What the page polls while the AI works: reload when busy turns false or the step changes."""
+    agreement = _load(agreement_id)
+    stages = [r["stage"] for r in agreement["rounds"].values() if r["status"] == "reviewing"]
+    return {"busy": agreement["status"] == "reviewing", "token": stages[-1] if stages else ""}
 
 
 @app.get("/api/agreements/{agreement_id}")
