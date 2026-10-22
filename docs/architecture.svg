@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 726" width="760" height="726" font-family="Helvetica, Arial, sans-serif">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b7280"/></marker></defs>
+<rect width="760" height="726" fill="#ffffff"/>
+<text x="40" y="36" font-size="17" font-weight="700" fill="#14171c">How a customer's redline moves through the app</text>
+<rect x="40" y="70" width="330" height="44" rx="8" fill="#f4f5f7" stroke="#9aa1ad" stroke-width="1.2"/>
+<text x="205.0" y="88" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14171c">Customer's edited version arrives</text>
+<text x="205.0" y="104" text-anchor="middle" font-size="11.5" fill="#485060">.docx</text>
+<rect x="40" y="136" width="330" height="44" rx="8" fill="#eef0f3" stroke="#6b7280" stroke-width="1.2"/>
+<text x="205.0" y="154" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14171c">1  Find the changes</text>
+<text x="205.0" y="170" text-anchor="middle" font-size="11.5" fill="#485060">plain code, clause by clause</text>
+<path d="M205.0 114V134" stroke="#6b7280" stroke-width="1.3" fill="none" marker-end="url(#ar)"/>
+<rect x="40" y="202" width="330" height="44" rx="8" fill="#e8eefb" stroke="#1e3a6b" stroke-width="2"/>
+<text x="205.0" y="220" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14171c">2  Classify</text>
+<text x="205.0" y="236" text-anchor="middle" font-size="11.5" fill="#485060">contract type, GDPR topics per change</text>
+<path d="M205.0 180V200" stroke="#6b7280" stroke-width="1.3" fill="none" marker-end="url(#ar)"/>
+<rect x="40" y="268" width="330" height="44" rx="8" fill="#eef0f3" stroke="#6b7280" stroke-width="1.2"/>
+<text x="205.0" y="286" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14171c">3  Search the GDPR</text>
+<text x="205.0" y="302" text-anchor="middle" font-size="11.5" fill="#485060">4 paragraphs per change, keyword + meaning</text>
+<path d="M205.0 246V266" stroke="#6b7280" stroke-width="1.3" fill="none" marker-end="url(#ar)"/>
+<rect x="40" y="334" width="330" height="44" rx="8" fill="#e8eefb" stroke="#1e3a6b" stroke-width="2"/>
+<text x="205.0" y="352" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14171c">4  Judge each change</text>
+<text x="205.0" y="368" text-anchor="middle" font-size="11.5" fill="#485060">accept, push back or escalate, with sources</text>
+<path d="M205.0 312V332" stroke="#6b7280" stroke-width="1.3" fill="none" marker-end="url(#ar)"/>
+<rect x="40" y="400" width="330" height="44" rx="8" fill="#eef0f3" stroke="#6b7280" stroke-width="1.2"/>
+<text x="205.0" y="418" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14171c">5  Safety checks</text>
+<text x="205.0" y="434" text-anchor="middle" font-size="11.5" fill="#485060">can only make a decision stricter</text>
+<path d="M205.0 378V398" stroke="#6b7280" stroke-width="1.3" fill="none" marker-end="url(#ar)"/>
+<rect x="40" y="466" width="330" height="44" rx="8" fill="#e8eefb" stroke="#1e3a6b" stroke-width="2"/>
+<text x="205.0" y="484" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14171c">6  Group related changes</text>
+<text x="205.0" y="500" text-anchor="middle" font-size="11.5" fill="#485060">e.g. edits that together shift risk</text>
+<path d="M205.0 444V464" stroke="#6b7280" stroke-width="1.3" fill="none" marker-end="url(#ar)"/>
+<rect x="40" y="532" width="330" height="44" rx="8" fill="#e8f3ed" stroke="#24704c" stroke-width="2"/>
+<text x="205.0" y="550" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14171c">A person answers each change</text>
+<text x="205.0" y="566" text-anchor="middle" font-size="11.5" fill="#485060">accept, reject or counter</text>
+<path d="M205.0 510V530" stroke="#6b7280" stroke-width="1.3" fill="none" marker-end="url(#ar)"/>
+<rect x="40" y="626" width="160" height="44" rx="8" fill="#eef0f3" stroke="#6b7280" stroke-width="1.2"/>
+<text x="120.0" y="644" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14171c">Not all agreed</text>
+<text x="120.0" y="660" text-anchor="middle" font-size="11.5" fill="#485060">next version goes back</text>
+<rect x="210" y="626" width="160" height="44" rx="8" fill="#e8f3ed" stroke="#24704c" stroke-width="2"/>
+<text x="290.0" y="644" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14171c">All agreed</text>
+<text x="290.0" y="660" text-anchor="middle" font-size="11.5" fill="#485060">signed PDF + certificate</text>
+<path d="M205.0 576V604H120.0V624" stroke="#6b7280" stroke-width="1.3" fill="none" marker-end="url(#ar)"/>
+<path d="M205.0 604H290.0V624" stroke="#6b7280" stroke-width="1.3" fill="none" marker-end="url(#ar)"/>
+<path d="M40 648.0H18V92.0H38" stroke="#9aa1ad" stroke-width="1.3" fill="none" stroke-dasharray="4 4" marker-end="url(#ar)"/>
+<text x="14" y="348.0" font-size="11" fill="#485060" text-anchor="middle" transform="rotate(-90 14 348.0)">their next version starts a new round</text>
+<rect x="470" y="268" width="250" height="44" rx="8" fill="#f4f5f7" stroke="#9aa1ad" stroke-width="1.2"/>
+<text x="595.0" y="286" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14171c">GDPR</text>
+<text x="595.0" y="302" text-anchor="middle" font-size="11.5" fill="#485060">414 article paragraphs, no recitals</text>
+<path d="M470 290.0H372" stroke="#6b7280" stroke-width="1.3" fill="none" marker-end="url(#ar)"/>
+<rect x="470" y="334" width="250" height="44" rx="8" fill="#f4f5f7" stroke="#9aa1ad" stroke-width="1.2"/>
+<text x="595.0" y="352" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14171c">Clauses it refers to</text>
+<text x="595.0" y="368" text-anchor="middle" font-size="11.5" fill="#485060">asked for on demand, up to 2 rounds</text>
+<path d="M470 348H372" stroke="#6b7280" stroke-width="1.3" fill="none" stroke-dasharray="4 4" marker-end="url(#ar)" marker-start="url(#ar)"/>
+<rect x="470" y="398" width="250" height="44" rx="8" fill="#f4f5f7" stroke="#9aa1ad" stroke-width="1.2"/>
+<text x="595.0" y="416" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14171c">Acme's playbook</text>
+<text x="595.0" y="432" text-anchor="middle" font-size="11.5" fill="#485060">14 rules: accept, push back, escalate</text>
+<path d="M470 408H420V366H372" stroke="#6b7280" stroke-width="1.3" fill="none" marker-end="url(#ar)"/>
+<path d="M470 424H372" stroke="#6b7280" stroke-width="1.3" fill="none" marker-end="url(#ar)"/>
+<text x="421.0" y="440" font-size="11" fill="#485060" text-anchor="middle">red lines</text>
+<rect x="40" y="685" width="14" height="14" rx="3" fill="#eef0f3" stroke="#6b7280" stroke-width="1.5"/>
+<text x="62" y="696" font-size="12" fill="#485060">plain code</text>
+<rect x="190" y="685" width="14" height="14" rx="3" fill="#e8eefb" stroke="#1e3a6b" stroke-width="1.5"/>
+<text x="212" y="696" font-size="12" fill="#485060">AI (claude -p)</text>
+<rect x="340" y="685" width="14" height="14" rx="3" fill="#e8f3ed" stroke="#24704c" stroke-width="1.5"/>
+<text x="362" y="696" font-size="12" fill="#485060">a person</text>
+<rect x="490" y="685" width="14" height="14" rx="3" fill="#f4f5f7" stroke="#9aa1ad" stroke-width="1.5"/>
+<text x="512" y="696" font-size="12" fill="#485060">data</text>
+</svg>
