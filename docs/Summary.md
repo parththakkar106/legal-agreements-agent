@@ -5,17 +5,17 @@
 1. **Missing a change is to be avoided at all costs.** A wrong "accept" will cost more than a reviewer spending some extra time.
 2. **Every decision should be easily verifiable.** Every decision should track to a law, a rule or a clause and this should be easily accessible. If people can't check it, they won't trust it.
 3. **Should easily fit into existing systems.** The tool should be able to be connect directly to inbox instead of having its own separate app because then its just extra work.
-4. **Simple and lightweight.** Add enough guardrails that there are no errors but avoid any unneeded complexity.
+4. **Simple and lightweight.** Enough guardrails to catch the costly mistakes, and nothing beyond what the job needs.
 
 ## One prompt, an agent, or a pipeline?
 
 | Option | Why not (or why) |
 | --- | --- |
-| One big prompt with both contracts | Cheapest, but it will require a lot of tokens to read through complete knowledge base (GDPR and Playbook) every time, and is more susceptible to hidden prompt injections. We kept it as our baseline. |
+| One big prompt with both contracts | Cheapest, but the model has to find every change itself, and if it skips one, nothing tells you. The rule that matters gets buried among tens of thousands of words, which makes it less reliable. And you can't check where its legal citations came from, or whether it made one up. We kept it as our baseline. |
 | An autonomous agent with tools | Flexible, but it picks its own steps, so runs differ and are hard to test or explain and might bypass basic guardrails. Tools also widen the door for prompt injection. |
 | **A fixed pipeline (chosen)** | Code sets the order and the AI answers a few small questions. More code, roughly 2 to 4 times the model cost, but every step can be tested and checked. |
 
-The pipeline is the best option because multiple agents supervised by a clear set of rules and guardrails lessen the risk of an outside injection or a hallucination causing major issues. Each agent also keeps others in check and at each step the behavior is monitored. Capabilities of each agent are limited and any major flags are directly escalated to a human with simple readable context.
+The pipeline is the best option because plain code, not the model, controls the flow: code finds every change, so none are skipped, and code guardrails check every AI answer and can only make it stricter. Each agent sees only what it needs and has no tools, and anything risky or uncertain goes straight to a person, with the reason shown.
 
 ## Why three agents
 
