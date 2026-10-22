@@ -93,7 +93,8 @@ label { display: block; font-weight: 500; font-size: 14px; margin-bottom: 6px; }
 // A slow action (starting an upload) disables its buttons and says what is happening.
 document.querySelectorAll("form[data-busy]").forEach(form => form.addEventListener("submit", event => {
   const button = event.submitter || form.querySelector("button");
-  form.querySelectorAll("button").forEach(b => b.disabled = true);
+  // Disable after the browser has read the form: a disabled button's name=value is not sent.
+  setTimeout(() => form.querySelectorAll("button").forEach(b => b.disabled = true));
   if (button) button.textContent = form.dataset.busy;
 }));
 </script>
