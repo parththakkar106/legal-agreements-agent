@@ -15,8 +15,9 @@ import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
 
-APP_DATA = Path(__file__).resolve().parents[2] / "data" / "app"
-DB_FILE = APP_DATA / "desk.db"
+from legal_agent import config, webhooks
+
+DB_FILE = config.DATA_DIR / "desk.db"
 ACME = "Acme Cloud Inc."
 
 SCHEMA = """
@@ -158,6 +159,7 @@ def close_round(db, round_id: int, actor: str, summary: str):
 def set_status(db, agreement_id: int, status: str):
     db.execute("UPDATE agreements SET status = ? WHERE id = ?", (status, agreement_id))
     db.commit()
+    webhooks.publish("agreement.status_changed", _brief(db, agreement_id), status)
 
 
 def set_signed(db, agreement_id: int, pdf: Path):
@@ -170,6 +172,16 @@ def add_event(db, agreement_id: int, action: str, actor: str, detail: str = "",
     db.execute("INSERT INTO events (agreement_id, at, action, actor, detail, version, round_id)"
                " VALUES (?, ?, ?, ?, ?, ?, ?)", (agreement_id, now(), action, actor, detail, version, round_id))
     db.commit()
+    if action in webhooks.EVENTS:  # every audit-trail entry is also an event for other systems
+        webhooks.publish(webhooks.EVENTS[action], _brief(db, agreement_id), detail,
+                         actor=actor, version=version, round_id=round_id)
+
+
+def _brief(db, agreement_id: int) -> dict:
+    """What a webhook says about an agreement: ids and status, no contract text."""
+    row = db.execute("SELECT id, title, counterparty, doc_type, status FROM agreements WHERE id = ?",
+                     (agreement_id,)).fetchone()
+    return dict(row)
 
 
 def get_agreement(db, agreement_id: int) -> dict | None:

@@ -1,10 +1,11 @@
+import json
 import re
 from pathlib import Path
 
 from fastapi.testclient import TestClient
 from fakes import result, review_answer
 
-from legal_agent import store
+from legal_agent import desk, store
 from legal_agent.agents import classifier, grouper, reviewer
 from legal_agent.docx_parser import parse_docx
 from legal_agent.llm import LLMUnavailable
@@ -35,8 +36,14 @@ def fake_ai(monkeypatch):
 
 def client(monkeypatch, tmp_path):
     monkeypatch.setattr(store, "DB_FILE", tmp_path / "desk.db")
-    monkeypatch.setattr(web, "Thread", RunNow)
+    monkeypatch.setattr(desk, "Thread", RunNow)
     return TestClient(web.app)
+
+
+def state(agreement_id) -> dict:
+    """The agreement as stored, with string keys like JSON."""
+    with store.connect() as db:
+        return json.loads(json.dumps(store.get_agreement(db, int(agreement_id))))
 
 
 def start(http, kind: str, review: bool = True):
@@ -57,7 +64,7 @@ def test_full_negotiation_counter_then_accept_then_sign(monkeypatch, tmp_path):
     page = start(http, "msa")
     assert "We can offer 45 days." in page.text and "Close round" in page.text
     agreement_id = int(page.url.path.rsplit("/", 1)[1])
-    data = http.get(f"/api/agreements/{agreement_id}").json()
+    data = state(agreement_id)
     round_id = int(next(iter(data["rounds"])))
     payment = next(c["id"] for c in data["rounds"][str(round_id)]["changes"] if c["clause_id"] == "Payment Period")
 
@@ -68,7 +75,7 @@ def test_full_negotiation_counter_then_accept_then_sign(monkeypatch, tmp_path):
         "actor": "Ana", "outcome": "counter", "counter_text": "45 days from the invoice date.",
         "external_comment": "45 days is the most we can do."})
     http.post(f"/rounds/{round_id}/close", data={"actor": "Ana"})
-    data = http.get(f"/api/agreements/{agreement_id}").json()
+    data = state(agreement_id)
     assert data["status"] == "waiting for counterparty"
     v3 = data["versions"]["3"]
     assert v3["author"] == store.ACME and "45 days is the most we can do." in v3["note"]
@@ -78,12 +85,12 @@ def test_full_negotiation_counter_then_accept_then_sign(monkeypatch, tmp_path):
 
     # Globex sends v3 back unchanged: nothing to review, ready to sign.
     http.post(f"/agreements/{agreement_id}/accepted")
-    assert http.get(f"/api/agreements/{agreement_id}").json()["status"] == "ready to sign"
+    assert state(agreement_id)["status"] == "ready to sign"
 
     assert http.post(f"/agreements/{agreement_id}/sign", data={"name": "Ana Ruiz"}).status_code == 400  # no consent
     signed = http.post(f"/agreements/{agreement_id}/sign", data={"name": "Ana Ruiz", "consent": "yes"})
     assert "Signed by Ana Ruiz" in signed.text
-    data = http.get(f"/api/agreements/{agreement_id}").json()
+    data = state(agreement_id)
     assert data["status"] == "signed" and Path(data["signed_pdf"]).read_bytes()[:4] == b"%PDF"
     assert [e["action"] for e in data["events"]] == [
         "sent", "received", "reviewed", "round closed", "sent", "received", "round closed", "sign"]
@@ -95,7 +102,7 @@ def test_versions_diff_and_downloads(monkeypatch, tmp_path):
     http = client(monkeypatch, tmp_path)
     page = start(http, "sow")
     agreement_id = page.url.path.rsplit("/", 1)[1]
-    round_id = next(iter(http.get(f"/api/agreements/{agreement_id}").json()["rounds"]))
+    round_id = next(iter(state(agreement_id)["rounds"]))
 
     assert "not subject to Section 8" in http.get(f"/agreements/{agreement_id}/versions/2").text
     download = http.get(f"/agreements/{agreement_id}/versions/2/download")
@@ -127,7 +134,7 @@ def test_missing_claude_is_shown_in_the_trail(monkeypatch, tmp_path):
     page = start(http, "nda")
     assert "AI review stopped" in page.text and "was not found" in page.text
     assert "Non-Solicitation" in page.text  # the plain diff is still shown
-    assert http.get(page.url.path.replace("/agreements", "/api/agreements")).json()["status"] == "failed"
+    assert state(page.url.path.rsplit("/", 1)[1])["status"] == "failed"
 
 
 def test_review_waits_until_a_person_starts_it(monkeypatch, tmp_path):
@@ -135,14 +142,14 @@ def test_review_waits_until_a_person_starts_it(monkeypatch, tmp_path):
     http = client(monkeypatch, tmp_path)
     page = start(http, "msa", review=False)
     agreement_id = page.url.path.rsplit("/", 1)[1]
-    data = http.get(f"/api/agreements/{agreement_id}").json()
+    data = state(agreement_id)
     assert data["status"] == "not reviewed" and "Run AI review" in page.text
     assert "Run AI review" in http.get("/").text
 
     round_id = next(iter(data["rounds"]))
     page = http.post(f"/rounds/{round_id}/review")
     assert "We can offer 45 days." in page.text
-    assert http.get(f"/api/agreements/{agreement_id}").json()["status"] == "needs review"
+    assert state(agreement_id)["status"] == "needs review"
     assert http.post(f"/rounds/{round_id}/review").status_code == 400  # already reviewed
 
 
@@ -156,7 +163,7 @@ def test_portfolio_builds_saves_and_loads(monkeypatch, tmp_path):
     monkeypatch.setattr(store, "DB_FILE", tmp_path / "app" / "desk.db")
     assert portfolio.load_if_empty(tmp_path / "portfolio")
     assert not portfolio.load_if_empty(tmp_path / "portfolio")  # only into an empty database
-    agreements = [http.get(f"/api/agreements/{i}").json() for i in range(1, 10)]
+    agreements = [state(i) for i in range(1, 10)]
     assert [(a["counterparty"], a["status"], len(a["versions"])) for a in agreements] == [
         ("Globex Inc.", "signed", 4), ("Initech Ltd.", "signed", 2), ("Umbrella Corp.", "signed", 4),
         ("Initech Ltd.", "waiting for counterparty", 3), ("Hooli Inc.", "needs review", 4),
@@ -197,7 +204,7 @@ def test_signature_adopted_once_is_reused(monkeypatch, tmp_path):
                                                          "consent": "yes"}).status_code == 400
     http.post(f"/agreements/{second}/sign", data={"name": "Ana Ruiz", "job_title": "Head of Legal", "style": "Caveat",
                                                    "consent": "yes"})
-    data = http.get(f"/api/agreements/{second}").json()
+    data = state(second)
     assert data["status"] == "signed" and data["events"][-1]["actor"] == "Ana Ruiz"
     assert Path(data["signed_pdf"]).read_bytes()[:4] == b"%PDF"
     assert http.get("/fonts/Caveat.ttf").status_code == 200

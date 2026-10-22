@@ -1,0 +1,22 @@
+# docker compose up -d   then open http://127.0.0.1:8000 (web app) and http://127.0.0.1:8000/docs (API)
+services:
+  desk:
+    build: .
+    image: acme-agreement-desk
+    ports:
+      - "127.0.0.1:8000:8000"  # local only; put a reverse proxy with TLS and SSO in front to expose it
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - desk-data:/data  # database, versions, signed PDFs: survives restarts and upgrades
+    read_only: true  # the image cannot be changed at run time; only /data and the temp folders are writable
+    tmpfs:
+      - /tmp
+      - /home/desk
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+
+volumes:
+  desk-data:

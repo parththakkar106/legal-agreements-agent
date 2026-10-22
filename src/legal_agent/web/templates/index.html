@@ -71,7 +71,7 @@
             {% elif r.review_round %}<span class="faint">Not reviewed yet</span>
             {% elif r.status == 'reviewing' %}<span class="faint">Reviewing…</span>
             {% else %}<span class="faint">–</span>{% endif %}</td>
-        <td class="step">{{ r.step }}
+        <td class="step">{{ r.next_step }}
           {% if r.review_round %}<form method="post" action="/rounds/{{ r.review_round }}/review" data-busy="Starting…"><button class="btn small">Run AI review</button></form>{% endif %}</td>
         <td class="faint">{{ r.updated_at[:16] }}</td>
       </tr>

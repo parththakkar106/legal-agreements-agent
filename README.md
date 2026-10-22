@@ -24,7 +24,7 @@ python src/main.py review data/contracts/base/msa.docx data/contracts/redlines/m
 python src/main.py review data/contracts/base/sow.docx data/contracts/redlines/sow_globex_v2.docx \
     --related msa=data/contracts/base/msa.docx                                                    # SOW that points at the MSA
 python src/main.py eval --baseline                                                                # eval vs one-call baseline (~3 min)
-python -m pytest -q                                                                               # 58 tests, offline
+python -m pytest -q                                                                               # 64 tests, offline
 ```
 
 `run.yaml` runs these commands as the grader does.
@@ -143,12 +143,107 @@ every review and wrongly escalated innocent changes. It now lists references onl
 cases labelled by us from the playbook, one live run each (numbers move a little between runs),
 and two ambiguous cases were reworded after the first run (noted in `data/eval/cases.yaml`).
 
+## Deploy
+
+One container holds the web app, the JSON API and the webhooks. Settings come from environment
+variables (see [`.env.example`](.env.example)); data lives on a volume.
+
+```bash
+cp .env.example .env          # fill in CLAUDE_KEY, DESK_API_KEYS, and webhook settings if you want them
+docker compose up -d --build  # http://127.0.0.1:8000 (web app), /docs (API reference), /healthz
+```
+
+The container runs as a non-root user on a read-only filesystem with all Linux capabilities dropped;
+only `/data` (database, versions, signed PDFs) and temp folders are writable. It includes the
+`claude` CLI. It listens on localhost only: to expose it, put a reverse proxy in front that ends TLS
+and handles login (your SSO). Behind a TLS-inspecting proxy, build with
+`docker build --secret id=ca_bundle,src=<your CA bundle> .`; the certificate is used for the build
+and never stored in the image.
+
+| Setting | What it does |
+| --- | --- |
+| `CLAUDE_KEY` | Token for `claude -p` (from `claude setup-token`). Needed for AI reviews. |
+| `DESK_API_KEYS` | API keys, comma-separated `name:key`. The name shows in the audit trail. Empty = API off. |
+| `DESK_WEBHOOK_URLS` | Where events are POSTed, comma-separated. Empty = no webhooks. |
+| `DESK_WEBHOOK_SECRET` | Signs every webhook. Without it, nothing is sent. |
+| `DESK_PUBLIC_URL` | This app's address, for links inside events. |
+| `DESK_DATA_DIR` | Where data lives (`/data` in the container, `data/app/` otherwise). |
+| `DESK_MAX_UPLOAD_MB` | Largest .docx accepted (default 10). |
+
+## Connect other systems
+
+Other systems talk to the desk in two directions: they **push contracts in** through the JSON API,
+and they **hear what happened** through webhooks. People work in the web app.
+
+![How the desk connects to other systems](docs/integrations.svg)
+
+### The API
+
+Every call needs an `X-API-Key` header. The full reference, with every field, is at `/docs`.
+
+```bash
+# A customer's redline arrives (for example from your email intake): add it, the AI review starts.
+curl -H "X-API-Key: $KEY" -F title="Mutual NDA" -F counterparty="Initech Ltd." \
+     -F ours=@ours.docx -F theirs=@their_redline.docx http://127.0.0.1:8000/api/v1/agreements
+
+curl -H "X-API-Key: $KEY" http://127.0.0.1:8000/api/v1/agreements/10   # findings, answers, audit trail
+```
+
+| Call | What it does |
+| --- | --- |
+| `GET /api/v1/agreements` | Every agreement with its status and next step |
+| `POST /api/v1/agreements` | Our version, and theirs if they replied (`review=false` to hold the AI review) |
+| `GET /api/v1/agreements/{id}` | Versions, each change with the AI's finding and a person's answer, the audit trail |
+| `POST /api/v1/agreements/{id}/versions` | The counterparty's next version |
+| `POST /api/v1/agreements/{id}/accepted` | They accepted our last version as it is |
+| `POST /api/v1/rounds/{id}/review` | Start or retry the AI review (runs in the background) |
+| `POST /api/v1/rounds/{id}/answers` | A person's answer to one change, recorded as "name via system" |
+| `POST /api/v1/rounds/{id}/close` | Close the round: ready to sign, or our next version is written |
+| `GET .../versions/{n}/download`, `GET .../signed.pdf` | The files |
+
+**There is no signing call, on purpose.** Only a person signs, in the web app.
+
+### Webhooks
+
+Every entry in an agreement's audit trail is also an event, POSTed as JSON to each
+`DESK_WEBHOOK_URLS` address: `version.sent`, `version.received`, `review.completed`,
+`review.failed`, `round.closed`, `agreement.status_changed` (for example to "ready to sign") and
+`agreement.signed`. Events carry ids, statuses and a short summary with a link back to the API,
+never contract text.
+
+Each request is signed the way Stripe and GitHub sign theirs: `X-Desk-Signature` is
+`sha256=HMAC(secret, "<X-Desk-Timestamp>.<body>")`. The receiver recomputes it and rejects
+anything older than 5 minutes, so a captured request cannot be replayed. Failed deliveries are
+retried 3 times. [`examples/webhook_receiver.py`](examples/webhook_receiver.py) is a working
+receiver in 30 lines of standard-library Python.
+
+### Swapping parts
+
+- **Signing:** `signing.py` has a small `Signer` interface; a DocuSign or Dropbox Sign adapter
+  replaces the built-in one without touching the workflow.
+- **The model:** every model call goes through `llm.py`; another provider means changing one file.
+- **The workflow:** `desk.py` holds the whole negotiation flow, used by both the web pages and the API.
+
+## Security
+
+- **Secrets** come only from environment variables (`.env` is never committed): API keys,
+  webhook secret, `CLAUDE_KEY`. Nothing is logged or stored.
+- **API:** off unless keys are set; keys are compared in constant time; each call is recorded
+  with the system's name. No signing through the API.
+- **Webhooks:** never sent unsigned; signed with a timestamp against replays; no contract text in
+  events.
+- **Uploads:** only real .docx files (checked by content, not just the name), size-limited.
+- **AI:** the model runs with no tools, no MCP servers and no settings, from an empty folder;
+  counterparty text is marked as data, and the guardrails can only make a decision stricter.
+- **Container:** non-root, read-only, no capabilities, localhost only, health check.
+- **Web app:** has no login of its own. In production it sits behind your SSO or reverse proxy.
+
 ## Limitations
 
 - **Our paper only.** Contracts start from Acme's templates; reviewing a counterparty's own paper
   (a whole-document review plus a check for missing protections) is designed but not built.
 - **Not modelled:** the counterparty's countersignature, roles and signing authority (for example
-  legal-only sign-off on MSAs), login, multiple profiles, notifications and webhooks.
+  legal-only sign-off on MSAs), and multiple profiles. The web app relies on your SSO for login.
 - **Formatting:** our next version is regenerated in our layout, not as Word tracked changes in
   their file. Unusually formatted .docx files may split into clauses badly.
 - **Signature:** a typed electronic signature with consent and a SHA-256 certificate, behind a
@@ -157,7 +252,9 @@ and two ambiguous cases were reworded after the first run (noted in `data/eval/c
 - **GDPR only** as legal knowledge, and only the binding articles (no recitals).
 - **Cost and time:** about $0.10 and 20 to 40 seconds per contract review; the eval costs about
   $1.10 with the baseline.
-- **Local only:** SQLite and files in `data/app/`, one user, no authentication.
+- **One instance:** SQLite and files on one volume, so it scales up, not out. Moving to Postgres and
+  object storage would be the step for several instances. Webhook retries are in memory, so a
+  restart drops pending ones (the audit trail still has every event).
 
 ## Sources
 

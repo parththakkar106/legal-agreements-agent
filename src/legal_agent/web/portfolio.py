@@ -204,7 +204,9 @@ def _wait(http, agreement: int):
 
 
 def _api(http, agreement: int) -> dict:
-    return http.get(f"/api/agreements/{agreement}").json()
+    """The agreement as stored, with string keys like the JSON the pages see."""
+    with store.connect() as db:
+        return json.loads(json.dumps(store.get_agreement(db, agreement)))
 
 
 def _slug(title: str) -> str:

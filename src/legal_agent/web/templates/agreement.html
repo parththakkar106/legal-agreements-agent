@@ -203,7 +203,7 @@
           {% if r.status in ('not reviewed', 'failed') %}<form method="post" action="/rounds/{{ r.id }}/review" class="working" data-busy="Starting…">
             <span>{{ 'The AI has not reviewed these changes yet.' if r.status == 'not reviewed' else 'The AI review stopped (see below).' }}</span>
             <button class="btn small">{{ 'Run AI review' if r.status == 'not reviewed' else 'Try the AI review again' }}</button></form>{% endif %}
-          {% if r.status == 'reviewing' %}<div class="working" data-poll="/api/agreements/{{ a.id }}/progress" data-token="{{ r.stage }}"><span class="spinner" aria-hidden="true"></span><span>AI review: {{ r.stage }}… You can read the changes meanwhile; this page updates by itself.</span></div>{% endif %}
+          {% if r.status == 'reviewing' %}<div class="working" data-poll="/agreements/{{ a.id }}/progress" data-token="{{ r.stage }}"><span class="spinner" aria-hidden="true"></span><span>AI review: {{ r.stage }}… You can read the changes meanwhile; this page updates by itself.</span></div>{% endif %}
           {% if r.result and r.changes %}
           <div class="tally">
             {% for key in ['escalate', 'push_back', 'accept'] %}{% set n = r.result.changes | selectattr('decision', 'equalto', key) | list | length %}
