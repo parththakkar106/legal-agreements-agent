@@ -1,6 +1,12 @@
 # Acme Agreement Desk: a contract manager with an AI review agent
 
-A local, DocuSign-like tool for **Acme Cloud Inc.**, a SaaS vendor that sends customers its own
+Contracts rarely stall because they are hard; they stall in someone's inbox. A customer sends back an
+edited Word file, and someone has to work out what changed and check each edit against company
+policy. Most edits are routine, but a few really matter, like a rule that customer data must stay in
+one country. The job is to find those few quickly and never miss one.
+
+A local, DocuSign-like tool for **Acme Cloud Inc.** (a fictional company, named after the Acme of
+Looney Tunes and *Coyote vs. Acme*), a SaaS vendor that sends customers its own
 contracts (NDA, Cloud Service Agreement, DPA, SOW). Customers send back edited versions. The app
 keeps every version, shows what changed clause by clause, has an AI agent review each change
 against Acme's playbook and the GDPR, lets a person answer each change, builds our next version,
@@ -8,6 +14,9 @@ and finally signs the agreed version as a PDF with a certificate page.
 
 **The AI recommends; a person decides and signs.** Code guardrails can only make an AI decision
 stricter, never looser, and the AI never sends, accepts or signs anything.
+
+Why it is built this way (one prompt vs an agent vs a pipeline, why three agents, what we chose
+not to build) is in [`docs/Summary.md`](docs/Summary.md).
 
 ## Terms used
 
@@ -88,6 +97,8 @@ those reviews are part of each agreement's history. Every review you start runs 
 Everything lands in the agreement's audit trail.
 
 ## Architecture
+
+![How a customer's redline moves through the app](docs/architecture.svg)
 
 ```
  .docx v(n), v(n+1)
