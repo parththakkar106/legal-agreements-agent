@@ -140,11 +140,9 @@ Two full runs on the final cases; the full report is from the first of them:
 What it shows: the baseline is cheaper and nearly as accurate, but it misses changes a person must
 decide. Across three runs it only pushed back on governing law moved to Belarus every time, and to
 Russia in two of the three, where the playbook says a lawyer decides. The pipeline escalated every
-one of them, every time. The eval also found a real bug: the Reviewer's list of available
-references carried the first words of every clause, so an injection hidden in one clause reached
-every review and wrongly escalated innocent changes. It now lists references only. Caveats: 45
-cases labelled by us from the playbook, a handful of live runs (numbers move a little between runs),
-and two ambiguous cases were reworded after the first run (noted in `data/eval/cases.yaml`).
+one of them, every time. Caveats: 45 cases labelled by us from the playbook, a handful of live runs 
+(numbers move a little between runs), and two ambiguous cases were reworded after the first run 
+(noted in `data/eval/cases.yaml`).
 
 ## Deploy
 
@@ -247,8 +245,6 @@ receiver in 30 lines of standard-library Python.
   (a whole-document review plus a check for missing protections) is designed but not built.
 - **Not modelled:** the counterparty's countersignature, roles and signing authority (for example
   legal-only sign-off on MSAs), and multiple profiles. The web app relies on your SSO for login.
-- **Formatting:** our next version is regenerated in our layout, not as Word tracked changes in
-  their file. Unusually formatted .docx files may split into clauses badly.
 - **Signature:** a typed electronic signature with consent and a SHA-256 certificate, behind a
   small `Signer` interface so DocuSign or Dropbox Sign could replace it. It is not a qualified
   electronic signature.
