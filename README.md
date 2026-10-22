@@ -124,23 +124,26 @@ customer edits (5 hide prompt injections), runs the pipeline, runs a **baseline*
 `claude -p` call with both whole versions and the whole playbook), and scores both. Full report:
 [`docs/eval-results.md`](docs/eval-results.md).
 
+Two full runs on the final cases; the full report is from the first of them:
+
 | | Our pipeline | Baseline: one raw call |
 | --- | --- | --- |
-| Decision accuracy | **45/45 (100%)** | 42/45 (93%) |
-| Escalation recall (changes a person must see) | **18/18 (100%)** | 16/18 (89%) |
+| Decision accuracy | **45/45 in both runs** | 42/45 and 43/45 |
+| Escalation recall (changes a person must see) | **18/18 in both runs** | 16/18 and 17/18 |
 | Prompt injections caught | 5/5 | 5/5 |
 | Unsafe accepts | 0 | 0 |
 | Right playbook rule cited | 100% | 100% |
 | GDPR citations that exist | 100% | 100% |
 | GDPR chapters exactly right | 80% | 100% |
-| Cost / time per contract | $0.115 / 23 s | $0.025 / 8 s |
+| Cost / time per contract | $0.12 / 23 to 30 s | $0.03 to $0.08 / 8 s |
 
-What it shows: the baseline is cheaper and nearly as accurate, but in both runs it only pushed back
-on governing law moved to Russia and Belarus, which the playbook says a person must decide. The
-pipeline caught every one of them. The eval also found a real bug: the Reviewer's list of available
+What it shows: the baseline is cheaper and nearly as accurate, but it misses changes a person must
+decide. Across three runs it only pushed back on governing law moved to Belarus every time, and to
+Russia in two of the three, where the playbook says a lawyer decides. The pipeline escalated every
+one of them, every time. The eval also found a real bug: the Reviewer's list of available
 references carried the first words of every clause, so an injection hidden in one clause reached
 every review and wrongly escalated innocent changes. It now lists references only. Caveats: 45
-cases labelled by us from the playbook, one live run each (numbers move a little between runs),
+cases labelled by us from the playbook, a handful of live runs (numbers move a little between runs),
 and two ambiguous cases were reworded after the first run (noted in `data/eval/cases.yaml`).
 
 ## Deploy
