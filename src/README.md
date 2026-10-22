@@ -14,6 +14,8 @@
 | `legal_agent/agents/grouper.py` | AI: groups related changes under one theme |
 | `legal_agent/guardrails.py` | Code checks that can only make a decision stricter: red lines, injection, missing rule, unknown citation, low confidence |
 | `legal_agent/orchestrator.py` | Runs the steps in order, reviews changes in parallel, totals tokens, cost and time |
+| `legal_agent/evaluation.py` | The eval: builds the labelled contracts in `data/eval/cases.yaml`, runs the pipeline (and the baseline), scores decisions, escalations, injections, citations, chapters, contract type, cost and time, and compares keyword, embedding and hybrid retrieval |
+| `legal_agent/baseline.py` | The baseline for the eval: one raw `claude -p` call over both whole versions and the whole playbook, no diff, search or guardrails |
 | `legal_agent/store.py` | SQLite: agreements, every version exchanged (with SHA-256), review rounds, a person's answer to each change, and the audit trail |
 | `legal_agent/negotiation.py` | The human side of a round: what each change needs (by AI colour), building our next version from the answers, the cover note, clause history |
 | `legal_agent/docx_writer.py` | Writes clauses back to a .docx that `docx_parser` reads |

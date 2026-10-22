@@ -3,6 +3,7 @@
   python src/main.py diff OLD.docx NEW.docx        list the clause changes between two versions
   python src/main.py search "QUERY" [--chapter IV]  search the GDPR
   python src/main.py review OLD.docx NEW.docx      full AI review (needs `claude -p` and CLAUDE_KEY)
+  python src/main.py eval [--baseline]              score the pipeline on labelled cases (needs `claude -p`)
   python src/main.py serve                         the web app at http://127.0.0.1:8000
 """
 
@@ -75,6 +76,21 @@ def cmd_review(args):
             json.dump(asdict(review), f, indent=2)
 
 
+def cmd_eval(args):
+    from pathlib import Path
+
+    from legal_agent import evaluation
+    from legal_agent.llm import LLMUnavailable
+
+    try:
+        report = evaluation.run(baseline=args.baseline)
+    except LLMUnavailable as error:
+        sys.exit(f"Error: {error}")
+    print(report)
+    if args.out:
+        Path(args.out).write_text(report, encoding="utf-8")
+
+
 def cmd_serve(args):
     import uvicorn
 
@@ -107,6 +123,11 @@ def main():
                         help="another contract the reviewer may consult, e.g. msa=data/contracts/base/msa.docx")
     review.add_argument("--json", help="also write the full result to this JSON file")
     review.set_defaults(func=cmd_review)
+
+    evaluate = commands.add_parser("eval", help="score the pipeline on data/eval/cases.yaml (needs claude -p)")
+    evaluate.add_argument("--baseline", action="store_true", help="also run one raw claude -p call per contract")
+    evaluate.add_argument("--out", help="also write the report to this Markdown file")
+    evaluate.set_defaults(func=cmd_eval)
 
     serve = commands.add_parser("serve", help="run the web app")
     serve.add_argument("--host", default="127.0.0.1")

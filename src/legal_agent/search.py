@@ -44,8 +44,12 @@ class HybridSearch:
         self.embedder = embedder or load_embedder()
         self.vectors = self.embedder.embed(texts, norm=True)  # shape (n_chunks, 256)
 
-    def search(self, query: str, k: int = 5, chapters: set[str] | None = None) -> list[tuple[Chunk, float]]:
-        """Top-k chunks for the query, optionally only from the given GDPR chapters (e.g. {"IV", "V"})."""
+    def search(self, query: str, k: int = 5, chapters: set[str] | None = None,
+               mode: str = "hybrid") -> list[tuple[Chunk, float]]:
+        """Top-k chunks for the query, optionally only from the given GDPR chapters (e.g. {"IV", "V"}).
+
+        `mode` "keyword" or "meaning" uses one ranking alone; the eval compares them with "hybrid".
+        """
         allowed = [i for i, c in enumerate(self.chunks) if not chapters or c.chapter in chapters]
         keyword_scores = self.bm25.get_scores(tokenize(query))
         meaning_scores = self.vectors @ self.embedder.embed([query], norm=True)[0]  # cosine similarity
@@ -57,7 +61,9 @@ class HybridSearch:
         meaning_ranked = sorted(allowed, key=lambda i: -meaning_scores[i])
 
         fused = {i: 0.0 for i in allowed}
-        for ranked in (keyword_ranked, meaning_ranked):
+        rankings = {"hybrid": (keyword_ranked, meaning_ranked), "keyword": (keyword_ranked,),
+                    "meaning": (meaning_ranked,)}[mode]
+        for ranked in rankings:
             for rank, i in enumerate(ranked, start=1):
                 fused[i] += 1 / (RRF_K + rank)
 
