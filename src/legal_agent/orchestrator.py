@@ -4,6 +4,7 @@ Plain Python decides the order; the three AI agents only make judgments.
 Changes are reviewed in parallel because each `claude -p` call takes seconds.
 """
 
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -78,15 +79,18 @@ def get_search() -> HybridSearch:
 
 
 def review_contract(old_path: str | Path, new_path: str | Path,
-                    related: dict[str, str | Path] | None = None) -> ContractReview:
+                    related: dict[str, str | Path] | None = None,
+                    on_progress: Callable[[str], None] = lambda step: None) -> ContractReview:
     """Review a customer's redline. `related` names other contracts the Reviewer may consult,
-    e.g. {"msa": "msa.docx"} for a SOW that points at the MSA."""
+    e.g. {"msa": "msa.docx"} for a SOW that points at the MSA. `on_progress` hears each step."""
+    on_progress("Reading both versions and finding the changed clauses")
     new_clauses = parse_docx(new_path)
     changes = diff_clauses(parse_docx(old_path), new_clauses)
     usage = Usage()
     if not changes:
         return ContractReview("unknown", "ready to sign", [], [], usage)
 
+    on_progress(f"Classifying the contract and its {len(changes)} changes")
     classification, result = classify(new_clauses, changes, chapter_titles())
     usage.add(result)
     rules = rules_for(load_policy(), classification.doc_type)
@@ -117,6 +121,7 @@ def review_contract(old_path: str | Path, new_path: str | Path,
             guardrail_notes=notes, context_used=review.context_used,
         ), review.calls
 
+    on_progress(f"Reviewing {len(changes)} changes against the playbook and the GDPR")
     get_search()  # build the index before the threads start, not in each of them
     with ThreadPoolExecutor(max_workers=PARALLEL_REVIEWS) as pool:
         outcomes = list(pool.map(review_one, changes))
@@ -127,6 +132,7 @@ def review_contract(old_path: str | Path, new_path: str | Path,
 
     groups = []
     if len(reviewed) >= 2:
+        on_progress("Grouping related changes")
         summaries = [{"id": r.change.id, "clause": r.change.clause_id, "decision": r.decision,
                       "meaning": r.meaning, "impact": r.impact} for r in reviewed]
         groups, result = group_changes(summaries)

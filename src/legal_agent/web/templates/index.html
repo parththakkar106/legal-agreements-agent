@@ -1,59 +1,89 @@
 {% extends "base.html" %}
+{% from "macros.html" import file_row %}
 {% block style %}
-.intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-block: 20px; }
-@media (max-width: 760px) { .intro { grid-template-columns: minmax(0, 1fr); } }
-.demos { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
-.demos button { width: 100%; text-align: left; line-height: 1.35; padding: 12px 14px; }
-.demos button small { display: block; font-weight: 400; opacity: .85; margin-top: 3px; }
-.fields { display: flex; flex-direction: column; gap: 12px; }
+.page-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; }
+.page-head p { margin: 0; max-width: 62ch; }
+.list { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.list th { text-align: left; font-weight: 500; font-size: 13px; color: var(--ink-3); padding: 0 16px 10px; border-bottom: 1px solid var(--rule); }
+.list td { padding: 16px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+.list tr:last-child td { border-bottom: 0; }
+.list .name a { font: 600 17px/1.3 var(--serif); color: var(--ink); text-decoration: none; }
+.list .name a:hover { text-decoration: underline; }
+.list .name div { font-size: 13px; color: var(--ink-3); margin-top: 2px; }
+.list-card { padding: 16px 0 4px; margin-bottom: 44px; }
+.table-scroll { overflow-x: auto; }
+.empty { padding: 4px 20px 16px; color: var(--ink-2); margin: 0; }
+.start { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .start { grid-template-columns: minmax(0, 1fr); } }
+.section-head { display: flex; flex-direction: column; gap: 4px; padding: 20px 20px 4px; }
+.section-head p { margin: 0; font-size: 14px; }
+.packet { padding: 18px 20px; border-top: 1px solid var(--rule); display: flex; flex-direction: column; gap: 10px; }
+.packet:first-of-type { border-top: 0; }
+.packet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.packet-head strong { font: 600 16px/1.3 var(--serif); }
+.upload { padding: 4px 20px 20px; display: flex; flex-direction: column; gap: 16px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+@media (max-width: 480px) { .two { grid-template-columns: minmax(0, 1fr); } }
 {% endblock %}
 {% block content %}
-<h1>Customer redlines</h1>
-<p class="muted">Upload the version we sent and the version the customer sent back. The agent reads every changed
-clause against Acme's playbook and the GDPR, then a person decides.</p>
-{% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
-
-<div class="intro">
-  <section class="panel">
-    <h2>Try a demo redline</h2>
-    <form method="post" action="/reviews" data-busy="Reviewing… about 30 seconds">
-      <div class="demos">
-        {% for key, demo in demos.items() %}
-        <button name="demo" value="{{ key }}">{{ demo[0] }}<small>{{ demo[2] }}</small></button>
-        {% endfor %}
-      </div>
-    </form>
-  </section>
-  <section class="panel">
-    <h2>Review your own</h2>
-    <form method="post" action="/reviews" enctype="multipart/form-data" class="fields" data-busy="Reviewing… about 30 seconds">
-      <div><label for="title">Name</label><input type="text" id="title" name="title" placeholder="Initech: Cloud Service Agreement"></div>
-      <div><label for="old">Our version (.docx)</label><input type="file" id="old" name="old" accept=".docx" required></div>
-      <div><label for="new">Their version (.docx)</label><input type="file" id="new" name="new" accept=".docx" required></div>
-      <div><button>Review changes</button></div>
-    </form>
-  </section>
+<div class="page-head">
+  <h1>Agreements</h1>
+  <p class="muted">Every redline a customer sends back, what the AI found in it, and what a person decided.</p>
 </div>
+{% if error %}<p class="notice" role="alert">{{ error }}</p>{% endif %}
 
-<section class="panel">
-  <h2>Reviews</h2>
+<section class="card list-card">
   {% if reviews %}
-  <div class="table-scroll"><table>
-    <thead><tr><th>Agreement</th><th>Type</th><th>AI verdict</th><th>Status</th><th>Reviewed</th></tr></thead>
+  <div class="table-scroll"><table class="list">
+    <thead><tr><th>Agreement</th><th>Type</th><th>Status</th><th>Last activity</th></tr></thead>
     <tbody>
     {% for r in reviews %}
       <tr>
-        <td><a href="/reviews/{{ r.id }}">{{ r.title }}</a></td>
-        <td class="mono">{{ r.doc_type | upper }}</td>
-        <td><span class="pill {{ {'ready to sign': 'v-ready', 'send back': 'v-send'}.get(r.verdict, 'v-escalate') }}">{{ r.verdict }}</span></td>
-        <td>{{ r.status }}</td>
-        <td class="muted">{{ r.created_at }}</td>
+        <td class="name"><a href="/reviews/{{ r.id }}">{{ r.title }}</a><div>{{ r.counterparty }}</div></td>
+        <td class="mono">{{ (r.doc_type or '…') | upper }}</td>
+        <td><span class="status st-{{ r.status | replace(' ', '-') }}">{{ r.status | capitalize }}</span></td>
+        <td class="faint">{{ r.updated_at }}</td>
       </tr>
     {% endfor %}
     </tbody>
   </table></div>
   {% else %}
-  <p class="muted">No reviews yet. Pick a demo above to see one.</p>
+  <p class="empty">Nothing here yet. Run one of the demo redlines below to see the whole flow.</p>
   {% endif %}
 </section>
+
+<div class="start">
+  <section class="card">
+    <div class="section-head">
+      <h2>Demo: redlines from Globex Inc.</h2>
+      <p class="muted">We sent Globex our paper (v1). They sent back their edits (v2). Open either version, then run the review.</p>
+    </div>
+    {% for key, demo in demos.items() %}
+    <div class="packet">
+      <div class="packet-head">
+        <strong>{{ demo.title }}</strong>
+        <form method="post" action="/reviews" data-busy="Starting…"><button class="btn small" name="demo" value="{{ key }}">Run AI review</button></form>
+      </div>
+      {{ file_row(demo.v1[1], "v1 · ours", "/demos/" ~ key ~ "/v1", "/demos/" ~ key ~ "/v1/download") }}
+      {{ file_row(demo.v2[1], "v2 · redline", "/demos/" ~ key ~ "/v2", "/demos/" ~ key ~ "/v2/download") }}
+    </div>
+    {% endfor %}
+  </section>
+
+  <section class="card">
+    <div class="section-head">
+      <h2>Review a new redline</h2>
+      <p class="muted">Both versions as Word files.</p>
+    </div>
+    <form method="post" action="/reviews" enctype="multipart/form-data" class="upload" data-busy="Uploading…">
+      <div class="two">
+        <div><label for="title">Agreement</label><input type="text" id="title" name="title" placeholder="Cloud Service Agreement"></div>
+        <div><label for="counterparty">Counterparty</label><input type="text" id="counterparty" name="counterparty" placeholder="Initech Ltd."></div>
+      </div>
+      <div><label for="old">v1, the version we sent</label><input type="file" id="old" name="old" accept=".docx" required></div>
+      <div><label for="new">v2, the version they sent back</label><input type="file" id="new" name="new" accept=".docx" required></div>
+      <div><button class="btn">Start review</button></div>
+    </form>
+  </section>
+</div>
 {% endblock %}
