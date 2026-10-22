@@ -38,11 +38,22 @@ def client(monkeypatch, tmp_path):
     return TestClient(web.app)
 
 
+def start(http, kind: str, review: bool = True):
+    """Upload our paper (v1) and Globex's redline (v2) of one contract type."""
+    files = {"ours": (f"Acme_{kind}_v1.docx", (web.CONTRACTS / "base" / f"{kind}.docx").read_bytes()),
+             "theirs": (f"Globex_{kind}_v2_redline.docx",
+                        (web.CONTRACTS / "redlines" / f"{kind}_globex_v2.docx").read_bytes())}
+    if kind == "sow":
+        files["related"] = ("Acme_msa.docx", (web.CONTRACTS / "base" / "msa.docx").read_bytes())
+    return http.post("/agreements", files=files,
+                     data={"title": kind.upper(), "counterparty": "Globex Inc.", "review": "yes" if review else ""})
+
+
 def test_full_negotiation_counter_then_accept_then_sign(monkeypatch, tmp_path):
     fake_ai(monkeypatch)
     http = client(monkeypatch, tmp_path)
 
-    page = http.post("/agreements", data={"demo": "msa"})
+    page = start(http, "msa")
     assert "We can offer 45 days." in page.text and "Close round" in page.text
     agreement_id = int(page.url.path.rsplit("/", 1)[1])
     data = http.get(f"/api/agreements/{agreement_id}").json()
@@ -65,7 +76,7 @@ def test_full_negotiation_counter_then_accept_then_sign(monkeypatch, tmp_path):
     assert "24 months" in terms["General Cap Amount"]  # their accepted change stays
 
     # Globex sends v3 back unchanged: nothing to review, ready to sign.
-    http.post(f"/agreements/{agreement_id}/simulate-reply")
+    http.post(f"/agreements/{agreement_id}/accepted")
     assert http.get(f"/api/agreements/{agreement_id}").json()["status"] == "ready to sign"
 
     assert http.post(f"/agreements/{agreement_id}/sign", data={"name": "Ana Ruiz"}).status_code == 400  # no consent
@@ -81,17 +92,17 @@ def test_full_negotiation_counter_then_accept_then_sign(monkeypatch, tmp_path):
 def test_versions_diff_and_downloads(monkeypatch, tmp_path):
     fake_ai(monkeypatch)
     http = client(monkeypatch, tmp_path)
-    page = http.post("/agreements", data={"demo": "sow"})
+    page = start(http, "sow")
     agreement_id = page.url.path.rsplit("/", 1)[1]
     round_id = next(iter(http.get(f"/api/agreements/{agreement_id}").json()["rounds"]))
 
     assert "not subject to Section 8" in http.get(f"/agreements/{agreement_id}/versions/2").text
     download = http.get(f"/agreements/{agreement_id}/versions/2/download")
     assert download.content == (web.CONTRACTS / "redlines" / "sow_globex_v2.docx").read_bytes()
-    assert "Globex_Onboarding-SOW_v2_redline.docx" in download.headers["content-disposition"]
+    assert "Globex_sow_v2_redline.docx" in download.headers["content-disposition"]
     diff = http.get(f"/agreements/{agreement_id}/rounds/{round_id}/diff").text
     assert "unchanged clause" in diff and "USD 40,000" in diff
-    assert http.get("/demos/sow/v2").status_code == 200 and http.get("/demos/sow/v3").status_code == 404
+    assert http.get(f"/agreements/{agreement_id}/versions/3").status_code == 404
 
 
 def test_sign_refused_if_document_changed(monkeypatch, tmp_path):
@@ -112,21 +123,46 @@ def test_missing_claude_is_shown_in_the_trail(monkeypatch, tmp_path):
     monkeypatch.setattr(classifier, "ask_claude", unavailable)
     http = client(monkeypatch, tmp_path)
 
-    page = http.post("/agreements", data={"demo": "nda"})
+    page = start(http, "nda")
     assert "AI review stopped" in page.text and "was not found" in page.text
     assert "Non-Solicitation" in page.text  # the plain diff is still shown
     assert http.get(page.url.path.replace("/agreements", "/api/agreements")).json()["status"] == "failed"
 
 
-def test_examples_play_through_to_signed(monkeypatch, tmp_path):
-    from legal_agent.web import examples
+def test_review_waits_until_a_person_starts_it(monkeypatch, tmp_path):
     fake_ai(monkeypatch)
     http = client(monkeypatch, tmp_path)
+    page = start(http, "msa", review=False)
+    agreement_id = page.url.path.rsplit("/", 1)[1]
+    data = http.get(f"/api/agreements/{agreement_id}").json()
+    assert data["status"] == "not reviewed" and "Run AI review" in page.text
+    assert "Run AI review" in http.get("/").text
 
-    examples.load_examples()
+    round_id = next(iter(data["rounds"]))
+    page = http.post(f"/rounds/{round_id}/review")
+    assert "We can offer 45 days." in page.text
+    assert http.get(f"/api/agreements/{agreement_id}").json()["status"] == "needs review"
+    assert http.post(f"/rounds/{round_id}/review").status_code == 400  # already reviewed
 
-    agreements = [http.get(f"/api/agreements/{i}").json() for i in (1, 2, 3)]
-    assert [a["status"] for a in agreements] == ["signed", "signed", "signed"]
-    assert len(agreements[0]["versions"]) == 4 and len(agreements[0]["rounds"]) == 2
-    assert agreements[1]["counterparty"] == "Initech Ltd."
-    assert http.get("/api/agreements/1/progress").json() == {"busy": False, "token": ""}
+
+def test_portfolio_builds_saves_and_loads(monkeypatch, tmp_path):
+    from legal_agent.web import portfolio
+    fake_ai(monkeypatch)
+    http = client(monkeypatch, tmp_path / "build")
+    portfolio.build(http)
+    portfolio.save(store.DB_FILE, tmp_path / "portfolio")
+
+    monkeypatch.setattr(store, "DB_FILE", tmp_path / "app" / "desk.db")
+    assert portfolio.load_if_empty(tmp_path / "portfolio")
+    assert not portfolio.load_if_empty(tmp_path / "portfolio")  # only into an empty database
+    agreements = [http.get(f"/api/agreements/{i}").json() for i in range(1, 10)]
+    assert [(a["counterparty"], a["status"], len(a["versions"])) for a in agreements] == [
+        ("Globex Inc.", "signed", 4), ("Initech Ltd.", "signed", 2), ("Umbrella Corp.", "signed", 4),
+        ("Initech Ltd.", "waiting for counterparty", 3), ("Hooli Inc.", "needs review", 4),
+        ("Vandelay Industries", "ready to sign", 2), ("Globex Inc.", "needs review", 2),
+        ("Soylent Corp.", "waiting for counterparty", 1), ("Globex Inc.", "not reviewed", 2)]
+    assert all(str(tmp_path / "app") in v["file"] for a in agreements for v in a["versions"].values())
+    assert http.get("/agreements/1/signed.pdf").content[:4] == b"%PDF"
+    home = http.get("/").text
+    assert "Hooli Inc." in home and "Run AI review" in home and "Sign v2" in home
+    assert "Soylent Corp." not in http.get("/?view=signed").text

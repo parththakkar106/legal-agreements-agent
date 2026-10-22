@@ -21,7 +21,7 @@ ACME = "Acme Cloud Inc."
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS agreements (
     id INTEGER PRIMARY KEY, title TEXT, counterparty TEXT, doc_type TEXT,
-    status TEXT,  -- reviewing | needs review | waiting for counterparty | ready to sign | signed | failed
+    status TEXT,  -- not reviewed | reviewing | needs review | waiting for counterparty | ready to sign | signed | failed
     related_file TEXT, signed_pdf TEXT, created_at TEXT
 );
 CREATE TABLE IF NOT EXISTS versions (
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS versions (
 );
 CREATE TABLE IF NOT EXISTS rounds (
     id INTEGER PRIMARY KEY, agreement_id INTEGER, old_version INTEGER, new_version INTEGER,
-    status TEXT,  -- reviewing | open | closed | failed
+    status TEXT,  -- not reviewed | reviewing | open | closed | failed
     stage TEXT, changes_json TEXT, result_json TEXT
 );
 CREATE TABLE IF NOT EXISTS items (
@@ -69,11 +69,17 @@ def files_dir(agreement_id: int) -> Path:
 
 
 def create_agreement(db, title: str, counterparty: str, related_file: str | Path | None = None) -> int:
-    cursor = db.execute("INSERT INTO agreements (title, counterparty, status, related_file, created_at)"
-                        " VALUES (?, ?, 'needs review', ?, ?)",
-                        (title, counterparty, str(related_file) if related_file else None, now()))
+    """`related_file` is a contract this one refers to (an SOW's MSA); a copy is kept with the agreement."""
+    cursor = db.execute("INSERT INTO agreements (title, counterparty, status, created_at)"
+                        " VALUES (?, ?, 'waiting for counterparty', ?)", (title, counterparty, now()))
+    agreement_id = cursor.lastrowid
+    if related_file:
+        path = files_dir(agreement_id) / "related.docx"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(related_file, path)
+        db.execute("UPDATE agreements SET related_file = ? WHERE id = ?", (str(path), agreement_id))
     db.commit()
-    return cursor.lastrowid
+    return agreement_id
 
 
 def add_version(db, agreement_id: int, author: str, source: str | Path, name: str, note: str = "") -> dict:
@@ -96,11 +102,17 @@ def get_version(db, agreement_id: int, number: int) -> dict | None:
 
 
 def start_round(db, agreement_id: int, old_version: int, new_version: int, changes: list[dict]) -> int:
-    cursor = db.execute("INSERT INTO rounds (agreement_id, old_version, new_version, status, stage, changes_json)"
-                        " VALUES (?, ?, ?, 'reviewing', 'Starting', ?)",
+    """A new round waits for its AI review, which start_review begins (now or when a person asks)."""
+    cursor = db.execute("INSERT INTO rounds (agreement_id, old_version, new_version, status, changes_json)"
+                        " VALUES (?, ?, ?, 'not reviewed', ?)",
                         (agreement_id, old_version, new_version, json.dumps(changes)))
-    set_status(db, agreement_id, "reviewing")
+    set_status(db, agreement_id, "not reviewed")
     return cursor.lastrowid
+
+
+def start_review(db, round_id: int):
+    db.execute("UPDATE rounds SET status = 'reviewing', stage = 'Starting' WHERE id = ?", (round_id,))
+    set_status(db, _agreement_of(db, round_id), "reviewing")
 
 
 def set_stage(db, round_id: int, stage: str):

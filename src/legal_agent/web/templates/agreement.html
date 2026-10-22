@@ -167,7 +167,7 @@
   {% set total.cost = total.cost + u.cost_usd %}{% set total.seconds = total.seconds + u.llm_seconds %}
 {% endfor %}
 <div class="head">
-  <div class="eyebrow"><a href="/">Agreements</a> / {{ cp }}</div>
+  <div class="eyebrow"><a href="/">Contracts</a> / {{ cp }}</div>
   <h1>{{ a.title }}</h1>
   {% if total.calls %}<div class="cost" title="Cost of all AI reviews of this agreement">{{ total.calls }} AI calls · {{ '{:,}'.format(total.tokens) }} tokens<br>${{ '%.2f' | format(total.cost) }} · {{ '%.0f' | format(total.seconds) }}s model time</div>{% endif %}
   <div class="meta">
@@ -200,6 +200,9 @@
               {% if r.result %}<span class="faint">AI recommends: {{ verdicts[r.result.verdict] }}</span>{% endif %}
               <a href="/agreements/{{ a.id }}/rounds/{{ r.id }}/diff">Full diff</a>{% endif %}
           </div>
+          {% if r.status in ('not reviewed', 'failed') %}<form method="post" action="/rounds/{{ r.id }}/review" class="working" data-busy="Starting…">
+            <span>{{ 'The AI has not reviewed these changes yet.' if r.status == 'not reviewed' else 'The AI review stopped (see below).' }}</span>
+            <button class="btn small">{{ 'Run AI review' if r.status == 'not reviewed' else 'Try the AI review again' }}</button></form>{% endif %}
           {% if r.status == 'reviewing' %}<div class="working" data-poll="/api/agreements/{{ a.id }}/progress" data-token="{{ r.stage }}"><span class="spinner" aria-hidden="true"></span><span>AI review: {{ r.stage }}… You can read the changes meanwhile; this page updates by itself.</span></div>{% endif %}
           {% if r.result and r.changes %}
           <div class="tally">
@@ -338,9 +341,9 @@
         <div><button class="btn">Upload and review</button></div>
       </form>
       <hr>
-      <form method="post" action="/agreements/{{ a.id }}/simulate-reply" data-busy="Simulating…">
-        <p class="muted" style="margin-bottom:10px">Demo: pretend {{ cp }} accepted v{{ a.versions | length }} and sent it back unchanged.</p>
-        <button class="btn secondary">Simulate {{ cp }} accepting v{{ a.versions | length }}</button>
+      <form method="post" action="/agreements/{{ a.id }}/accepted" data-busy="Recording…">
+        <p class="muted" style="margin-bottom:10px">No new file? If {{ cp }} accepted v{{ a.versions | length }} as it is (for example by email), record that and it becomes ready to sign.</p>
+        <button class="btn secondary">{{ cp }} accepted v{{ a.versions | length }}</button>
       </form>
     </div>
   </li>

@@ -9,7 +9,8 @@ Flow for each version the counterparty sends:
   3. a person answers each change (accept, reject, counter) and closes the round;
   4. if everything was accepted the agreement is ready to sign, otherwise our next
      version is built from the answers and goes back unsigned.
-Every step lands in the audit trail.
+Every step lands in the audit trail. A new agreement can also hold the review until
+a person asks for it, or start with only our version, waiting for their reply.
 """
 
 import shutil
@@ -30,28 +31,15 @@ from legal_agent.docx_writer import write_docx
 from legal_agent.orchestrator import Usage, review_contract
 from legal_agent.policy import load_policy, red_line_hits, rules_for
 from legal_agent.signing import SIGNER
-from legal_agent.web import examples
 from legal_agent.web.sources import document, round_sources
 
 ROOT = Path(__file__).resolve().parents[3]
 CONTRACTS = ROOT / "data" / "contracts"
-
-# Ready-made negotiations so the demo works without preparing any files.
-# Each has our version (v1), the customer's redline (v2) and, for the SOW, the MSA it points at.
-DEMOS = {
-    "nda": {"title": "Mutual NDA", "counterparty": "Globex Inc.",
-            "v1": ("base/nda.docx", "Acme_Mutual-NDA_v1.docx"),
-            "v2": ("redlines/nda_globex_v2.docx", "Globex_Mutual-NDA_v2_redline.docx")},
-    "msa": {"title": "Cloud Service Agreement", "counterparty": "Globex Inc.",
-            "v1": ("base/msa.docx", "Acme_Cloud-Service-Agreement_v1.docx"),
-            "v2": ("redlines/msa_globex_v2.docx", "Globex_Cloud-Service-Agreement_v2_redline.docx")},
-    "dpa": {"title": "Data Processing Agreement", "counterparty": "Globex Inc.",
-            "v1": ("base/dpa.docx", "Acme_DPA_v1.docx"),
-            "v2": ("redlines/dpa_globex_v2.docx", "Globex_DPA_v2_redline.docx")},
-    "sow": {"title": "Onboarding SOW", "counterparty": "Globex Inc.",
-            "v1": ("base/sow.docx", "Acme_Onboarding-SOW_v1.docx"),
-            "v2": ("redlines/sow_globex_v2.docx", "Globex_Onboarding-SOW_v2_redline.docx"),
-            "related": "base/msa.docx"},
+VIEWS = {  # the home page tabs: which statuses each one shows
+    "action": ("Needs action", ("not reviewed", "needs review", "ready to sign", "failed")),
+    "counterparty": ("With counterparty", ("waiting for counterparty", "reviewing")),
+    "signed": ("Signed", ("signed",)),
+    "all": ("All", None),
 }
 
 app = FastAPI(title="Acme Agreement Desk")
@@ -59,33 +47,71 @@ templates = Jinja2Templates(directory=Path(__file__).parent / "templates")
 
 
 @app.get("/")
-def index(request: Request, error: str = ""):
+def index(request: Request, view: str = "all", error: str = ""):
     with store.connect() as db:
-        agreements = store.list_agreements(db)
+        agreements = [store.get_agreement(db, r["id"]) for r in store.list_agreements(db)]
+    rows = sorted((_summary(a) for a in agreements), key=lambda r: r["updated_at"] or "", reverse=True)
+    counts = {key: sum(1 for r in rows if statuses is None or r["status"] in statuses)
+              for key, (_, statuses) in VIEWS.items()}
+    view = view if view in VIEWS else "all"
+    statuses = VIEWS[view][1]
     return templates.TemplateResponse(request, "index.html", {
-        "agreements": agreements, "demos": DEMOS, "error": error, "examples_running": examples.running})
+        "rows": [r for r in rows if statuses is None or r["status"] in statuses],
+        "views": VIEWS, "view": view, "counts": counts, "error": error})
+
+
+def _summary(a: dict) -> dict:
+    """One line of the contract list: where the agreement stands and what to do next."""
+    latest = _latest(a)
+    rnd = list(a["rounds"].values())[-1] if a["rounds"] else None
+    tally = {}
+    if rnd and rnd["result"]:
+        for key in ("escalate", "push_back", "accept"):
+            tally[key] = sum(1 for c in rnd["result"]["changes"] if c["decision"] == key)
+    them = a["counterparty"]
+    status = a["status"]
+    if status == "signed":
+        signed = next(e for e in reversed(a["events"]) if e["action"] == "sign")
+        step = f"Signed v{signed['version']} on {signed['at'][:10]} by {signed['actor']}"
+    elif status == "ready to sign":
+        step = f"Sign v{latest['number']}"
+    elif status == "needs review":
+        open_items = sum(1 for c in rnd["result"]["changes"]
+                         if negotiation.missing(c["decision"], rnd["answers"].get(c["change"]["id"])))
+        step = f"Answer {open_items} change{'' if open_items == 1 else 's'} in v{rnd['new_version']}" if open_items \
+            else f"Close the round on v{rnd['new_version']}"
+    elif status == "not reviewed":
+        step = f"Run the AI review of v{rnd['new_version']} ({len(rnd['changes'])} changes)"
+    elif status == "reviewing":
+        step = f"AI is reviewing v{rnd['new_version']}"
+    elif status == "failed":
+        step = "AI review stopped: open to retry"
+    else:
+        step = f"Waiting for {them} to reply to v{latest['number']}"
+    return {"id": a["id"], "title": a["title"], "counterparty": them, "doc_type": a["doc_type"],
+            "status": status, "versions": len(a["versions"]), "tally": tally, "step": step,
+            "review_round": rnd["id"] if status == "not reviewed" else None,
+            "updated_at": a["events"][-1]["at"] if a["events"] else a["created_at"]}
 
 
 @app.post("/agreements")
-def create_agreement(demo: str = Form(""), title: str = Form(""), counterparty: str = Form(""),
-                     old: UploadFile | None = File(None), new: UploadFile | None = File(None)):
-    """Start a negotiation: our v1 and their v2, from a demo or two uploaded .docx files."""
-    if demo in DEMOS:
-        spec = DEMOS[demo]
-        title, counterparty = spec["title"], spec["counterparty"]
-        v1, v1_name = CONTRACTS / spec["v1"][0], spec["v1"][1]
-        v2, v2_name = CONTRACTS / spec["v2"][0], spec["v2"][1]
-        related = CONTRACTS / spec["related"] if "related" in spec else None
-    elif old and new and old.filename and new.filename:
-        v1, v1_name, v2, v2_name = _save_upload(old), old.filename, _save_upload(new), new.filename
-        title, counterparty, related = title or Path(new.filename).stem, counterparty or "Counterparty", None
-    else:
-        return RedirectResponse("/?error=" + quote("Pick a demo, or upload both versions as .docx."), status_code=303)
+def create_agreement(title: str = Form(""), counterparty: str = Form(""), review: str = Form(""),
+                     ours: UploadFile = File(...), theirs: UploadFile | None = File(None),
+                     related: UploadFile | None = File(None)):
+    """A new agreement: our version (v1) and, if they already replied, their version (v2).
 
+    `related` is a contract this one refers to (an SOW's MSA) so the AI can read those clauses.
+    """
+    if not ours.filename:
+        return RedirectResponse("/?error=" + quote("Upload our version as a .docx."), status_code=303)
+    title = title.strip() or Path(ours.filename).stem
+    counterparty = counterparty.strip() or "Counterparty"
     with store.connect() as db:
-        agreement_id = store.create_agreement(db, title, counterparty, related)
-        store.add_version(db, agreement_id, store.ACME, v1, v1_name)
-        _receive(db, agreement_id, v2, v2_name)
+        agreement_id = store.create_agreement(db, title, counterparty,
+                                              _save_upload(related) if related and related.filename else None)
+        store.add_version(db, agreement_id, store.ACME, _save_upload(ours), ours.filename)
+        if theirs and theirs.filename:
+            _receive(db, agreement_id, _save_upload(theirs), theirs.filename, review=bool(review))
     return RedirectResponse(f"/agreements/{agreement_id}", status_code=303)
 
 
@@ -99,9 +125,9 @@ def upload_reply(agreement_id: int, new: UploadFile = File(...)):
     return RedirectResponse(f"/agreements/{agreement_id}", status_code=303)
 
 
-@app.post("/agreements/{agreement_id}/simulate-reply")
-def simulate_reply(agreement_id: int):
-    """Demo only: the counterparty sends our last version back unchanged, i.e. they accept it."""
+@app.post("/agreements/{agreement_id}/accepted")
+def record_acceptance(agreement_id: int):
+    """The counterparty accepted our last version as it is (say, by email): log it as their next version, unchanged."""
     agreement = _load(agreement_id)
     _require(agreement["status"] == "waiting for counterparty", "We are not waiting for a new version.")
     ours = _latest(agreement)
@@ -111,8 +137,8 @@ def simulate_reply(agreement_id: int):
     return RedirectResponse(f"/agreements/{agreement_id}", status_code=303)
 
 
-def _receive(db, agreement_id: int, path: Path, name: str):
-    """Log their version, show its diff against what we sent at once, and start the AI review."""
+def _receive(db, agreement_id: int, path: Path, name: str, review: bool = True):
+    """Log their version and its diff against what we sent; start the AI review unless asked to wait."""
     agreement = store.get_agreement(db, agreement_id)
     ours = _latest(agreement)
     theirs = store.add_version(db, agreement_id, agreement["counterparty"], path, name)
@@ -123,9 +149,28 @@ def _receive(db, agreement_id: int, path: Path, name: str):
                                           "changes": [], "groups": [], "usage": asdict(Usage())}, by_ai=False)
         store.close_round(db, round_id, "the desk", f"No changes: {agreement['counterparty']} accepted v{ours['number']}.")
         store.set_status(db, agreement_id, "ready to sign")
-        return
+    elif review:
+        _start_review(db, round_id)
+
+
+@app.post("/rounds/{round_id}/review")
+def review_round(round_id: int):
+    """Run the AI review a person asked for, or try again after one stopped."""
+    agreement, rnd = _round(round_id)
+    _require(rnd["status"] in ("not reviewed", "failed"), "This round is already reviewed.")
+    with store.connect() as db:
+        _start_review(db, round_id)
+    return RedirectResponse(f"/agreements/{agreement['id']}#v{rnd['new_version']}", status_code=303)
+
+
+def _start_review(db, round_id: int):
+    """The AI review runs in a background thread; the page shows its progress."""
+    agreement, rnd = _round(round_id)
+    versions = agreement["versions"]
     related = Path(agreement["related_file"]) if agreement["related_file"] else None
-    Thread(target=run_review, args=(round_id, ours["file"], theirs["file"], related), daemon=True).start()
+    store.start_review(db, round_id)
+    Thread(target=run_review, args=(round_id, versions[rnd["old_version"]]["file"],
+                                    versions[rnd["new_version"]]["file"], related), daemon=True).start()
 
 
 def run_review(round_id: int, old_path: str, new_path: str, related: Path | None):
@@ -271,35 +316,6 @@ def show_diff(request: Request, agreement_id: int, round_id: int):
         "agreement": agreement, "old": old, "new": new, "rows": rows, "removed": removed})
 
 
-@app.get("/demos/{demo}/{version}")
-def show_demo_document(request: Request, demo: str, version: str):
-    path, name = _demo_version(demo, version)
-    return templates.TemplateResponse(request, "document.html", {
-        "doc": document(path, name), "label": "v1, ours" if version == "v1" else "v2, their redline",
-        "changed": set(), "back": ("/", "Agreements"), "download": f"/demos/{demo}/{version}/download"})
-
-
-@app.get("/demos/{demo}/{version}/download")
-def download_demo_document(demo: str, version: str):
-    path, name = _demo_version(demo, version)
-    return FileResponse(path, filename=name)
-
-
-@app.post("/examples")
-def start_examples():
-    """Play the example negotiations through the app in the background (needs `claude -p`)."""
-    if not examples.running:
-        Thread(target=examples.load_examples, daemon=True).start()
-    return RedirectResponse("/", status_code=303)
-
-
-@app.get("/api/examples")
-def examples_progress() -> dict:
-    with store.connect() as db:
-        count = len(store.list_agreements(db))
-    return {"busy": examples.running, "token": str(count)}
-
-
 @app.get("/api/agreements/{agreement_id}/progress")
 def review_progress(agreement_id: int) -> dict:
     """What the page polls while the AI works: reload when busy turns false or the step changes."""
@@ -338,13 +354,6 @@ def _version(agreement: dict, number: int) -> dict:
     if number not in agreement["versions"]:
         raise HTTPException(404, "No such version.")
     return agreement["versions"][number]
-
-
-def _demo_version(demo: str, version: str) -> tuple[Path, str]:
-    if demo not in DEMOS or version not in ("v1", "v2"):
-        raise HTTPException(404, "No such demo document.")
-    rel, name = DEMOS[demo][version]
-    return CONTRACTS / rel, name
 
 
 def _save_upload(upload: UploadFile) -> Path:

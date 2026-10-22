@@ -18,6 +18,7 @@
 | `legal_agent/negotiation.py` | The human side of a round: what each change needs (by AI colour), building our next version from the answers, the cover note, clause history |
 | `legal_agent/docx_writer.py` | Writes clauses back to a .docx that `docx_parser` reads |
 | `legal_agent/signing.py` | Signs the agreed version: PDF plus certificate page, behind a small `Signer` interface so a real e-signature provider can replace it |
-| `legal_agent/web/app.py` | FastAPI web app: negotiation rounds (instant diff, background AI review, answers, next version), version and diff pages, downloads, signing |
+| `legal_agent/web/app.py` | FastAPI web app: the contract list with what to do next, negotiation rounds (instant diff, background AI review, answers, next version), version and diff pages, downloads, signing |
+| `legal_agent/web/portfolio.py` | Acme's contract portfolio: plays each negotiation through the app once (`scripts/build_portfolio.py`), saves it to `data/portfolio/`, loads it into an empty database on `serve` |
 | `legal_agent/web/sources.py` | The text behind each cited source (GDPR article, playbook rule, contract clause) for the side panel |
 | `legal_agent/web/templates/` | The HTML pages (Jinja, no frontend framework) |

@@ -78,6 +78,10 @@ def cmd_review(args):
 def cmd_serve(args):
     import uvicorn
 
+    from legal_agent.web import portfolio
+
+    if portfolio.load_if_empty():
+        print("Loaded the contract portfolio from data/portfolio/ into data/app/.")
     uvicorn.run("legal_agent.web.app:app", host=args.host, port=args.port)
 
 
