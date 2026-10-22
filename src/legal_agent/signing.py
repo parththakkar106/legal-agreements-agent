@@ -34,6 +34,9 @@ class BuiltinSigner:
             heading = f"{clause.title}. " if clause.id == clause.title else ""
             _text(pdf, label + heading + clause.text, 10)
             pdf.ln(1)
+        pdf.ln(6)  # the signature block: "/s/ Name" is the usual form of a typed e-signature
+        _text(pdf, f"Signed for Acme Cloud Inc.:  /s/ {certificate['signature']}", 11, style="I")
+        _text(pdf, certificate["fields"]["Signed at"], 9)
 
         pdf.add_page()
         _text(pdf, "Certificate of completion", 14, bold=True)
@@ -49,8 +52,8 @@ class BuiltinSigner:
         return out_path
 
 
-def _text(pdf: FPDF, text: str, size: int, bold: bool = False):
-    pdf.set_font("Helvetica", "B" if bold else "", size)
+def _text(pdf: FPDF, text: str, size: int, bold: bool = False, style: str = ""):
+    pdf.set_font("Helvetica", "B" if bold else style, size)
     plain = text.translate(PLAIN).encode("latin-1", "replace").decode("latin-1")
     pdf.multi_cell(0, size * 0.5, plain, new_x="LMARGIN", new_y="NEXT")
 

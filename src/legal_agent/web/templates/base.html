@@ -7,7 +7,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 {% block head %}{% endblock %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Dancing+Script:wght@500&family=Caveat:wght@500&family=Homemade+Apple&display=swap">
 <style>
 /* Acme Agreement Desk. Contract text is set in a serif, like the paper it comes from;
    the tool around it is a quiet sans. Colour is kept for meaning: redline, decisions, highlights. */
@@ -15,7 +15,7 @@
   --bg: #f4f5f7; --surface: #ffffff; --sunken: #f0f2f5; --ink: #14171c; --ink-2: #485060; --ink-3: #737b8a;
   --rule: #e2e5ea; --rule-strong: #c9ced6; --accent: #1e3a6b; --accent-ink: #ffffff; --accent-wash: #e9eef7;
   --esc: #a3261c; --esc-wash: #fbeceb; --push: #8c5600; --push-wash: #fbf2e2; --ok: #24704c; --ok-wash: #e8f3ed;
-  --del: #b42318; --ins: #1d4fbf; --hl: #ffe98a; --shadow: 0 1px 2px rgba(20, 23, 28, .05), 0 12px 40px rgba(20, 23, 28, .14);
+  --del: #b42318; --ins: #1a7a3e; --hl: #ffe98a; --shadow: 0 1px 2px rgba(20, 23, 28, .05), 0 12px 40px rgba(20, 23, 28, .14);
   --serif: "Source Serif 4", Charter, "Iowan Old Style", Georgia, serif;
   --sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -24,13 +24,13 @@
   --bg: #0f1215; --surface: #171b20; --sunken: #1d2228; --ink: #e7eaee; --ink-2: #a7afbb; --ink-3: #828b99;
   --rule: #272d35; --rule-strong: #3a424d; --accent: #9db8ea; --accent-ink: #0f1215; --accent-wash: #1b2638;
   --esc: #f1958c; --esc-wash: #3a1d1a; --push: #e8b766; --push-wash: #352a14; --ok: #7cc9a0; --ok-wash: #16302a;
-  --del: #f1958c; --ins: #9db8ea; --hl: #5c4c12; --shadow: 0 12px 40px rgba(0, 0, 0, .5); color-scheme: dark;
+  --del: #f1958c; --ins: #7cc9a0; --hl: #5c4c12; --shadow: 0 12px 40px rgba(0, 0, 0, .5); color-scheme: dark;
 } }
 :root[data-theme="dark"] {
   --bg: #0f1215; --surface: #171b20; --sunken: #1d2228; --ink: #e7eaee; --ink-2: #a7afbb; --ink-3: #828b99;
   --rule: #272d35; --rule-strong: #3a424d; --accent: #9db8ea; --accent-ink: #0f1215; --accent-wash: #1b2638;
   --esc: #f1958c; --esc-wash: #3a1d1a; --push: #e8b766; --push-wash: #352a14; --ok: #7cc9a0; --ok-wash: #16302a;
-  --del: #f1958c; --ins: #9db8ea; --hl: #5c4c12; --shadow: 0 12px 40px rgba(0, 0, 0, .5); color-scheme: dark;
+  --del: #f1958c; --ins: #7cc9a0; --hl: #5c4c12; --shadow: 0 12px 40px rgba(0, 0, 0, .5); color-scheme: dark;
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
@@ -42,6 +42,12 @@ a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness:
 .brand-mark { width: 26px; height: 26px; border-radius: 6px; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font: 700 14px/1 var(--sans); }
 .brand span { color: var(--ink-3); font-weight: 400; }
 .tagline { color: var(--ink-3); font-size: 13px; }
+.topbar-right { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.me { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--ink); text-decoration: none; border: 1px solid var(--rule-strong); border-radius: 999px; padding: 4px 12px 4px 4px; }
+.me:hover { border-color: var(--ink-3); }
+.me:not(:has(.avatar)) { padding-left: 12px; }
+.avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--accent-wash); color: var(--accent); display: grid; place-items: center; font-size: 12px; font-weight: 600; }
+.signature { font-size: 34px; line-height: 1.3; color: var(--ink); overflow-wrap: anywhere; }
 h1 { font: 600 clamp(26px, 3.6vw, 36px)/1.15 var(--serif); letter-spacing: -.015em; margin: 0; text-wrap: balance; }
 h2 { font: 600 19px/1.3 var(--serif); margin: 0; }
 .eyebrow { font-size: 13px; color: var(--ink-3); }
@@ -86,7 +92,8 @@ label { display: block; font-weight: 500; font-size: 14px; margin-bottom: 6px; }
 <div class="wrap">
   <header class="topbar">
     <a class="brand" href="/"><span class="brand-mark">A</span>Acme <span>Agreement Desk</span></a>
-    <span class="tagline">Contract management and e-signing. AI reviews every redline; a person signs.</span>
+    <span class="topbar-right"><span class="tagline">Contract management and e-signing. AI reviews every redline; a person signs.</span>
+      {% set me = profile() %}<a class="me" href="/profile">{% if me %}<span class="avatar" aria-hidden="true">{{ me.name[:1] | upper }}</span>{{ me.name }}{% else %}Set up your signature{% endif %}</a></span>
   </header>
   {% block content %}{% endblock %}
 </div>

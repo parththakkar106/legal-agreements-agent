@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% set me = profile() %}
+{% block title %}Your signature · Acme Agreement Desk{% endblock %}
+{% block style %}
+.page-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; max-width: 640px; }
+.page-head p { margin: 0; }
+.panel { padding: 20px; display: flex; flex-direction: column; gap: 16px; max-width: 640px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+@media (max-width: 480px) { .two { grid-template-columns: minmax(0, 1fr); } }
+.styles { display: flex; flex-direction: column; gap: 8px; border: 0; padding: 0; margin: 0; }
+.styles label { display: flex; align-items: center; gap: 12px; margin: 0; font-weight: 400; border: 1px solid var(--rule-strong); border-radius: 10px; padding: 8px 14px; cursor: pointer; }
+.styles label:has(input:checked) { border-color: var(--accent); background: var(--accent-wash); }
+.styles .signature { font-size: 30px; }
+.saved { border-radius: 10px; padding: 12px 14px; background: var(--ok-wash); border: 1px solid var(--ok); }
+{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div class="eyebrow"><a href="/">Contracts</a> / profile</div>
+  <h1>Your signature</h1>
+  <p class="muted">Adopt your signature once and it is used on every agreement you sign. You still confirm each document with its own consent tick; that click is what signs it.</p>
+</div>
+{% if saved %}<p class="saved" role="status" style="max-width:640px">Signature saved. Every sign form now uses it.</p>{% endif %}
+<form class="card panel" method="post" action="/profile">
+  <div class="two">
+    <div><label for="name">Full name</label><input type="text" id="name" name="name" value="{{ me.name if me }}" autocomplete="name" required></div>
+    <div><label for="job_title">Job title, shown on the certificate</label><input type="text" id="job_title" name="job_title" value="{{ me.job_title if me }}" placeholder="Head of Legal"></div>
+  </div>
+  <fieldset class="styles"><legend style="font-weight:500;font-size:14px;margin-bottom:6px">Style</legend>
+    {% for style in styles %}
+    <label><input type="radio" name="style" value="{{ style }}" {{ 'checked' if (me and me.style == style) or (not me and loop.first) }}>
+      <span class="signature" style="font-family: '{{ style }}', cursive" data-preview>{{ me.name if me else 'Your Name' }}</span></label>
+    {% endfor %}
+  </fieldset>
+  {% if me %}<p class="faint" style="margin:0;font-size:13px">Adopted {{ me.adopted_at }}.</p>{% endif %}
+  <div><button class="btn">{{ 'Save signature' if me else 'Adopt signature' }}</button></div>
+</form>
+{% endblock %}
+{% block script %}
+<script>
+// The style previews show the name as it is typed.
+const nameInput = document.getElementById("name");
+nameInput.addEventListener("input", () => document.querySelectorAll("[data-preview]").forEach(p => p.textContent = nameInput.value || "Your Name"));
+</script>
+{% endblock %}

@@ -124,6 +124,7 @@
 .panel hr { border: 0; border-top: 1px solid var(--rule); margin: 0; width: 100%; }
 .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; overflow-wrap: anywhere; }
 .check input { margin-top: 4px; }
+.adopted { border: 1px dashed var(--rule-strong); border-radius: 10px; padding: 12px 16px; background: var(--sunken); }
 .fingerprint { font: 12px/1.5 var(--mono); color: var(--ink-3); overflow-wrap: anywhere; }
 .todo-list { margin: 0; padding-left: 18px; color: var(--esc); font-size: 14px; }
 /* Clause history */
@@ -352,7 +353,15 @@
     <div class="ev-head"><span class="ev-title">Ready to sign v{{ final.number }}</span><span class="ev-meta">every change is agreed; only a person can sign</span></div>
     <form class="card panel" method="post" action="/agreements/{{ a.id }}/sign">
       <p class="muted">Signing creates a PDF of v{{ final.number }} with a certificate page listing every version, its SHA-256 and who signed. The final playbook check runs on the whole text first. Our internal comments and the AI findings stay in this audit trail.</p>
+      {% set me = profile() %}
+      {% if me %}
+      <div class="adopted"><div class="faint" style="font-size:13px">Signing as {{ me.name }}{{ ', ' ~ me.job_title if me.job_title }} · <a href="/profile">change signature</a></div>
+        <div class="signature" style="font-family: '{{ me.style }}', cursive">{{ me.name }}</div></div>
+      <input type="hidden" name="name" value="{{ me.name }}">
+      {% else %}
       <div><label for="name">Your full name</label><input type="text" id="name" name="name" autocomplete="name" value="{{ reviewer }}" required></div>
+      <label class="check"><input type="checkbox" name="remember" value="yes" checked> Save this as my signature, so next time I only tick the box</label>
+      {% endif %}
       <label class="check"><input type="checkbox" name="consent" value="yes" required> I have read {{ final.name }} and sign it electronically on behalf of Acme Cloud Inc.</label>
       <div><button class="btn">Sign v{{ final.number }}</button></div>
       <div class="fingerprint">SHA-256 of v{{ final.number }}: {{ final.sha256 }}</div>

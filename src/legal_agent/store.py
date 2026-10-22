@@ -5,6 +5,7 @@
   rounds      one per version received: the changes against the version we sent, and the AI review
   items       a person's answer to one change: outcome, counter text, comments
   events      the audit trail: everything that happened, in order
+  profile     the person using the app and the signature they adopted (one row for now)
 """
 
 import hashlib
@@ -37,6 +38,9 @@ CREATE TABLE IF NOT EXISTS items (
     round_id INTEGER, change_id INTEGER, outcome TEXT, counter_text TEXT,
     internal_comment TEXT, external_comment TEXT, actor TEXT, at TEXT,
     PRIMARY KEY (round_id, change_id)
+);
+CREATE TABLE IF NOT EXISTS profile (
+    id INTEGER PRIMARY KEY CHECK (id = 1), name TEXT, job_title TEXT, style TEXT, adopted_at TEXT
 );
 CREATE TABLE IF NOT EXISTS events (
     id INTEGER PRIMARY KEY, agreement_id INTEGER, at TEXT, action TEXT, actor TEXT, detail TEXT,
@@ -185,6 +189,18 @@ def get_agreement(db, agreement_id: int) -> dict | None:
     agreement["events"] = [dict(e) for e in db.execute(
         "SELECT * FROM events WHERE agreement_id = ? ORDER BY id", (agreement_id,))]
     return agreement
+
+
+def get_profile(db) -> dict | None:
+    row = db.execute("SELECT * FROM profile WHERE id = 1").fetchone()
+    return dict(row) if row else None
+
+
+def save_profile(db, name: str, job_title: str, style: str):
+    """Adopt (or change) the signature reused on every document this person signs."""
+    db.execute("INSERT OR REPLACE INTO profile (id, name, job_title, style, adopted_at) VALUES (1, ?, ?, ?, ?)",
+               (name, job_title, style, now()))
+    db.commit()
 
 
 def list_agreements(db) -> list[dict]:

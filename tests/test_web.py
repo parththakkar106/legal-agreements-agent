@@ -168,3 +168,32 @@ def test_portfolio_builds_saves_and_loads(monkeypatch, tmp_path):
     assert "Hooli Inc." in home and "Run AI review" in home and "Sign v2" in home
     sections = re.findall(r'class="group-head"[^>]*><h2>([^<]+)</h2>', home)
     assert sections == ["Not reviewed", "Needs review", "Ready to sign", "Waiting for counterparty", "Signed"]
+
+
+def test_signature_adopted_once_is_reused(monkeypatch, tmp_path):
+    http = client(monkeypatch, tmp_path)
+    assert "Set up your signature" in http.get("/").text
+
+    def ready_nda():
+        with store.connect() as db:
+            agreement_id = store.create_agreement(db, "NDA", "Globex")
+            store.add_version(db, agreement_id, "Globex", web.CONTRACTS / "base" / "nda.docx", "nda.docx")
+            store.set_status(db, agreement_id, "ready to sign")
+        return agreement_id
+
+    # First signature: typed, and saved for next time.
+    first = ready_nda()
+    assert "Save this as my signature" in http.get(f"/agreements/{first}").text
+    http.post(f"/agreements/{first}/sign", data={"name": "Ana Ruiz", "consent": "yes", "remember": "yes"})
+    http.post("/profile", data={"name": "Ana Ruiz", "job_title": "Head of Legal", "style": "Caveat"})
+
+    # Next one: the page signs as the profile; only the consent tick is needed.
+    second = ready_nda()
+    page = http.get(f"/agreements/{second}").text
+    assert "Signing as Ana Ruiz, Head of Legal" in page and 'name="remember"' not in page
+    assert http.post(f"/agreements/{second}/sign", data={"name": "Ana Ruiz"}).status_code == 400  # still needs consent
+    http.post(f"/agreements/{second}/sign", data={"name": "Ana Ruiz", "consent": "yes"})
+    data = http.get(f"/api/agreements/{second}").json()
+    assert data["status"] == "signed" and data["events"][-1]["actor"] == "Ana Ruiz"
+    assert "Ana Ruiz" in http.get("/").text
+    assert http.post("/profile", data={"name": "Ana", "style": "Comic Sans"}).status_code == 400
