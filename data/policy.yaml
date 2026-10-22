@@ -19,7 +19,8 @@ rules:
     accept: A cap of 12 months of fees or less, or a separate higher cap for data breaches of up to 2x the general cap.
     push_back: A general cap above 12 months of fees, or new carve-outs from the cap other than confidentiality and data breaches.
     escalate: Uncapped liability for Acme, or deleting the cap.
-    red_line: ['\bunlimited liability\b', '\buncapped\b', '\bwithout (any )?limit(ation)?\b']
+    # Not "without limitation": that is a common phrase ("including without limitation") that caps nothing.
+    red_line: ['\bunlimited liability\b', '\buncapped\b', '\bnot subject to\b[^.]{0,40}\blimitation of liability\b']
 
   - id: indemnification
     topic: Indemnification

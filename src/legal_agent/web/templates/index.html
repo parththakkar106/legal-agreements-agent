@@ -28,19 +28,20 @@
 {% block content %}
 <div class="page-head">
   <h1>Agreements</h1>
-  <p class="muted">Every redline a customer sends back, what the AI found in it, and what a person decided.</p>
+  <p class="muted">Every negotiation round by round: what the customer changed, what the AI found, what a person answered, and what was signed.</p>
 </div>
 {% if error %}<p class="notice" role="alert">{{ error }}</p>{% endif %}
 
 <section class="card list-card">
-  {% if reviews %}
+  {% if agreements %}
   <div class="table-scroll"><table class="list">
-    <thead><tr><th>Agreement</th><th>Type</th><th>Status</th><th>Last activity</th></tr></thead>
+    <thead><tr><th>Agreement</th><th>Type</th><th>Latest</th><th>Status</th><th>Last activity</th></tr></thead>
     <tbody>
-    {% for r in reviews %}
+    {% for r in agreements %}
       <tr>
-        <td class="name"><a href="/reviews/{{ r.id }}">{{ r.title }}</a><div>{{ r.counterparty }}</div></td>
+        <td class="name"><a href="/agreements/{{ r.id }}">{{ r.title }}</a><div>{{ r.counterparty }}</div></td>
         <td class="mono">{{ (r.doc_type or '…') | upper }}</td>
+        <td class="mono">v{{ r.latest_version }}</td>
         <td><span class="status st-{{ r.status | replace(' ', '-') }}">{{ r.status | capitalize }}</span></td>
         <td class="faint">{{ r.updated_at }}</td>
       </tr>
@@ -56,13 +57,13 @@
   <section class="card">
     <div class="section-head">
       <h2>Demo: redlines from Globex Inc.</h2>
-      <p class="muted">We sent Globex our paper (v1). They sent back their edits (v2). Open either version, then run the review.</p>
+      <p class="muted">We sent Globex our paper (v1). They sent back their edits (v2). Open either version, then start the negotiation.</p>
     </div>
     {% for key, demo in demos.items() %}
     <div class="packet">
       <div class="packet-head">
         <strong>{{ demo.title }}</strong>
-        <form method="post" action="/reviews" data-busy="Starting…"><button class="btn small" name="demo" value="{{ key }}">Run AI review</button></form>
+        <form method="post" action="/agreements" data-busy="Starting…"><button class="btn small" name="demo" value="{{ key }}">Start negotiation</button></form>
       </div>
       {{ file_row(demo.v1[1], "v1 · ours", "/demos/" ~ key ~ "/v1", "/demos/" ~ key ~ "/v1/download") }}
       {{ file_row(demo.v2[1], "v2 · redline", "/demos/" ~ key ~ "/v2", "/demos/" ~ key ~ "/v2/download") }}
@@ -72,10 +73,10 @@
 
   <section class="card">
     <div class="section-head">
-      <h2>Review a new redline</h2>
+      <h2>Start a new negotiation</h2>
       <p class="muted">Both versions as Word files.</p>
     </div>
-    <form method="post" action="/reviews" enctype="multipart/form-data" class="upload" data-busy="Uploading…">
+    <form method="post" action="/agreements" enctype="multipart/form-data" class="upload" data-busy="Uploading…">
       <div class="two">
         <div><label for="title">Agreement</label><input type="text" id="title" name="title" placeholder="Cloud Service Agreement"></div>
         <div><label for="counterparty">Counterparty</label><input type="text" id="counterparty" name="counterparty" placeholder="Initech Ltd."></div>

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Diff v{{ old.number }}→v{{ new.number }} · {{ agreement.title }} · Acme Agreement Desk{% endblock %}
+{% block style %}
+.diff-head { margin-bottom: 24px; display: flex; flex-direction: column; gap: 6px; }
+.diff-head h1 { font-size: clamp(22px, 2.8vw, 28px); }
+.diff-head p { margin: 0; color: var(--ink-2); font-size: 14px; overflow-wrap: anywhere; }
+.gitdiff { max-width: 900px; overflow: hidden; font: 14px/1.6 var(--mono); }
+.hunk-label { padding: 8px 16px; background: var(--sunken); color: var(--ink-3); font-size: 12px; border-top: 1px solid var(--rule); }
+.hunk-label:first-child { border-top: 0; }
+.line { display: grid; grid-template-columns: 2ch minmax(0, 1fr); gap: 10px; padding: 3px 16px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.line.del { background: var(--esc-wash); color: var(--del); }
+.line.ins { background: var(--accent-wash); color: var(--ins); }
+.fold { padding: 6px 16px; color: var(--ink-3); font-size: 12px; background: var(--surface); border-top: 1px dashed var(--rule); border-bottom: 1px dashed var(--rule); }
+{% endblock %}
+{% block content %}
+<div class="diff-head">
+  <div class="eyebrow"><a href="/agreements/{{ agreement.id }}">{{ agreement.title }}</a> / full diff</div>
+  <h1>v{{ old.number }} → v{{ new.number }}</h1>
+  <p><span style="color:var(--del)">−</span> {{ old.name }} ({{ old.author }}) &nbsp; <span style="color:var(--ins)">+</span> {{ new.name }} ({{ new.author }})</p>
+</div>
+<div class="card gitdiff">
+  {% set folded = namespace(n=0) %}
+  {% for row in rows %}
+    {% if row.change %}
+      {% if folded.n %}<div class="fold">… {{ folded.n }} unchanged clause{{ '' if folded.n == 1 else 's' }}</div>{% set folded.n = 0 %}{% endif %}
+      <div class="hunk-label">@@ {{ '§ ' if row.clause.id[:1].isdigit() }}{{ row.clause.id }} · {{ row.change.kind }} @@</div>
+      {% if row.change.old_text %}<div class="line del"><span>−</span><span>{{ row.change.old_text }}</span></div>{% endif %}
+      <div class="line ins"><span>+</span><span>{{ row.change.new_text }}</span></div>
+    {% else %}{% set folded.n = folded.n + 1 %}{% endif %}
+  {% endfor %}
+  {% for c in removed %}
+    <div class="hunk-label">@@ {{ '§ ' if c.clause_id[:1].isdigit() }}{{ c.clause_id }} · removed @@</div>
+    <div class="line del"><span>−</span><span>{{ c.old_text }}</span></div>
+  {% endfor %}
+  {% if folded.n %}<div class="fold">… {{ folded.n }} unchanged clause{{ '' if folded.n == 1 else 's' }}</div>{% endif %}
+</div>
+{% endblock %}

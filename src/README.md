@@ -14,7 +14,10 @@
 | `legal_agent/agents/grouper.py` | AI: groups related changes under one theme |
 | `legal_agent/guardrails.py` | Code checks that can only make a decision stricter: red lines, injection, missing rule, unknown citation, low confidence |
 | `legal_agent/orchestrator.py` | Runs the steps in order, reviews changes in parallel, totals tokens, cost and time |
-| `legal_agent/store.py` | SQLite: each agreement's two versions, its status and live review step, the SHA-256 of v2, and the audit trail |
-| `legal_agent/web/app.py` | FastAPI web app: start a review (demo or upload) in the background, show it as an audit trail, open and download each version, and let a person sign, send back or escalate |
+| `legal_agent/store.py` | SQLite: agreements, every version exchanged (with SHA-256), review rounds, a person's answer to each change, and the audit trail |
+| `legal_agent/negotiation.py` | The human side of a round: what each change needs (by AI colour), building our next version from the answers, the cover note, clause history |
+| `legal_agent/docx_writer.py` | Writes clauses back to a .docx that `docx_parser` reads |
+| `legal_agent/signing.py` | Signs the agreed version: PDF plus certificate page, behind a small `Signer` interface so a real e-signature provider can replace it |
+| `legal_agent/web/app.py` | FastAPI web app: negotiation rounds (instant diff, background AI review, answers, next version), version and diff pages, downloads, signing |
 | `legal_agent/web/sources.py` | The text behind each cited source (GDPR article, playbook rule, contract clause) for the side panel |
 | `legal_agent/web/templates/` | The HTML pages (Jinja, no frontend framework) |

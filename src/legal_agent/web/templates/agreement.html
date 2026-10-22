@@ -1,0 +1,428 @@
+{% extends "base.html" %}
+{% from "macros.html" import file_row %}
+{% set a = agreement %}
+{% set cp = a.counterparty %}
+{% set labels = {'accept': 'Accept', 'push_back': 'Push back', 'escalate': 'Escalate'} %}
+{% set verdicts = {'escalate': 'Escalate to legal', 'send back': 'Send back to ' ~ cp, 'ready to sign': 'Ready to sign'} %}
+{% set needs = {'escalate': 'Needs an outcome and an internal comment', 'push_back': 'Needs an outcome', 'accept': 'Accepted unless you change it'} %}
+{% set rounds_by_version = {} %}{% for r in a.rounds.values() %}{% set _ = rounds_by_version.update({r.new_version: r}) %}{% endfor %}
+{% set current = a.rounds.values() | list | last if a.rounds else none %}
+{% macro clause_ref(id) %}{{ '§ ' if id[:1].isdigit() }}{{ id }}{% endmacro %}
+{% macro source(known, key, text) %}{% if key in known %}<button type="button" class="link" data-source="{{ key }}">{{ text }}</button>{% else %}<span>{{ text }}</span>{% endif %}{% endmacro %}
+{% macro redline(c) -%}
+<div class="redline">
+  {%- if c.kind == 'modified' -%}
+    {%- for op, words in c.word_diff -%}
+      {%- if op == 'delete' %}<del>{{ words }}</del> {% elif op == 'insert' %}<ins>{{ words }}</ins> {% else %}{{ words }} {% endif -%}
+    {%- endfor -%}
+  {%- elif c.kind == 'added' -%}<ins>{{ c.new_text }}</ins>
+  {%- else -%}<del>{{ c.old_text }}</del>{%- endif -%}
+</div>
+{%- endmacro %}
+{% macro change_head(c, r=none) -%}
+{% set numbered = c.clause_id[:1].isdigit() %}
+<div class="chg-head">
+  {% if r %}<span class="dec dec-{{ r.decision }}">{{ labels[r.decision] }}</span>{% endif %}
+  <span class="chg-title">{{ c.title if c.title and c.title != c.clause_id else clause_ref(c.clause_id) }}</span>
+  <span class="chg-where">{{ (clause_ref(c.clause_id) ~ ' · ' if numbered and c.title) ~ ('Key term · ' if not numbered) }}{{ c.kind }}</span>
+  {{ caller() if caller }}
+</div>
+{%- endmacro %}
+
+{% block title %}{{ a.title }}, {{ cp }} · Acme Agreement Desk{% endblock %}
+{% block head %}{% if a.status == 'reviewing' %}<meta http-equiv="refresh" content="3">{% endif %}{% endblock %}
+{% block style %}
+.head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 24px; align-items: start; margin-bottom: 36px; }
+.head .eyebrow { grid-column: 1 / -1; }
+.head .meta { grid-column: 1; display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--ink-2); font-size: 14px; margin-top: 4px; }
+.cost { grid-column: 2; grid-row: 2; font: 12px/1.5 var(--mono); color: var(--ink-3); text-align: right; white-space: nowrap; padding-top: 10px; }
+@media (max-width: 640px) { .head { grid-template-columns: minmax(0, 1fr); } .cost { grid-column: 1; grid-row: auto; text-align: left; padding-top: 0; } }
+.section-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 18px; }
+.section-title span { font-size: 13px; color: var(--ink-3); }
+.trail { list-style: none; margin: 0; padding: 0; max-width: 840px; }
+.ev { position: relative; padding: 0 0 30px 34px; }
+.ev::before { content: ""; position: absolute; left: 6px; top: 18px; bottom: -2px; width: 1px; background: var(--rule-strong); }
+.ev:last-child::before { display: none; }
+.ev-dot { position: absolute; left: 0; top: 5px; width: 13px; height: 13px; border-radius: 50%; background: var(--surface); border: 2px solid var(--ink-3); }
+.ev-small .ev-dot { width: 9px; height: 9px; left: 2px; top: 7px; border-width: 0; background: var(--rule-strong); }
+.ev-received .ev-dot { border-color: var(--accent); }
+.ev-reviewed .ev-dot { background: var(--accent); }
+.ev-sign .ev-dot { border-color: var(--ok); background: var(--ok); }
+.ev-failed .ev-dot { background: var(--esc); }
+.ev-now .ev-dot { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-wash); }
+.ev-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; margin-bottom: 10px; }
+.ev-small .ev-head { margin-bottom: 0; }
+.ev-title { font-weight: 600; font-size: 16px; }
+.ev-small .ev-title { font-weight: 500; font-size: 14px; color: var(--ink-2); }
+.ev-meta { font-size: 13px; color: var(--ink-3); }
+.ev-note { margin: 4px 0 0; color: var(--ink-2); font-size: 14px; overflow-wrap: anywhere; }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.files { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+.cover { padding: 14px 16px; font-size: 14px; white-space: pre-line; color: var(--ink-2); border-top: 1px solid var(--rule); }
+.cover b { color: var(--ink); }
+.round { overflow: hidden; }
+.round-head { padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid var(--rule); }
+.round-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+.round-line strong { font: 600 19px/1.3 var(--serif); }
+.round-line a { margin-left: auto; font-size: 14px; }
+.tally { display: flex; gap: 16px; flex-wrap: wrap; }
+.groups { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: var(--ink-2); }
+.groups b { color: var(--ink); font-weight: 600; }
+.working { display: flex; gap: 12px; align-items: center; color: var(--ink-2); font-size: 14px; }
+.spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--rule-strong); border-top-color: var(--accent); flex: none; }
+@media (prefers-reduced-motion: no-preference) { .spinner { animation: spin .9s linear infinite; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+.chg { padding: 20px; display: flex; flex-direction: column; gap: 14px; border-top: 1px solid var(--rule); scroll-margin-top: 16px; }
+.round-head + .chg { border-top: 0; }
+.chg-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.chg-title { font-weight: 600; }
+.chg-where { font-size: 13px; color: var(--ink-3); }
+.chg-head .link { margin-left: auto; font-size: 13px; }
+.redline { font: 16px/1.7 var(--serif); background: var(--sunken); border-radius: 8px; padding: 14px 16px; overflow-wrap: anywhere; }
+.redline del { color: var(--del); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.redline ins { color: var(--ins); text-decoration: underline double; text-underline-offset: 3px; }
+.explain { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+@media (max-width: 640px) { .explain { grid-template-columns: minmax(0, 1fr); } }
+.explain h3, .reply h3 { font-size: 13px; font-weight: 600; color: var(--ink-2); margin: 0 0 3px; }
+.explain p, .reply p { margin: 0; }
+.reply { border-left: 2px solid var(--accent); padding: 2px 0 2px 14px; }
+.reply p { font: 16px/1.6 var(--serif); }
+.guard { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--esc); background: var(--esc-wash); border-radius: 8px; padding: 10px 12px; }
+.guard svg { flex: none; margin-top: 3px; }
+.sources { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 14px; align-items: baseline; }
+.sources > span:first-child { color: var(--ink-3); }
+.sources .conf { margin-left: auto; color: var(--ink-3); font-size: 13px; }
+/* A person's answer to one change */
+.answer { border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+.answer-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px; align-items: baseline; }
+.answer-head h3 { margin: 0; font-size: 14px; font-weight: 600; }
+.need { font-size: 13px; color: var(--ink-3); }
+.need.todo { color: var(--esc); }
+.need.done { color: var(--ok); }
+.outcomes { display: flex; flex-wrap: wrap; gap: 8px; border: 0; padding: 0; margin: 0; }
+.outcomes label { display: inline-flex; align-items: center; gap: 7px; margin: 0; font-weight: 500; font-size: 14px; border: 1px solid var(--rule-strong); border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+.outcomes label:has(input:checked) { border-color: var(--accent); background: var(--accent-wash); }
+.counter { display: none; }
+.answer:has(input[value=counter]:checked) .counter { display: block; }
+.counter textarea { font: 15px/1.6 var(--serif); }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+@media (max-width: 640px) { .two { grid-template-columns: minmax(0, 1fr); } }
+.answer textarea { min-height: 64px; font-size: 14px; }
+.answer label { font-size: 13px; }
+.answer .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+.answer .row > div { flex: 1 1 180px; }
+.answered { font-size: 14px; display: flex; flex-direction: column; gap: 4px; background: var(--sunken); border-radius: 8px; padding: 10px 12px; }
+.answered .q { color: var(--ink-3); }
+.panel { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.panel p { margin: 0; }
+.panel hr { border: 0; border-top: 1px solid var(--rule); margin: 0; width: 100%; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; overflow-wrap: anywhere; }
+.check input { margin-top: 4px; }
+.fingerprint { font: 12px/1.5 var(--mono); color: var(--ink-3); overflow-wrap: anywhere; }
+.todo-list { margin: 0; padding-left: 18px; color: var(--esc); font-size: 14px; }
+/* Clause history */
+.history { margin-top: 44px; max-width: 840px; }
+.clause-hist { padding: 16px 20px; border-top: 1px solid var(--rule); }
+.clause-hist:first-of-type { border-top: 0; }
+.clause-hist h3 { margin: 0 0 10px; font-size: 15px; }
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.steps li { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: 12px; font-size: 14px; }
+.steps .who { color: var(--ink-3); font-size: 13px; }
+.steps .txt { font: 15px/1.55 var(--serif); }
+.steps del { color: var(--del); }
+.steps ins { color: var(--ins); text-decoration: underline double; text-underline-offset: 3px; }
+.steps .note { color: var(--ink-3); font: 13px var(--sans); margin-left: 6px; }
+@media (max-width: 520px) { .steps li { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+/* Source panel */
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(520px, 100vw); background: var(--surface); box-shadow: var(--shadow);
+  border-left: 1px solid var(--rule); display: flex; flex-direction: column; z-index: 20; transform: translateX(100%); visibility: hidden; }
+.drawer.open { transform: none; visibility: visible; }
+@media (prefers-reduced-motion: no-preference) { .drawer { transition: transform .22s ease, visibility .22s; } }
+.drawer-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; padding: 18px 20px 14px; padding-top: max(18px, env(safe-area-inset-top, 0px)); border-bottom: 1px solid var(--rule); }
+.drawer-kind { font-size: 13px; color: var(--ink-3); }
+.drawer-head h2 { grid-column: 1; overflow-wrap: anywhere; }
+.drawer-sub { grid-column: 1; font-size: 13px; color: var(--ink-2); }
+.drawer-close { grid-column: 2; grid-row: 1 / span 3; align-self: start; width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); font-size: 20px; line-height: 1; cursor: pointer; }
+.drawer-body { overflow-y: auto; padding: 14px 20px 40px; padding-bottom: max(40px, env(safe-area-inset-bottom, 0px)); font: 15px/1.65 var(--serif); }
+.part { display: grid; grid-template-columns: 3.6em minmax(0, 1fr); gap: 10px; padding: 8px 10px; margin: 0 -10px; border-radius: 6px; }
+.part.no-label, .part.stacked { grid-template-columns: minmax(0, 1fr); }
+.part.stacked { gap: 2px; }
+.part.stacked .part-label { font: 600 13px/1.4 var(--sans); }
+.part-label { font: 12px/2.1 var(--mono); color: var(--ink-3); overflow-wrap: anywhere; }
+.part p { margin: 0; white-space: pre-line; }
+.part.hit { background: var(--hl); color: var(--ink); }
+.part.hit .part-label { color: var(--ink-2); }
+{% endblock %}
+
+{% block content %}
+{% set total = namespace(calls=0, tokens=0, cost=0.0, seconds=0.0) %}
+{% for r in a.rounds.values() if r.result %}{% set u = r.result.usage %}
+  {% set total.calls = total.calls + u.calls %}{% set total.tokens = total.tokens + u.input_tokens + u.output_tokens %}
+  {% set total.cost = total.cost + u.cost_usd %}{% set total.seconds = total.seconds + u.llm_seconds %}
+{% endfor %}
+<div class="head">
+  <div class="eyebrow"><a href="/">Agreements</a> / {{ cp }}</div>
+  <h1>{{ a.title }}</h1>
+  {% if total.calls %}<div class="cost" title="Cost of all AI reviews of this agreement">{{ total.calls }} AI calls · {{ '{:,}'.format(total.tokens) }} tokens<br>${{ '%.2f' | format(total.cost) }} · {{ '%.0f' | format(total.seconds) }}s model time</div>{% endif %}
+  <div class="meta">
+    <span>{{ cp }}</span>
+    {% if a.doc_type %}<span class="mono">{{ a.doc_type | upper }}</span>{% endif %}
+    <span>{{ a.versions | length }} versions</span>
+    <span class="status st-{{ a.status | replace(' ', '-') }}">{{ a.status | capitalize }}</span>
+  </div>
+</div>
+
+<div class="section-title"><h2>Audit trail</h2><span>Every version, review and decision, oldest first</span></div>
+<ol class="trail">
+{% for e in a.events %}
+  {% if e.action in ('sent', 'received') %}{% set v = a.versions[e.version] %}
+  <li class="ev ev-{{ e.action }}" id="v{{ v.number }}"><span class="ev-dot"></span>
+    <div class="ev-head"><span class="ev-title">v{{ v.number }} {{ 'sent to ' ~ cp if e.action == 'sent' else 'received from ' ~ cp }}</span><span class="ev-meta">{{ e.actor }} · {{ e.at }}</span></div>
+    <div class="stack">
+      <div class="card">
+        <div class="files">{{ file_row(v.name, "v" ~ v.number ~ " · " ~ ('ours' if e.action == 'sent' else 'theirs'), "/agreements/" ~ a.id ~ "/versions/" ~ v.number, "/agreements/" ~ a.id ~ "/versions/" ~ v.number ~ "/download") }}</div>
+        {% if v.note %}<div class="cover"><b>Cover note to {{ cp }}</b>
+{{ v.note }}</div>{% endif %}
+      </div>
+      {% set r = rounds_by_version.get(v.number) %}
+      {% if r %}{% set known = (sources.get(r.id) or {}).get('sources', {}) %}
+      <div class="card round" data-round="{{ r.id }}">
+        <div class="round-head">
+          <div class="round-line">
+            {% if not r.changes %}<strong>No changes</strong><span class="faint">{{ cp }} accepted v{{ r.old_version }} as it was</span>
+            {% else %}<strong>{{ r.changes | length }} change{{ '' if r.changes | length == 1 else 's' }} from v{{ r.old_version }}</strong>
+              {% if r.result %}<span class="faint">AI recommends: {{ verdicts[r.result.verdict] | lower }}</span>{% endif %}
+              <a href="/agreements/{{ a.id }}/rounds/{{ r.id }}/diff">Full diff</a>{% endif %}
+          </div>
+          {% if r.status == 'reviewing' %}<div class="working"><span class="spinner" aria-hidden="true"></span><span>AI review: {{ r.stage }}… You can read the changes meanwhile.</span></div>{% endif %}
+          {% if r.result and r.changes %}
+          <div class="tally">
+            {% for key in ['escalate', 'push_back', 'accept'] %}{% set n = r.result.changes | selectattr('decision', 'equalto', key) | list | length %}
+            {% if n %}<span class="dec dec-{{ key }}">{{ n }} {{ labels[key] }}</span>{% endif %}{% endfor %}
+          </div>
+          {% if r.result.groups %}<ul class="groups">{% for g in r.result.groups %}<li><b>{{ g.theme }}.</b> {{ g.summary }}</li>{% endfor %}</ul>{% endif %}
+          {% endif %}
+        </div>
+
+        {% if not r.result %}
+          {% for c in r.changes %}
+          <article class="chg">{% call change_head(c) %}{% endcall %}{{ redline(c) }}</article>
+          {% endfor %}
+        {% else %}
+          {% for key in ['escalate', 'push_back', 'accept'] %}{% for rc in r.result.changes | selectattr('decision', 'equalto', key) %}
+          {% set c = rc.change %}{% set item = r.answers.get(c.id) or {} %}{% set todo = missing[r.id][c.id] %}
+          <article class="chg" id="change-{{ r.id }}-{{ c.id }}">
+            {% call change_head(c, rc) %}{{ source(known, ('old:' if c.kind == 'removed' else 'new:') ~ c.clause_id, 'Show in v' ~ (r.old_version if c.kind == 'removed' else r.new_version)) }}{% endcall %}
+            {{ redline(c) }}
+            <div class="explain">
+              <div><h3>What it means</h3><p>{{ rc.meaning }}</p></div>
+              <div><h3>Impact on Acme</h3><p>{{ rc.impact }}</p></div>
+            </div>
+            {% if rc.counter_proposal %}<div class="reply"><h3>AI's suggested reply to {{ cp }}</h3><p>{{ rc.counter_proposal }}</p></div>{% endif %}
+            {% for note in rc.guardrail_notes %}
+            <div class="guard"><svg width="14" height="16" viewBox="0 0 14 16" fill="none" aria-hidden="true"><path d="M7 1 1.5 3v4.5C1.5 11 4 13.6 7 15c3-1.4 5.5-4 5.5-7.5V3L7 1Z" stroke="currentColor" stroke-width="1.4"/></svg>
+              <span>Safety check: {{ note }}{% if rc.ai_decision != rc.decision %} The AI had said {{ labels[rc.ai_decision] | lower }}; the check made it {{ labels[rc.decision] | lower }}.{% endif %}</span></div>
+            {% endfor %}
+            <div class="sources">
+              <span>Sources</span>
+              {% for id in rc.rule_ids %}{{ source(known, 'rule:' ~ id ~ ':' ~ rc.decision, 'Playbook: ' ~ id) }}{% endfor %}
+              {% for cite in rc.gdpr_citations %}{{ source(known, cite, cite) }}{% endfor %}
+              {% for ref in rc.context_used %}{% set p = ref.rpartition(':') %}{{ source(known, (p[0] or 'new') ~ ':' ~ p[2], (p[0] | upper ~ ' ' if p[0] else '') ~ clause_ref(p[2])) }}{% endfor %}
+              {% if not (rc.rule_ids or rc.gdpr_citations or rc.context_used) %}<span class="faint">none cited</span>{% endif %}
+              <span class="conf">{{ '%.0f' | format(rc.confidence * 100) }}% confident</span>
+            </div>
+
+            {% if r.status == 'open' %}
+            {% set chosen = item.outcome or ('accept' if rc.decision == 'accept' else '') %}
+            <form class="answer" method="post" action="/rounds/{{ r.id }}/items/{{ c.id }}">
+              <div class="answer-head"><h3>Your answer</h3>
+                {% if todo %}<span class="need todo">Still needed: {{ todo | join(', ') }}</span>
+                {% elif item %}<span class="need done">Answered by {{ item.actor }}</span>
+                {% else %}<span class="need">{{ needs[rc.decision] }}</span>{% endif %}</div>
+              <fieldset class="outcomes"><legend class="faint" style="font-size:13px;margin-bottom:6px">Outcome{{ ' (required)' if rc.decision != 'accept' }}</legend>
+                <label><input type="radio" name="outcome" value="accept" {{ 'checked' if chosen == 'accept' }}> Accept their change</label>
+                <label><input type="radio" name="outcome" value="reject" {{ 'checked' if chosen == 'reject' }}> Reject, keep our wording</label>
+                <label><input type="radio" name="outcome" value="counter" {{ 'checked' if chosen == 'counter' }}> Counter with new wording</label>
+              </fieldset>
+              <div class="counter"><label for="ct-{{ r.id }}-{{ c.id }}">Our wording for this clause (goes into v{{ r.new_version + 1 }})</label>
+                <textarea id="ct-{{ r.id }}-{{ c.id }}" name="counter_text">{{ item.counter_text or c.new_text or c.old_text }}</textarea></div>
+              <div class="two">
+                <div><label for="ic-{{ r.id }}-{{ c.id }}">Internal comment{{ ' (required)' if rc.decision == 'escalate' }}, stays in our audit trail</label>
+                  <textarea id="ic-{{ r.id }}-{{ c.id }}" name="internal_comment" placeholder="Why we decided this">{{ item.internal_comment or '' }}</textarea></div>
+                <div><label for="ec-{{ r.id }}-{{ c.id }}">Note to {{ cp }}, goes in the cover note</label>
+                  <textarea id="ec-{{ r.id }}-{{ c.id }}" name="external_comment">{{ item.external_comment if item else (rc.counter_proposal if rc.decision != 'accept' else '') }}</textarea></div>
+              </div>
+              <div class="row">
+                <div><label for="ac-{{ r.id }}-{{ c.id }}">Your name</label><input type="text" id="ac-{{ r.id }}-{{ c.id }}" name="actor" value="{{ item.actor or reviewer }}" required autocomplete="name"></div>
+                <button class="btn secondary">Save answer</button>
+              </div>
+            </form>
+            {% elif r.status == 'closed' %}
+            {% set oc = item.outcome or 'accept' %}
+            <div class="answered">
+              <div><span class="q">Answer:</span> <strong>{{ {'accept': 'Accepted', 'reject': 'Rejected, our wording restored', 'counter': 'Countered'}[oc] }}</strong>{% if item.actor %} by {{ item.actor }} · {{ item.at }}{% endif %}</div>
+              {% if oc == 'counter' %}<div><span class="q">Our wording:</span> {{ item.counter_text }}</div>{% endif %}
+              {% if item.internal_comment %}<div><span class="q">Internal:</span> {{ item.internal_comment }}</div>{% endif %}
+              {% if item.external_comment %}<div><span class="q">To {{ cp }}:</span> {{ item.external_comment }}</div>{% endif %}
+            </div>
+            {% endif %}
+          </article>
+          {% endfor %}{% endfor %}
+        {% endif %}
+        {% if r.id in sources %}<script type="application/json" class="sources-data">{{ sources[r.id] | tojson }}</script>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </li>
+  {% elif e.action == 'reviewed' %}
+  <li class="ev ev-small ev-reviewed"><span class="ev-dot"></span>
+    <div class="ev-head"><span class="ev-title">AI review finished: {{ verdicts.get(e.detail, e.detail) | lower }}</span><span class="ev-meta">{{ e.at }}</span></div>
+  </li>
+  {% elif e.action == 'review failed' %}
+  <li class="ev ev-failed"><span class="ev-dot"></span>
+    <div class="ev-head"><span class="ev-title">AI review stopped</span><span class="ev-meta">{{ e.at }}</span></div>
+    <p class="notice">{{ e.detail }}</p>
+  </li>
+  {% elif e.action == 'round closed' %}
+  <li class="ev ev-small"><span class="ev-dot"></span>
+    <div class="ev-head"><span class="ev-title">Round closed by {{ e.actor }}</span><span class="ev-meta">{{ e.at }}</span></div>
+    <p class="ev-note">{{ e.detail }}</p>
+  </li>
+  {% elif e.action == 'sign' %}
+  <li class="ev ev-sign" id="signed"><span class="ev-dot"></span>
+    <div class="ev-head"><span class="ev-title">Signed by {{ e.actor }} for Acme</span><span class="ev-meta">{{ e.at }}</span></div>
+    <div class="card files">{{ file_row(a.title ~ " (signed).pdf", "v" ~ e.version ~ " · signed", "/agreements/" ~ a.id ~ "/signed.pdf", "/agreements/" ~ a.id ~ "/signed.pdf") }}</div>
+    <p class="ev-note">{{ e.detail }}</p>
+  </li>
+  {% endif %}
+{% endfor %}
+
+{% if a.status == 'needs review' and current %}
+  {% set todo_count = missing[current.id].values() | select | list | length %}
+  <li class="ev ev-now"><span class="ev-dot"></span>
+    <div class="ev-head"><span class="ev-title">Close this round</span><span class="ev-meta">answer each change, then close</span></div>
+    <form class="card panel" method="post" action="/rounds/{{ current.id }}/close">
+      {% if todo_count %}<p class="need todo">{{ todo_count }} change{{ ' still needs' if todo_count == 1 else 's still need' }} an answer above.</p>{% endif %}
+      <p class="muted">If you accepted every change, v{{ current.new_version }} becomes ready to sign. Otherwise your answers become v{{ current.new_version + 1 }}, which goes back to {{ cp }} unsigned with a cover note.</p>
+      <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:end">
+        <div style="flex:1 1 200px"><label for="close-actor">Your name</label><input type="text" id="close-actor" name="actor" value="{{ reviewer }}" required></div>
+        <button class="btn" {{ 'disabled' if todo_count }}>Close round</button>
+      </div>
+    </form>
+  </li>
+{% elif a.status == 'waiting for counterparty' %}
+  <li class="ev ev-now"><span class="ev-dot"></span>
+    <div class="ev-head"><span class="ev-title">Waiting for {{ cp }}</span><span class="ev-meta">their next version starts a new round</span></div>
+    <div class="card panel">
+      <form method="post" action="/agreements/{{ a.id }}/versions" enctype="multipart/form-data" class="stack" data-busy="Uploading…">
+        <div><label for="reply">Their next version (.docx)</label><input type="file" id="reply" name="new" accept=".docx" required></div>
+        <div><button class="btn">Upload and review</button></div>
+      </form>
+      <hr>
+      <form method="post" action="/agreements/{{ a.id }}/simulate-reply" data-busy="Simulating…">
+        <p class="muted" style="margin-bottom:10px">Demo: pretend {{ cp }} accepted v{{ a.versions | length }} and sent it back unchanged.</p>
+        <button class="btn secondary">Simulate {{ cp }} accepting v{{ a.versions | length }}</button>
+      </form>
+    </div>
+  </li>
+{% elif a.status == 'ready to sign' %}{% set final = a.versions[a.versions | length] %}
+  <li class="ev ev-now" id="sign"><span class="ev-dot"></span>
+    <div class="ev-head"><span class="ev-title">Ready to sign v{{ final.number }}</span><span class="ev-meta">every change is agreed; only a person can sign</span></div>
+    <form class="card panel" method="post" action="/agreements/{{ a.id }}/sign">
+      <p class="muted">Signing creates a PDF of v{{ final.number }} with a certificate page listing every version, its SHA-256 and who signed. The final playbook check runs on the whole text first. Our internal comments and the AI findings stay in this audit trail.</p>
+      <div><label for="name">Your full name</label><input type="text" id="name" name="name" autocomplete="name" value="{{ reviewer }}" required></div>
+      <label class="check"><input type="checkbox" name="consent" value="yes" required> I have read {{ final.name }} and sign it electronically on behalf of Acme Cloud Inc.</label>
+      <div><button class="btn">Sign v{{ final.number }}</button></div>
+      <div class="fingerprint">SHA-256 of v{{ final.number }}: {{ final.sha256 }}</div>
+    </form>
+  </li>
+{% endif %}
+</ol>
+
+{% if history %}
+<section class="history">
+  <div class="section-title"><h2>Clause history</h2><span>Each changed clause, version by version</span></div>
+  <div class="card">
+    {% for h in history %}
+    <div class="clause-hist">
+      <h3>{{ h.title if h.title and h.title != h.clause else clause_ref(h.clause) }}{% if h.title and h.title != h.clause %} <span class="faint" style="font-weight:400">{{ clause_ref(h.clause) }}</span>{% endif %}</h3>
+      <ol class="steps">
+        {% for s in h.steps %}
+        <li><span class="who">v{{ s.version }} · {{ 'Acme' if s.who == 'Acme Cloud Inc.' else s.who }}</span><span class="txt">{% if s.diff %}{% for op, words in s.diff %}{% if op == 'delete' %}<del>{{ words }}</del> {% elif op == 'insert' %}<ins>{{ words }}</ins> {% else %}{{ words }} {% endif %}{% endfor %}{% else %}{{ s.text }}{% endif %}{% if s.note %}<span class="note">{{ s.note | replace('push_back', 'push back') }}</span>{% endif %}</span></li>
+        {% endfor %}
+      </ol>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<aside class="drawer" id="drawer" aria-labelledby="drawer-title" role="dialog">
+  <div class="drawer-head">
+    <span class="drawer-kind" id="drawer-kind"></span>
+    <h2 id="drawer-title"></h2>
+    <span class="drawer-sub" id="drawer-sub"></span>
+    <button type="button" class="drawer-close" id="drawer-close" aria-label="Close">×</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</aside>
+{% endblock %}
+
+{% block script %}
+<script>
+// Sources: clicking one opens the cited text in the side panel, with the exact part highlighted.
+// Each round carries its own sources (GDPR, playbook, and the two versions it compares).
+const drawer = document.getElementById("drawer");
+let opener = null;
+
+function openSource(key, button) {
+  const data = JSON.parse(button.closest("[data-round]").querySelector(".sources-data").textContent);
+  const entry = data.sources[key];
+  if (!entry) return;
+  const source = entry.doc ? data.docs[entry.doc] : entry;
+  const isHit = part => entry.doc ? part.id === entry.hit : part.hit;
+  document.getElementById("drawer-kind").textContent = source.kind;
+  document.getElementById("drawer-title").textContent = source.title;
+  document.getElementById("drawer-sub").textContent = entry.doc ? "Highlighted: " + (/^\d/.test(entry.hit) ? "§ " : "") + entry.hit : source.subtitle;
+  const body = document.getElementById("drawer-body");
+  body.replaceChildren(...source.parts.map(part => {
+    const row = document.createElement("div");
+    // Contract clauses keep a narrow number column; playbook labels ("We push back on") sit above their text.
+    const layout = entry.doc || source.kind === "GDPR" ? (part.label ? "" : " no-label") : " stacked";
+    row.className = "part" + layout + (isHit(part) ? " hit" : "");
+    if (part.label) {
+      const label = document.createElement("span");
+      label.className = "part-label";
+      label.textContent = part.label;
+      row.append(label);
+    }
+    const text = document.createElement("p");
+    if (part.term) {
+      const term = document.createElement("strong");
+      term.textContent = part.term + ". ";
+      text.append(term);
+    }
+    text.append(part.text);
+    row.append(text);
+    return row;
+  }));
+  opener = button;
+  drawer.classList.add("open");
+  const hit = body.querySelector(".hit");
+  if (hit) hit.scrollIntoView({ block: "center" }); else body.scrollTop = 0;
+  document.getElementById("drawer-close").focus({ preventScroll: true });
+}
+
+function closeSource() {
+  drawer.classList.remove("open");
+  if (opener) opener.focus({ preventScroll: true });
+}
+
+document.addEventListener("click", event => {
+  const source = event.target.closest("[data-source]");
+  if (source) openSource(source.dataset.source, source);
+});
+document.getElementById("drawer-close").addEventListener("click", closeSource);
+document.addEventListener("keydown", event => { if (event.key === "Escape" && drawer.classList.contains("open")) closeSource(); });
+</script>
+{% endblock %}

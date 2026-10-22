@@ -58,23 +58,24 @@ def _clause_part(clause) -> dict:
     return {"id": clause.id, "label": clause.id, "term": "", "text": clause.text}
 
 
-def review_sources(review: dict) -> dict:
-    """Everything the review page needs to open its sources: {"docs": {...}, "sources": {...}}.
+def round_sources(old: dict, new: dict, related_file: str | None, result: dict) -> dict:
+    """Everything one round needs to open its sources: {"docs": {...}, "sources": {...}}.
 
-    Contracts are sent once under "docs"; a clause source just names the doc and the clause.
+    `old` and `new` are the two versions compared. Contracts are sent once under "docs";
+    a clause source just names the doc ("old", "new" or "msa") and the clause.
     """
-    docs = {"v1": document(review["old_file"], review["old_name"]),
-            "v2": document(review["new_file"], review["new_name"])}
-    if review["related_file"]:
-        docs["msa"] = document(review["related_file"], "Cloud Service Agreement (signed, in force)")
+    docs = {"old": document(old["file"], f"v{old['number']} · {old['name']}"),
+            "new": document(new["file"], f"v{new['number']} · {new['name']}")}
+    if related_file:
+        docs["msa"] = document(related_file, "Cloud Service Agreement (signed, in force)")
     sources = {}
-    for r in review["result"]["changes"]:
+    for r in result["changes"]:
         change = r["change"]
-        version = "v1" if change["kind"] == "removed" else "v2"
+        version = "old" if change["kind"] == "removed" else "new"
         sources[f"{version}:{change['clause_id']}"] = {"doc": version, "hit": change["clause_id"]}
         for ref in r["context_used"]:
             doc, _, clause = ref.rpartition(":")
-            sources[f"{doc or 'v2'}:{clause}"] = {"doc": doc or "v2", "hit": clause}
+            sources[f"{doc or 'new'}:{clause}"] = {"doc": doc or "new", "hit": clause}
         for citation in r["gdpr_citations"]:
             sources[citation] = gdpr_source(citation)
         for rule_id in r["rule_ids"]:

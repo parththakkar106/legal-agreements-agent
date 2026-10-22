@@ -16,12 +16,12 @@
 {% block content %}
 <div class="doc-head">
   <div>
-    <div class="eyebrow"><a href="{{ back[0] }}">{{ back[1] }}</a> / {{ 'v1, our version' if version == 'v1' else 'v2, the redline' }}</div>
+    <div class="eyebrow"><a href="{{ back[0] }}">{{ back[1] }}</a> / {{ label }}</div>
     <h1>{{ doc.title }}</h1>
   </div>
   <a class="btn secondary" href="{{ download }}" download>Download .docx</a>
 </div>
-{% if changed %}<p class="legend"><span></span>Clauses that differ between v1 and v2</p>{% endif %}
+{% if changed %}<p class="legend"><span></span>Clauses changed in a negotiation round</p>{% endif %}
 <article class="card paper">
   {% for part in doc.parts %}
   <div class="clause{{ '' if part.label else ' no-label' }}{{ ' changed' if part.id in changed }}" id="clause-{{ part.id }}">
