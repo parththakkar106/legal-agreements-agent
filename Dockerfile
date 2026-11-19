@@ -19,9 +19,13 @@ RUN --mount=type=secret,id=ca_bundle,required=false \
 
 WORKDIR /app
 COPY requirements.txt .
+# wordllama has no ARM (aarch64) wheel, so pip compiles it there. Install g++
+# for this step only and remove it in the same layer to keep the image small.
 RUN --mount=type=secret,id=ca_bundle,required=false \
     if [ -f /run/secrets/ca_bundle ]; then export PIP_CERT=/run/secrets/ca_bundle; fi \
-    && pip install --no-cache-dir -r requirements.txt
+    && apt-get update && apt-get install -y --no-install-recommends g++ \
+    && pip install --no-cache-dir -r requirements.txt \
+    && apt-get purge -y --auto-remove g++ && rm -rf /var/lib/apt/lists/*
 COPY src src
 COPY data data
 
