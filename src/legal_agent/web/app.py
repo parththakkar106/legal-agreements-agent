@@ -20,7 +20,9 @@ from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from legal_agent import desk, negotiation, store
+from starlette.concurrency import run_in_threadpool
+
+from legal_agent import config, demo, desk, negotiation, store
 from legal_agent.desk import SIGNATURE_STYLES, DeskError
 from legal_agent.docx_parser import parse_docx
 from legal_agent.signing import SIGNATURE_FONTS_DIR
@@ -47,6 +49,24 @@ app.mount("/fonts", StaticFiles(directory=SIGNATURE_FONTS_DIR), name="fonts")
 templates = Jinja2Templates(directory=Path(__file__).parent / "templates")
 templates.env.globals["profile"] = lambda: _profile()  # the top bar shows who is signed in
 page = {"include_in_schema": False}  # the pages stay out of the API reference
+
+
+@app.middleware("http")
+async def visitor_copy(request: Request, call_next):
+    """In the public demo, each browser works on its own copy of the portfolio (see demo.py).
+    Health checks, fonts and the API use the main database, so they never create a copy."""
+    if not config.demo_mode() or request.url.path.startswith(("/healthz", "/fonts", "/api", "/docs", "/openapi")):
+        return await call_next(request)
+    db_file, cookie = await run_in_threadpool(demo.visitor_db, request.cookies.get(demo.COOKIE, ""))
+    token = store.use_db(db_file)
+    try:
+        response = await call_next(request)
+    finally:
+        store.reset_db(token)
+    if cookie != request.cookies.get(demo.COOKIE):
+        response.set_cookie(demo.COOKIE, cookie, max_age=demo.KEEP_DAYS * 86400, httponly=True, samesite="lax",
+                            secure=request.url.scheme == "https")
+    return response
 
 
 @app.exception_handler(DeskError)

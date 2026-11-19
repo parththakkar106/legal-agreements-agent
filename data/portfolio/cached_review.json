@@ -1,0 +1,168 @@
+{
+ "old_sha256": "b96ce38dc4fd7b31651a67ceec7c3192eeee6b666eb73acf2af50c4d66f2c065",
+ "new_sha256": "2f5797575fbca10a5a9e9327ae01cdf876ed718540aa7943b0dd765750855582",
+ "stages": [
+  "Reading both versions and finding the changed clauses",
+  "Classifying the contract and its 3 changes",
+  "Reviewing 3 changes against the playbook and the GDPR",
+  "Grouping related changes"
+ ],
+ "result": {
+  "doc_type": "dpa",
+  "verdict": "escalate",
+  "changes": [
+   {
+    "change": {
+     "id": 1,
+     "kind": "modified",
+     "clause_id": "Subprocessor Notice Period",
+     "title": "Subprocessor Notice Period",
+     "old_text": "30 days before a new Subprocessor is engaged.",
+     "new_text": "60 days before a new Subprocessor is engaged.",
+     "word_diff": [
+      [
+       "delete",
+       "30"
+      ],
+      [
+       "insert",
+       "60"
+      ],
+      [
+       "equal",
+       "days before a new Subprocessor is engaged."
+      ]
+     ]
+    },
+    "gdpr_chapters": [
+     "IV"
+    ],
+    "search_query": "processor engaging another processor prior notice to controller opportunity to object",
+    "excerpts": [
+     "GDPR Art. 28(2)",
+     "GDPR Art. 28(4)",
+     "GDPR Art. 28(10)",
+     "GDPR Art. 28(3)"
+    ],
+    "meaning": "The customer lengthened the advance notice Acme must give before engaging a new subprocessor from 30 days to 60 days.",
+    "impact": "Acme would have to wait twice as long before onboarding new subprocessors, slowing operational changes and exceeding our standard 30-day maximum.",
+    "ai_decision": "push_back",
+    "decision": "push_back",
+    "rule_ids": [
+     "subprocessors"
+    ],
+    "gdpr_citations": [
+     "GDPR Art. 28(2)"
+    ],
+    "counter_proposal": "We can offer 30 days' notice before a new subprocessor is engaged, with the customer's right to object, which satisfies GDPR Art. 28(2).",
+    "confidence": 0.95,
+    "guardrail_notes": [],
+    "context_used": []
+   },
+   {
+    "change": {
+     "id": 2,
+     "kind": "added",
+     "clause_id": "3.1.a",
+     "title": "",
+     "old_text": "",
+     "new_text": "Provider will store and process Customer Personal Data only within the European Union.",
+     "word_diff": []
+    },
+    "gdpr_chapters": [
+     "V",
+     "IV"
+    ],
+    "search_query": "restriction of personal data storage and processing transfer to third country outside Union",
+    "excerpts": [
+     "GDPR Art. 48",
+     "GDPR Art. 49(5)",
+     "GDPR Art. 44",
+     "GDPR Art. 45(1)"
+    ],
+    "meaning": "The customer added a requirement that Acme store and process their personal data only within the European Union, which rules out processing anywhere else.",
+    "impact": "Acme would have to keep all customer personal data inside the EU, which may conflict with its infrastructure, support and subprocessor setup, and removes the right to process outside the EEA under the Standard Contractual Clauses.",
+    "ai_decision": "escalate",
+    "decision": "escalate",
+    "rule_ids": [
+     "data-location"
+    ],
+    "gdpr_citations": [],
+    "counter_proposal": "",
+    "confidence": 0.95,
+    "guardrail_notes": [],
+    "context_used": []
+   },
+   {
+    "change": {
+     "id": 3,
+     "kind": "modified",
+     "clause_id": "4.1",
+     "title": "",
+     "old_text": "Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 72 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider’s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.",
+     "new_text": "Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than 24 hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider’s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident.",
+     "word_diff": [
+      [
+       "equal",
+       "Upon becoming aware of any Security Incident, Provider will: (a) notify Customer without undue delay when feasible, but no later than"
+      ],
+      [
+       "delete",
+       "72"
+      ],
+      [
+       "insert",
+       "24"
+      ],
+      [
+       "equal",
+       "hours after becoming aware of the Security Incident; (b) provide timely information about the Security Incident as it becomes known or as is reasonably requested by Customer; and (c) promptly take reasonable steps to contain and investigate the Security Incident. Provider’s notification of or response to a Security Incident as required by this DPA will not be construed as an acknowledgment by Provider of any fault or liability for the Security Incident."
+      ]
+     ]
+    },
+    "gdpr_chapters": [
+     "IV"
+    ],
+    "search_query": "processor notify controller without undue delay personal data breach awareness",
+    "excerpts": [
+     "GDPR Art. 33(2)",
+     "GDPR Art. 33(1)",
+     "GDPR Art. 33(4)",
+     "GDPR Art. 34(1)"
+    ],
+    "meaning": "The customer shortened the deadline for Acme to notify them of a security incident from 72 hours to 24 hours after Acme becomes aware of it.",
+    "impact": "Acme would have to notify within 24 hours, which is tighter than our playbook allows (48 hours or more). That raises the risk of breaching the contract while an incident is still being investigated.",
+    "ai_decision": "push_back",
+    "decision": "push_back",
+    "rule_ids": [
+     "breach-notification"
+    ],
+    "gdpr_citations": [
+     "GDPR Art. 33(2)"
+    ],
+    "counter_proposal": "We can commit to notifying Customer without undue delay and within 72 hours of becoming aware of a Security Incident, in line with GDPR Art. 33(2).",
+    "confidence": 0.95,
+    "guardrail_notes": [],
+    "context_used": []
+   }
+  ],
+  "groups": [
+   {
+    "theme": "Data protection operational constraints",
+    "change_ids": [
+     1,
+     2,
+     3
+    ],
+    "summary": "The customer's edits to subprocessor notice, EU-only data processing and 24-hour incident notification together tighten Acme's data protection obligations beyond its standard operating limits and raise the risk of breaching the contract."
+   }
+  ],
+  "usage": {
+   "calls": 5,
+   "input_tokens": 17744,
+   "output_tokens": 1590,
+   "cost_usd": 0.08685599999999999,
+   "llm_seconds": 27.87400000001071
+  }
+ }
+}

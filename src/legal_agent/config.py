@@ -7,6 +7,8 @@
   DESK_WEBHOOK_SECRET  signs every webhook (HMAC-SHA256). Required when URLs are set.
   DESK_PUBLIC_URL      this app's address, used for links inside webhook events (optional)
   DESK_MAX_UPLOAD_MB   largest .docx accepted (default 10)
+  DESK_DEMO            1 = public demo: a private copy per visitor and one saved
+                       AI review instead of live ones (see demo.py)
   CLAUDE_KEY           token for `claude -p` (see llm.py)
 
 Secrets are read when used and never written to disk or logs.
@@ -46,3 +48,7 @@ def public_url() -> str:
 
 def max_upload_bytes() -> int:
     return int(float(os.environ.get("DESK_MAX_UPLOAD_MB", "10")) * 1024 * 1024)
+
+
+def demo_mode() -> bool:
+    return os.environ.get("DESK_DEMO", "") == "1"

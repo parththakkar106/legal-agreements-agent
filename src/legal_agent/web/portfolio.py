@@ -121,13 +121,15 @@ def save(db_file: Path, out: Path = PORTFOLIO):
     (out / "portfolio.json").write_text(json.dumps(tables, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def load_if_empty(source: Path = PORTFOLIO) -> bool:
-    """Fill an empty database with the portfolio. Returns whether it did."""
+def load_if_empty(source: Path = PORTFOLIO, copy_files: bool = True) -> bool:
+    """Fill an empty database with the portfolio. Returns whether it did.
+    With `copy_files` off, the rows point at the portfolio's own files, which are only ever read."""
     with store.connect() as db:
         if db.execute("SELECT COUNT(*) FROM agreements").fetchone()[0] or not (source / "portfolio.json").exists():
             return False
-        app_dir = store.DB_FILE.parent
-        shutil.copytree(source / "files", app_dir / "files", dirs_exist_ok=True)
+        app_dir = store.current_db().parent if copy_files else source
+        if copy_files:
+            shutil.copytree(source / "files", app_dir / "files", dirs_exist_ok=True)
         tables = json.loads((source / "portfolio.json").read_text(encoding="utf-8"))
         for table in TABLES:
             for row in tables[table]:

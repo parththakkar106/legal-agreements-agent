@@ -12,6 +12,7 @@ import hashlib
 import json
 import shutil
 import sqlite3
+from contextvars import ContextVar
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -59,8 +60,24 @@ def sha256_of(path: str | Path) -> str:
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+_visitor_db: ContextVar[Path | None] = ContextVar("visitor_db", default=None)
+
+
+def use_db(db_file: Path):
+    """Point this request (and threads started with its context) at another database. See demo.py."""
+    return _visitor_db.set(db_file)
+
+
+def reset_db(token):
+    _visitor_db.reset(token)
+
+
+def current_db() -> Path:
+    return _visitor_db.get() or DB_FILE
+
+
 def connect(db_file: Path | None = None) -> sqlite3.Connection:
-    db_file = db_file or DB_FILE
+    db_file = db_file or current_db()
     db_file.parent.mkdir(parents=True, exist_ok=True)
     db = sqlite3.connect(db_file)
     db.row_factory = sqlite3.Row
@@ -70,7 +87,7 @@ def connect(db_file: Path | None = None) -> sqlite3.Connection:
 
 def files_dir(agreement_id: int) -> Path:
     """Where an agreement's versions and signed PDF are kept (next to the database)."""
-    return (DB_FILE.parent / "files" / str(agreement_id))
+    return (current_db().parent / "files" / str(agreement_id))
 
 
 def create_agreement(db, title: str, counterparty: str, related_file: str | Path | None = None) -> int:

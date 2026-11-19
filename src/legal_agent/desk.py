@@ -13,12 +13,13 @@ Every step lands in the audit trail, and every audit-trail entry is also a webho
 import shutil
 import tempfile
 import zipfile
+from contextvars import copy_context
 from dataclasses import asdict
 from pathlib import Path
 from threading import Thread
 from typing import BinaryIO
 
-from legal_agent import config, negotiation, store
+from legal_agent import config, demo, negotiation, store
 from legal_agent.clause_diff import Change, diff_clauses
 from legal_agent.docx_parser import parse_docx
 from legal_agent.docx_writer import write_docx
@@ -183,17 +184,22 @@ def _start_review(db, round_id: int):
     versions = agreement["versions"]
     related = Path(agreement["related_file"]) if agreement["related_file"] else None
     store.start_review(db, round_id)
-    Thread(target=run_review, args=(round_id, versions[rnd["old_version"]]["file"],
-                                    versions[rnd["new_version"]]["file"], related), daemon=True).start()
+    # Run in a copy of this request's context, so the thread writes to the same visitor's database.
+    Thread(target=copy_context().run, args=(run_review, round_id, versions[rnd["old_version"]]["file"],
+                                            versions[rnd["new_version"]]["file"], related), daemon=True).start()
 
 
 def run_review(round_id: int, old_path: str, new_path: str, related: Path | None):
     """Runs in a background thread. Any failure (including no `claude` CLI) is recorded, never hidden."""
     with store.connect() as db:
+        progress = lambda step: store.set_stage(db, round_id, step)  # noqa: E731
         try:
-            result = review_contract(old_path, new_path, {"msa": related} if related else None,
-                                     on_progress=lambda step: store.set_stage(db, round_id, step))
-            store.finish_round(db, round_id, asdict(result))
+            if config.demo_mode():
+                result = demo.replay_review(old_path, new_path, progress)
+            else:
+                result = asdict(review_contract(old_path, new_path, {"msa": related} if related else None,
+                                                on_progress=progress))
+            store.finish_round(db, round_id, result)
         except Exception as error:  # the page must show why the review stopped
             store.fail_round(db, round_id, str(error))
 
